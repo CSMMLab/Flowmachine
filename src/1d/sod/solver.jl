@@ -21,7 +21,7 @@ end
 ###
 
 cd(@__DIR__)
-@load "nn.jld2" nn
+@load "../nn.jld2" nn
 
 D = Dict{Symbol,Any}()
 begin
