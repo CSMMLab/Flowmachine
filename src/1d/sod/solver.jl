@@ -5,8 +5,8 @@ using ProgressMeter: @showprogress
 function regime_data(ks, w, prim, sw, f)
     Mu, Mxi, _, _1 = gauss_moments(prim, ks.gas.K)
     a = pdf_slope(prim, sw, ks.gas.K)
-    sw = -prim[1] .* moments_conserve_slope(a, Mu, Mxi, 1)
-    A = pdf_slope(prim, sw, ks.gas.K)
+    swt = -prim[1] .* moments_conserve_slope(a, Mu, Mxi, 1)
+    A = pdf_slope(prim, swt, ks.gas.K)
     tau = vhs_collision_time(prim, ks.gas.μᵣ, ks.gas.ω)
     fr = chapman_enskog(ks.vs.u, prim, a, A, tau)
     L = norm((f .- fr) ./ prim[1])
@@ -108,12 +108,12 @@ for iter = 1:nt
                 ctr[i-1].sw,
                 ctr[i].sw,
             )
-        elseif regime == 2
+        else
             flux_kfvs!(
                 face[i].fw,
                 face[i].ff,
-                ctr[i-1].f,
-                ctr[i].f,
+                ctr[i-1].f .+ ctr[i-1].sf .* ks.ps.dx[i-1] / 2,
+                ctr[i].f .- ctr[i].sf .* ks.ps.dx[i] / 2,
                 ks.vs.u,
                 ks.vs.weights,
                 dt,
