@@ -143,12 +143,14 @@ X1, Y1, X2, Y2 = split_dataset(X, Y)
 
 @save "data.jld2" X1 Y1 X2 Y2
 
+###
 # test
+###
+#=
 i = 50
 sw = (ctr[i+1].w .- ctr[i-1].w) / ks.ps.dx[i] / 2.0
 tau = vhs_collision_time(ctr[i].prim, ks.gas.μᵣ, ks.gas.ω)
 x, y = regime_data(ks, ctr[i].w, ctr[i].prim, sw, ctr[i].f)
-nn(x) #|> onecold
 
 Mu, Mxi, _, _1 = gauss_moments(ctr[i].prim, ks.gas.K)
 a = pdf_slope(ctr[i].prim, sw, ks.gas.K)
@@ -158,3 +160,4 @@ fr = chapman_enskog(ks.vs.u, ctr[i].prim, a, A, tau)
 
 plot(ks.vs.u, ctr[i].f)
 plot!(ks.vs.u, fr, line=:dash)
+=#
