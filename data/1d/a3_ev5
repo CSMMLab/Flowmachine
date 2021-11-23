@@ -1,0 +1,146 @@
+2021-11-23 11:57:32.096092 | ------------------------------------------------------------------------
+2021-11-23 11:57:32.096115 | |    _  _____ _____     ____ _____                                     |
+2021-11-23 11:57:32.096118 | |   | |/ /_ _|_   _|   |  _ \_   _|                                    |
+2021-11-23 11:57:32.096120 | |   | ' / | |  | |_____| |_) || |            Version                   |
+2021-11-23 11:57:32.096122 | |   | . \ | |  | |_____|  _ < | |             0.1.0                    |
+2021-11-23 11:57:32.096124 | |   |_|\_\___| |_|     |_| \_\|_|                                      |
+2021-11-23 11:57:32.096127 | |                                                                      |
+2021-11-23 11:57:32.096129 | ------------------------------------------------------------------------
+2021-11-23 11:57:32.096132 | |    Copyright statement goes here                                     |
+2021-11-23 11:57:32.096134 | ------------------------------------------------------------------------
+2021-11-23 11:57:32.096137 | |
+2021-11-23 11:57:32.096143 | | Git commit :	7f4397f67e72aff6b7e1d50f8dd667c5c046b59b
+2021-11-23 11:57:32.096147 | | Config file:	../examples/DataGeneratorClassification.cfg
+2021-11-23 11:57:32.096153 | | MPI Threads:	1
+2021-11-23 11:57:32.098506 | | OMP Threads:	32
+2021-11-23 11:57:32.098520 | |
+2021-11-23 11:57:32.098524 | -------------------------- Config File Info ----------------------------
+2021-11-23 11:57:32.098527 | |
+2021-11-23 11:57:32.098555 | | DATA_GENERATOR_MODE = YES
+2021-11-23 11:57:32.098560 | | SAMPLER_NAME = CLASSIFICATION_SAMPLER
+2021-11-23 11:57:32.098562 | | NORMALIZED_SAMPLING = YES
+2021-11-23 11:57:32.098563 | | TRAINING_SET_SIZE = 2000
+2021-11-23 11:57:32.098565 | | SPATIAL_DIM = 1
+2021-11-23 11:57:32.098570 | | MAX_MOMENT_SOLVER = 3
+2021-11-23 11:57:32.098572 | | ALPHA_SAMPLING = YES
+2021-11-23 11:57:32.098575 | | UNIFORM_SAMPLING = NO
+2021-11-23 11:57:32.098577 | | ALPHA_SAMPLING_BOUND = 0.03
+2021-11-23 11:57:32.098579 | | MIN_EIGENVALUE_THRESHOLD = 1e-5
+2021-11-23 11:57:32.098582 | | MAX_VELOCITY = 5.0
+2021-11-23 11:57:32.098585 | | MIN_VELOCITY = -5.0
+2021-11-23 11:57:32.098587 | | MIN_TEMPERATURE = 0.1
+2021-11-23 11:57:32.098589 | | MAX_TEMPERATURE = 1.0
+2021-11-23 11:57:32.098594 | | N_TEMPERATURES = 10
+2021-11-23 11:57:32.098597 | | 
+2021-11-23 11:57:32.098600 | | 
+2021-11-23 11:57:32.098603 | | OUTPUT_DIR = ../result
+2021-11-23 11:57:32.098605 | | OUTPUT_FILE = trainM11D
+2021-11-23 11:57:32.098608 | | LOG_DIR = ../result/logs
+2021-11-23 11:57:32.098609 | | LOG_FILE = a3_ev5
+2021-11-23 11:57:32.098612 | | 
+2021-11-23 11:57:32.098614 | | SPHERICAL_BASIS = SPHERICAL_MONOMIALS
+2021-11-23 11:57:32.098616 | | ENTROPY_FUNCTIONAL = MAXWELL_BOLTZMANN
+2021-11-23 11:57:32.098619 | | ENTROPY_OPTIMIZER = NEWTON
+2021-11-23 11:57:32.098623 | | QUAD_TYPE = GAUSS_LEGENDRE_1D
+2021-11-23 11:57:32.098624 | | QUAD_ORDER = 100
+2021-11-23 11:57:32.098627 | | 
+2021-11-23 11:57:32.103472 | ------------------------ Data Generation Starts --------------------------
+2021-11-23 11:57:32.103479 | | Generating 2000 datapoints.
+2021-11-23 11:57:32.103481 | | Sample Lagrange multipliers.
+2021-11-23 11:57:32.103492 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.100000
+|
+2021-11-23 11:57:32.103500 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-5.000000
+|
+2021-11-23 11:57:32.144699 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.190000
+|
+2021-11-23 11:57:32.144705 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-2.631579
+|
+2021-11-23 11:57:32.152942 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.280000
+|
+2021-11-23 11:57:32.152946 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-1.785714
+|
+2021-11-23 11:57:32.161188 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.370000
+|
+2021-11-23 11:57:32.161208 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-1.351351
+|
+2021-11-23 11:57:32.169465 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.460000
+|
+2021-11-23 11:57:32.169470 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-1.086957
+|
+2021-11-23 11:57:32.177681 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.550000
+|
+2021-11-23 11:57:32.177685 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.909091
+|
+2021-11-23 11:57:32.185851 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.640000
+|
+2021-11-23 11:57:32.185855 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.781250
+|
+2021-11-23 11:57:32.194034 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.730000
+|
+2021-11-23 11:57:32.194038 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.684932
+|
+2021-11-23 11:57:32.202208 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.820000
+|
+2021-11-23 11:57:32.202212 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.609756
+|
+2021-11-23 11:57:32.211076 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.910000
+|
+2021-11-23 11:57:32.211080 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.549451
+|
+2021-11-23 11:57:32.219981 | | Multipliers sampled.
+2021-11-23 11:57:32.219983 | | Reconstruct kinetic density functions.
+2021-11-23 11:57:32.221667 | | Compute KL Divergence to Maxwellian with threshold XXX.
+2021-11-23 11:57:32.221669 | | Compute realizable problems.
+2021-11-23 11:57:32.221670 | | Print Solution.
+2021-11-23 11:57:32.221672 | ---------------------- Data Generation Successful ------------------------
+2021-11-23 11:57:32.292348 | ------------------------- Data printed to file ---------------------------
