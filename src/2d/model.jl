@@ -4,7 +4,7 @@ using Flux: onecold, @epochs
 cd(@__DIR__)
 @load "data.jld2" X1 Y1 X2 Y2
 
-device = gpu
+device = cpu#gpu
 
 X1 = Float32.(X1) |> device
 Y1 = Float32.(Y1) |> device
