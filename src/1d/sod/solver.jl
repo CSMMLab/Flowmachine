@@ -21,8 +21,8 @@ end
 ###
 
 cd(@__DIR__)
-@load "../nn_scalar.jld2" nn
-#@load "/home2/vavrines/Coding/Flowmachine/src/1d/sampler/nn_rif.jld2" nn
+#@load "../nn_scalar.jld2" nn
+@load "/home2/vavrines/Coding/Flowmachine/src/1d/sampler/nn_rif.jld2" nn
 
 D = Dict{Symbol,Any}()
 begin
