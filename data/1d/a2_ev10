@@ -1,0 +1,954 @@
+2021-11-26 14:48:22.432352 | ------------------------------------------------------------------------
+2021-11-26 14:48:22.432366 | |    _  _____ _____     ____ _____                                     |
+2021-11-26 14:48:22.432367 | |   | |/ /_ _|_   _|   |  _ \_   _|                                    |
+2021-11-26 14:48:22.432368 | |   | ' / | |  | |_____| |_) || |            Version                   |
+2021-11-26 14:48:22.432369 | |   | . \ | |  | |_____|  _ < | |             0.1.0                    |
+2021-11-26 14:48:22.432369 | |   |_|\_\___| |_|     |_| \_\|_|                                      |
+2021-11-26 14:48:22.432370 | |                                                                      |
+2021-11-26 14:48:22.432371 | ------------------------------------------------------------------------
+2021-11-26 14:48:22.432372 | |    Copyright statement goes here                                     |
+2021-11-26 14:48:22.432372 | ------------------------------------------------------------------------
+2021-11-26 14:48:22.432373 | |
+2021-11-26 14:48:22.432375 | | Git commit :	4c19a372a2212bb2c76726905ede680bcb442d13
+2021-11-26 14:48:22.432376 | | Config file:	../examples/DataGeneratorClassification1D.cfg
+2021-11-26 14:48:22.432377 | | MPI Threads:	1
+2021-11-26 14:48:22.433836 | | OMP Threads:	32
+2021-11-26 14:48:22.433848 | |
+2021-11-26 14:48:22.433849 | -------------------------- Config File Info ----------------------------
+2021-11-26 14:48:22.433850 | |
+2021-11-26 14:48:22.433871 | | DATA_GENERATOR_MODE = YES
+2021-11-26 14:48:22.433873 | | SAMPLER_NAME = CLASSIFICATION_SAMPLER
+2021-11-26 14:48:22.433874 | | NORMALIZED_SAMPLING = YES
+2021-11-26 14:48:22.433875 | | TRAINING_SET_SIZE = 10000
+2021-11-26 14:48:22.433878 | | SPATIAL_DIM = 1
+2021-11-26 14:48:22.433880 | | MAX_MOMENT_SOLVER = 2
+2021-11-26 14:48:22.433881 | | ALPHA_SAMPLING = YES
+2021-11-26 14:48:22.433882 | | UNIFORM_SAMPLING = NO
+2021-11-26 14:48:22.433884 | | ALPHA_SAMPLING_BOUND = 0.005
+2021-11-26 14:48:22.433885 | | MIN_EIGENVALUE_THRESHOLD = 1e-1
+2021-11-26 14:48:22.433885 | | MAX_VELOCITY = 10.0
+2021-11-26 14:48:22.433886 | | MIN_TEMPERATURE = 0.5
+2021-11-26 14:48:22.433887 | | MAX_TEMPERATURE = 2.5
+2021-11-26 14:48:22.433889 | | N_TEMPERATURES = 100
+2021-11-26 14:48:22.433890 | | 
+2021-11-26 14:48:22.433891 | | 
+2021-11-26 14:48:22.433892 | | OUTPUT_DIR = ../result
+2021-11-26 14:48:22.433893 | | OUTPUT_FILE = trainM11D
+2021-11-26 14:48:22.433895 | | LOG_DIR = ../result/logs
+2021-11-26 14:48:22.433897 | | LOG_FILE = a2_ev10
+2021-11-26 14:48:22.433898 | | 
+2021-11-26 14:48:22.433899 | | SPHERICAL_BASIS = SPHERICAL_MONOMIALS
+2021-11-26 14:48:22.433901 | | ENTROPY_FUNCTIONAL = MAXWELL_BOLTZMANN
+2021-11-26 14:48:22.433903 | | ENTROPY_OPTIMIZER = NEWTON
+2021-11-26 14:48:22.433904 | | QUAD_TYPE = GAUSS_LEGENDRE_1D
+2021-11-26 14:48:22.433905 | | QUAD_ORDER = 100
+2021-11-26 14:48:22.442063 | ------------------------ Data Generation Starts --------------------------
+2021-11-26 14:48:22.442079 | | Generating 10000 datapoints.
+2021-11-26 14:48:22.442081 | | Sample Lagrange multipliers.
+2021-11-26 14:48:22.442091 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.500000
+|
+2021-11-26 14:48:22.442096 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-1.000000
+|
+2021-11-26 14:48:22.508382 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.520000
+|
+2021-11-26 14:48:22.508388 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.961538
+|
+2021-11-26 14:48:22.545283 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.540000
+|
+2021-11-26 14:48:22.545288 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.925926
+|
+2021-11-26 14:48:22.582300 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.560000
+|
+2021-11-26 14:48:22.582304 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.892857
+|
+2021-11-26 14:48:22.620357 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.580000
+|
+2021-11-26 14:48:22.620364 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.862069
+|
+2021-11-26 14:48:22.657328 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.600000
+|
+2021-11-26 14:48:22.657332 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.833333
+|
+2021-11-26 14:48:22.694263 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.620000
+|
+2021-11-26 14:48:22.694269 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.806452
+|
+2021-11-26 14:48:22.730678 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.640000
+|
+2021-11-26 14:48:22.730682 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.781250
+|
+2021-11-26 14:48:22.767539 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.660000
+|
+2021-11-26 14:48:22.767544 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.757576
+|
+2021-11-26 14:48:22.804432 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.680000
+|
+2021-11-26 14:48:22.804437 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.735294
+|
+2021-11-26 14:48:22.841315 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.700000
+|
+2021-11-26 14:48:22.841319 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.714286
+|
+2021-11-26 14:48:22.878022 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.720000
+|
+2021-11-26 14:48:22.878026 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.694444
+|
+2021-11-26 14:48:22.914724 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.740000
+|
+2021-11-26 14:48:22.914728 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.675676
+|
+2021-11-26 14:48:22.951552 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.760000
+|
+2021-11-26 14:48:22.951558 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.657895
+|
+2021-11-26 14:48:22.988088 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.780000
+|
+2021-11-26 14:48:22.988092 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.641026
+|
+2021-11-26 14:48:23.024728 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.800000
+|
+2021-11-26 14:48:23.024734 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.625000
+|
+2021-11-26 14:48:23.061404 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.820000
+|
+2021-11-26 14:48:23.061408 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.609756
+|
+2021-11-26 14:48:23.098013 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.840000
+|
+2021-11-26 14:48:23.098017 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.595238
+|
+2021-11-26 14:48:23.134608 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.860000
+|
+2021-11-26 14:48:23.134612 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.581395
+|
+2021-11-26 14:48:23.171369 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.880000
+|
+2021-11-26 14:48:23.171374 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.568182
+|
+2021-11-26 14:48:23.208008 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.900000
+|
+2021-11-26 14:48:23.208013 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.555556
+|
+2021-11-26 14:48:23.244639 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.920000
+|
+2021-11-26 14:48:23.244643 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.543478
+|
+2021-11-26 14:48:23.281282 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.940000
+|
+2021-11-26 14:48:23.281286 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.531915
+|
+2021-11-26 14:48:23.318042 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.960000
+|
+2021-11-26 14:48:23.318046 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.520833
+|
+2021-11-26 14:48:23.354771 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =0.980000
+|
+2021-11-26 14:48:23.354776 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.510204
+|
+2021-11-26 14:48:23.391558 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.000000
+|
+2021-11-26 14:48:23.391567 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.500000
+|
+2021-11-26 14:48:23.428583 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.020000
+|
+2021-11-26 14:48:23.428588 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.490196
+|
+2021-11-26 14:48:23.465222 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.040000
+|
+2021-11-26 14:48:23.465227 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.480769
+|
+2021-11-26 14:48:23.501825 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.060000
+|
+2021-11-26 14:48:23.501830 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.471698
+|
+2021-11-26 14:48:23.538655 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.080000
+|
+2021-11-26 14:48:23.538659 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.462963
+|
+2021-11-26 14:48:23.575460 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.100000
+|
+2021-11-26 14:48:23.575464 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.454545
+|
+2021-11-26 14:48:23.612351 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.120000
+|
+2021-11-26 14:48:23.612357 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.446429
+|
+2021-11-26 14:48:23.649081 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.140000
+|
+2021-11-26 14:48:23.649085 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.438596
+|
+2021-11-26 14:48:23.685874 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.160000
+|
+2021-11-26 14:48:23.685881 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.431034
+|
+2021-11-26 14:48:23.722655 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.180000
+|
+2021-11-26 14:48:23.722669 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.423729
+|
+2021-11-26 14:48:23.759474 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.200000
+|
+2021-11-26 14:48:23.759478 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.416667
+|
+2021-11-26 14:48:23.796303 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.220000
+|
+2021-11-26 14:48:23.796307 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.409836
+|
+2021-11-26 14:48:23.833030 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.240000
+|
+2021-11-26 14:48:23.833034 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.403226
+|
+2021-11-26 14:48:23.869665 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.260000
+|
+2021-11-26 14:48:23.869669 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.396825
+|
+2021-11-26 14:48:23.905240 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.280000
+|
+2021-11-26 14:48:23.905244 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.390625
+|
+2021-11-26 14:48:23.940916 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.300000
+|
+2021-11-26 14:48:23.940921 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.384615
+|
+2021-11-26 14:48:23.976605 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.320000
+|
+2021-11-26 14:48:23.976609 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.378788
+|
+2021-11-26 14:48:24.012284 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.340000
+|
+2021-11-26 14:48:24.012290 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.373134
+|
+2021-11-26 14:48:24.048016 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.360000
+|
+2021-11-26 14:48:24.048020 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.367647
+|
+2021-11-26 14:48:24.083729 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.380000
+|
+2021-11-26 14:48:24.083733 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.362319
+|
+2021-11-26 14:48:24.119422 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.400000
+|
+2021-11-26 14:48:24.119427 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.357143
+|
+2021-11-26 14:48:24.155189 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.420000
+|
+2021-11-26 14:48:24.155193 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.352113
+|
+2021-11-26 14:48:24.191153 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.440000
+|
+2021-11-26 14:48:24.191160 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.347222
+|
+2021-11-26 14:48:24.226931 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.460000
+|
+2021-11-26 14:48:24.226936 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.342466
+|
+2021-11-26 14:48:24.262552 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.480000
+|
+2021-11-26 14:48:24.262566 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.337838
+|
+2021-11-26 14:48:24.298264 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.500000
+|
+2021-11-26 14:48:24.298268 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.333333
+|
+2021-11-26 14:48:24.333981 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.520000
+|
+2021-11-26 14:48:24.333985 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.328947
+|
+2021-11-26 14:48:24.369662 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.540000
+|
+2021-11-26 14:48:24.369667 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.324675
+|
+2021-11-26 14:48:24.405383 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.560000
+|
+2021-11-26 14:48:24.405387 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.320513
+|
+2021-11-26 14:48:24.441114 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.580000
+|
+2021-11-26 14:48:24.441121 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.316456
+|
+2021-11-26 14:48:24.476839 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.600000
+|
+2021-11-26 14:48:24.476844 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.312500
+|
+2021-11-26 14:48:24.512514 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.620000
+|
+2021-11-26 14:48:24.512518 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.308642
+|
+2021-11-26 14:48:24.548187 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.640000
+|
+2021-11-26 14:48:24.548191 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.304878
+|
+2021-11-26 14:48:24.583831 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.660000
+|
+2021-11-26 14:48:24.583835 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.301205
+|
+2021-11-26 14:48:24.619592 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.680000
+|
+2021-11-26 14:48:24.619596 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.297619
+|
+2021-11-26 14:48:24.655287 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.700000
+|
+2021-11-26 14:48:24.655292 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.294118
+|
+2021-11-26 14:48:24.691270 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.720000
+|
+2021-11-26 14:48:24.691275 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.290698
+|
+2021-11-26 14:48:24.726959 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.740000
+|
+2021-11-26 14:48:24.726964 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.287356
+|
+2021-11-26 14:48:24.762681 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.760000
+|
+2021-11-26 14:48:24.762686 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.284091
+|
+2021-11-26 14:48:24.798383 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.780000
+|
+2021-11-26 14:48:24.798397 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.280899
+|
+2021-11-26 14:48:24.834103 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.800000
+|
+2021-11-26 14:48:24.834109 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.277778
+|
+2021-11-26 14:48:24.869886 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.820000
+|
+2021-11-26 14:48:24.869891 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.274725
+|
+2021-11-26 14:48:24.905276 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.840000
+|
+2021-11-26 14:48:24.905281 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.271739
+|
+2021-11-26 14:48:24.941094 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.860000
+|
+2021-11-26 14:48:24.941100 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.268817
+|
+2021-11-26 14:48:24.976762 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.880000
+|
+2021-11-26 14:48:24.976766 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.265957
+|
+2021-11-26 14:48:25.012544 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.900000
+|
+2021-11-26 14:48:25.012549 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.263158
+|
+2021-11-26 14:48:25.047766 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.920000
+|
+2021-11-26 14:48:25.047773 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.260417
+|
+2021-11-26 14:48:25.083093 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.940000
+|
+2021-11-26 14:48:25.083097 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.257732
+|
+2021-11-26 14:48:25.118714 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.960000
+|
+2021-11-26 14:48:25.118718 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.255102
+|
+2021-11-26 14:48:25.154366 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =1.980000
+|
+2021-11-26 14:48:25.154371 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.252525
+|
+2021-11-26 14:48:25.190119 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.000000
+|
+2021-11-26 14:48:25.190127 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.250000
+|
+2021-11-26 14:48:25.225784 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.020000
+|
+2021-11-26 14:48:25.225789 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.247525
+|
+2021-11-26 14:48:25.261448 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.040000
+|
+2021-11-26 14:48:25.261452 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.245098
+|
+2021-11-26 14:48:25.297149 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.060000
+|
+2021-11-26 14:48:25.297154 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.242718
+|
+2021-11-26 14:48:25.332851 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.080000
+|
+2021-11-26 14:48:25.332865 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.240385
+|
+2021-11-26 14:48:25.368552 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.100000
+|
+2021-11-26 14:48:25.368557 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.238095
+|
+2021-11-26 14:48:25.404237 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.120000
+|
+2021-11-26 14:48:25.404242 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.235849
+|
+2021-11-26 14:48:25.440000 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.140000
+|
+2021-11-26 14:48:25.440006 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.233645
+|
+2021-11-26 14:48:25.475807 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.160000
+|
+2021-11-26 14:48:25.475812 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.231481
+|
+2021-11-26 14:48:25.511660 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.180000
+|
+2021-11-26 14:48:25.511664 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.229358
+|
+2021-11-26 14:48:25.547496 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.200000
+|
+2021-11-26 14:48:25.547500 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.227273
+|
+2021-11-26 14:48:25.583284 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.220000
+|
+2021-11-26 14:48:25.583288 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.225225
+|
+2021-11-26 14:48:25.619012 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.240000
+|
+2021-11-26 14:48:25.619017 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.223214
+|
+2021-11-26 14:48:25.654797 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.260000
+|
+2021-11-26 14:48:25.654801 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.221239
+|
+2021-11-26 14:48:25.690567 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.280000
+|
+2021-11-26 14:48:25.690573 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.219298
+|
+2021-11-26 14:48:25.726317 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.300000
+|
+2021-11-26 14:48:25.726321 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.217391
+|
+2021-11-26 14:48:25.762059 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.320000
+|
+2021-11-26 14:48:25.762063 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.215517
+|
+2021-11-26 14:48:25.797847 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.340000
+|
+2021-11-26 14:48:25.797851 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.213675
+|
+2021-11-26 14:48:25.833592 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.360000
+|
+2021-11-26 14:48:25.833597 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.211864
+|
+2021-11-26 14:48:25.869259 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.380000
+|
+2021-11-26 14:48:25.869264 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.210084
+|
+2021-11-26 14:48:25.905043 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.400000
+|
+2021-11-26 14:48:25.905047 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.208333
+|
+2021-11-26 14:48:25.940749 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.420000
+|
+2021-11-26 14:48:25.940754 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.206612
+|
+2021-11-26 14:48:25.976534 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.440000
+|
+2021-11-26 14:48:25.976539 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.204918
+|
+2021-11-26 14:48:26.012379 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.460000
+|
+2021-11-26 14:48:26.012384 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.203252
+|
+2021-11-26 14:48:26.048143 | | Sample Lagrange multipliers with mean based on Maxwellians with
+| Density =1.000000
+| Bulk velocity =0.000000
+| Temperature =2.480000
+|
+2021-11-26 14:48:26.048148 | | Lagrange multiplier means are:
+| Alpha1 =0.000000
+| Alpha2 =-0.201613
+|
+2021-11-26 14:48:26.083863 | | Multipliers sampled.
+2021-11-26 14:48:26.083866 | | Reconstruct kinetic density functions.
+2021-11-26 14:48:26.092356 | | Compute KL Divergence to Maxwellian with threshold XXX.
+2021-11-26 14:48:26.092362 | | Compute realizable problems.
+2021-11-26 14:48:26.092363 | | Print Solution.
+2021-11-26 14:48:26.092364 | ---------------------- Data Generation Successful ------------------------
+2021-11-26 14:48:26.438243 | ------------------------- Data printed to file ---------------------------

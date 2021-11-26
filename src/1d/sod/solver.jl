@@ -21,8 +21,8 @@ end
 ###
 
 cd(@__DIR__)
-#@load "../nn.jld2" nn
-@load "/home2/vavrines/Coding/Flowmachine/src/1d/sampler/nn_rif.jld2" nn
+@load "../nn_scalar.jld2" nn
+#@load "/home2/vavrines/Coding/Flowmachine/src/1d/sampler/nn_rif.jld2" nn
 
 D = Dict{Symbol,Any}()
 begin
@@ -89,8 +89,8 @@ for iter = 1:nt
         sw = (ctr[i].w .- ctr[i-1].w) / ks.ps.dx[i]
         tau = vhs_collision_time(prim, ks.gas.μᵣ, ks.gas.ω)
 
-        regime = nn([w; sw; tau]) |> onecold
-        #regime = ifelse(iter < 15, 2, nn([w; sw; tau]) |> onecold)
+        #regime = nn([w; sw; tau]) |> onecold
+        regime = 1 - Int(round(nn([w; sw; tau])[1]))
 
         if regime == 1
             flux_gks!(
@@ -141,7 +141,8 @@ for i = 1:ks.ps.nx
     tau = vhs_collision_time(ctr[i].prim, ks.gas.μᵣ, ks.gas.ω)
     x, y = regime_data(ks, ctr[i].w, ctr[i].prim, sw, ctr[i].f)
 
-    regime[i] = nn(x) |> onecold
+    #regime[i] = nn(x) |> onecold
+    regime[i] = round(nn(x)[1])
 end
 
 plot!(ks.ps.x[1:ks.ps.nx], regime)
