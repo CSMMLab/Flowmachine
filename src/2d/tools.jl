@@ -15,4 +15,3 @@ function regime_data(ks, w, prim, swx, swy, f)
 
     return x, y
 end
-
