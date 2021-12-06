@@ -1,3 +1,5 @@
+using LinearAlgebra
+
 function regime_data(ks, w, prim, swx, swy, f)
     Mu, Mv, Mxi, _, _1 = gauss_moments(prim, ks.gas.K)
     a = pdf_slope(prim, swx, ks.gas.K)
@@ -11,7 +13,7 @@ function regime_data(ks, w, prim, swx, swy, f)
 
     sw = (swx.^2 + swy.^2).^0.5
     x = [w; sw; tau]
-    y = ifelse(L <= 0.005, [1.0, 0.0], [0.0, 1.0])
+    y = ifelse(L <= 0.005, 0.0, 1.0)
 
     return x, y
 end

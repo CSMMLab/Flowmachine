@@ -110,10 +110,10 @@ begin
         space = "2d2f2v",
         boundary = ["maxwell", "extra", "mirror", "mirror"],
         limiter = "minmod",
-        cfl = 0.3,
-        maxTime = 10.0, # time
+        cfl = 0.5,
+        maxTime = 15.0, # time
     )
-    ps = CSpace2D(1.0, 6.0, 50, 0.0, π, 50, 1, 1)
+    ps = CSpace2D(1.0, 6.0, 60, 0.0, π, 50, 1, 1)
     vs = VSpace2D(-10.0, 10.0, 48, -10.0, 10.0, 48)
     gas = Gas(Kn = 1e-2, Ma = 5.0, K = 1.0)
     
@@ -138,8 +138,8 @@ begin
     ks = SolverSet(set, ps, vs, gas, ib)
 end
 
-#isNewRun = true
-isNewRun = false
+isNewRun = true
+#isNewRun = false
 if isNewRun
     ctr, a1face, a2face = init_fvm(ks, ks.ps)
 else
@@ -151,7 +151,7 @@ dt = timestep(ks, ctr, 0.0)
 nt = ks.set.maxTime ÷ dt |> Int
 res = zeros(4)
 @showprogress for iter = 1:nt
-    rc!(ks, ctr)
+    #rc!(ks, ctr)
     ev!(ks, ctr, a1face, a2face, dt)
     update!(ks, ctr, a1face, a2face, dt, res)
 
@@ -164,8 +164,8 @@ res = zeros(4)
     end
 
     global t += dt
-    if iter % 99 == 0
-        @show res
+    if iter % 199 == 0
+        println("residuals: $(res)")
         @save "kn2kt.jld2" ctr a1face a2face
     end
 
