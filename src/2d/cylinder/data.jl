@@ -41,7 +41,7 @@ end
 
 ctr, a1face, a2face = init_fvm(ks, ks.ps)
 cd(@__DIR__)
-include("../tools.jl")
+include("../common.jl")
 #@load "kn3.jld2" ctr
 
 t = 0.0
@@ -77,7 +77,7 @@ res = zeros(4)
             swx = (swx1 + swx2) ./ 2
             swy = (swy1 + swy2) ./ 2
 
-            x, y = regime_data(ks, ctr[i, j].w, ctr[i, j].prim, swx, swy, ctr[i, j].h)
+            x, y = regime_data(ks, ctr[i, j].w, swx, swy, ctr[i, j].h)
             global X = hcat(X, x)
             global Y = hcat(Y, y)
         end
@@ -110,7 +110,7 @@ end=#
     swx = (swx1 + swx2) ./ 2
     swy = (swy1 + swy2) ./ 2
 
-    x, y = regime_data(ks, ctr[i, j].w, ctr[i, j].prim, swx, swy, ctr[i, j].h)
+    x, y = regime_data(ks, ctr[i, j].w, swx, swy, ctr[i, j].h)
     X = hcat(X, x)
     Y = hcat(Y, y)
 end=#
