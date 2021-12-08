@@ -1,24 +1,6 @@
-using Kinetic, Plots, LinearAlgebra, JLD2, Flux
-using Flux: onecold
-using ProgressMeter: @showprogress
-
-function regime_data(ks, w, prim, sw, f)
-    Mu, Mxi, _, _1 = gauss_moments(prim, ks.gas.K)
-    a = pdf_slope(prim, sw, ks.gas.K)
-    swt = -prim[1] .* moments_conserve_slope(a, Mu, Mxi, 1)
-    A = pdf_slope(prim, swt, ks.gas.K)
-    tau = vhs_collision_time(prim, ks.gas.μᵣ, ks.gas.ω)
-    fr = chapman_enskog(ks.vs.u, prim, a, A, tau)
-    L = norm((f .- fr) ./ prim[1])
-
-    x = [w; sw; tau]
-    y = ifelse(L <= 0.005, [1.0, 0.0], [0.0, 1.0])
-    return x, y
-end
-
-###
-# initialize kinetic solver
-###
+using Kinetic, Plots, Flux
+using KitBase.JLD2
+using KitBase.ProgressMeter: @showprogress
 
 cd(@__DIR__)
 #@load "../nn_scalar.jld2" nn
@@ -60,7 +42,7 @@ begin
 end
 
 ks = SolverSet(D)
-ctr, face = init_fvm(ks, ks.ps, :dynamic_array; structarray = true)
+ctr, face = init_fvm(ks, ks.ps, :static_array; structarray = true)
 #=for i in eachindex(ctr)
     prim = [2.0 * rand(), 0.0, 1 / rand()]
 
@@ -80,7 +62,7 @@ res = zero(ctr[1].w)
 for iter = 1:nt
     println("iteration: $iter")
 
-    reconstruct!(ks, ctr)
+    #reconstruct!(ks, ctr)
 
     #evolve!(ks, ctr, face, dt; mode = Symbol(ks.set.flux), bc = Symbol(ks.set.boundary))
     for i in eachindex(face)
@@ -132,19 +114,18 @@ for iter = 1:nt
     #end
 end
 
-plot_line(ks, ctr)
+plot(ks, ctr)
 
 # test
 regime = zeros(Int, ks.ps.nx)
 for i = 1:ks.ps.nx
     sw = (ctr[i+1].w .- ctr[i-1].w) / ks.ps.dx[i] / 2.0
     tau = vhs_collision_time(ctr[i].prim, ks.gas.μᵣ, ks.gas.ω)
-    x, y = regime_data(ks, ctr[i].w, ctr[i].prim, sw, ctr[i].f)
+    x, y = regime_data(ks, ctr[i].w, sw, ctr[i].f)
 
     #regime[i] = nn(x) |> onecold
     regime[i] = round(nn(x)[1])
 end
-
 plot!(ks.ps.x[1:ks.ps.nx], regime)
 
 regime1 = zeros(Int, ks.ps.nx)
@@ -155,9 +136,8 @@ for i = 1:ks.ps.nx
     ℓ = (1/ctr[i].prim[end])^ks.gas.ω / ctr[i].prim[1] * sqrt(ctr[i].prim[end]) * ks.gas.Kn
 
     KnGLL[i] = ℓ / L
-    regime1[i] = ifelse(KnGLL[i] >= 0.05, 2, 1)
+    regime1[i] = ifelse(KnGLL[i] >= 0.05, 1, 0)
 end
-
 plot!(ks.ps.x[1:ks.ps.nx], regime1)
 
 plot(ks.ps.x[1:ks.ps.nx], KnGLL)

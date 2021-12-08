@@ -1,28 +1,18 @@
-using Kinetic, Plots, LinearAlgebra, Flux, JLD2
-using Flux: onecold
-using ProgressMeter: @showprogress
+using Kinetic, Plots, Flux
+using KitBase.JLD2
+using KitBase.ProgressMeter: @showprogress
 
-function regime_data(ks, w, prim, sw, f)
-    Mu, Mxi, _, _1 = gauss_moments(prim, ks.gas.K)
-    a = pdf_slope(prim, sw, ks.gas.K)
-    sw = -prim[1] .* moments_conserve_slope(a, Mu, Mxi, 1)
-    A = pdf_slope(prim, sw, ks.gas.K)
-    tau = vhs_collision_time(prim, ks.gas.μᵣ, ks.gas.ω)
-    fr = chapman_enskog(ks.vs.u, prim, a, A, tau)
-    L = norm((f .- fr) ./ prim[1])
-
-    x = [w; sw; tau]
-    y = ifelse(L <= 0.005, [1.0, 0.0], [0.0, 1.0])
-    return x, y
-end
+cd(@__DIR__)
+#@load "../nn_scalar.jld2" nn
+@load "/home2/vavrines/Coding/Flowmachine/src/1d/sampler/nn_rif.jld2" nn
 
 set = Setup(case = "sod", space = "1d2f1v", maxTime = 0.15)
 ps = PSpace1D(0.0, 1.0, 200, 1)
 vs = VSpace1D(-5.0, 5.0, 100)
-gas = Gas(Kn = 1e-2)
+gas = Gas(Kn = 1e-4)
 ib = IB2F(ib_sod(set, ps, vs, gas)...)
 ks = SolverSet(set, ps, vs, gas, ib)
-ctr, face = init_fvm(ks, ks.ps)
+ctr, face = init_fvm(ks, ks.ps, :static_array; structarray = true)
 
 t = 0.0
 dt = timestep(ks, ctr, t)
@@ -37,16 +27,19 @@ res = zero(ctr[1].w)
         prim = (ctr[i-1].prim .+ ctr[i].prim) ./ 2
         sw = (ctr[i].w .- ctr[i-1].w) / ks.ps.dx[i]
         
-        L = abs(ctr[i].w[1] / sw[1])
-        ℓ = (1/prim[end])^ks.gas.ω / prim[1] * sqrt(prim[end]) * ks.gas.Kn
-        KnGLL = ℓ / L
-        isNS = ifelse(KnGLL > 0.05, false, true)
+        #L = abs(ctr[i].w[1] / sw[1])
+        #ℓ = (1/prim[end])^ks.gas.ω / prim[1] * sqrt(prim[end]) * ks.gas.Kn
+        #KnGLL = ℓ / L
+        #isNS = ifelse(KnGLL > 0.05, false, true)
 
         #h = (ctr[i-1].h .+ ctr[i].h) ./ 2
         #x, y = regime_data(ks, w, prim, sw, h)
         #isNS = ifelse(onecold(y) == 1, true, false)
+        
+        tau = vhs_collision_time(prim, ks.gas.μᵣ, ks.gas.ω)
+        regime = Int(round(nn([w; sw; tau])[1]))
 
-        if isNS
+        if regime == 0
             flux_gks!(
                 face[i].fw,
                 face[i].fh,
@@ -90,7 +83,6 @@ res = zero(ctr[1].w)
 end
 
 plot(ks, ctr)
-plot!(ks, ctr0)
 
 cd(@__DIR__)
 #@save "pure_kinetic.jld2" ks ctr
@@ -99,11 +91,20 @@ cd(@__DIR__)
 #@save "kngll.jld2" ks ctr
 
 begin
+    #regime = zeros(Int, ks.ps.nx)
+    #for i = 1:ks.ps.nx
+    #    sw = (ctr[i+1].w .- ctr[i-1].w) / ks.ps.dx[i] / 2.0
+    #    x, y = regime_data(ks, ctr[i].w, sw, ctr[i].h)
+    #    regime[i] = Int(round(y))
+    #end
     regime = zeros(Int, ks.ps.nx)
     for i = 1:ks.ps.nx
         sw = (ctr[i+1].w .- ctr[i-1].w) / ks.ps.dx[i] / 2.0
-        x, y = regime_data(ks, ctr[i].w, ctr[i].prim, sw, ctr[i].h)
-        regime[i] = onecold(y)
+        tau = vhs_collision_time(ctr[i].prim, ks.gas.μᵣ, ks.gas.ω)
+        x, y = regime_data(ks, ctr[i].w, sw, ctr[i].h)
+
+        #regime[i] = nn(x) |> onecold
+        regime[i] = round(nn(x)[1])
     end
 
     regime1 = zeros(Int, ks.ps.nx)
@@ -114,7 +115,7 @@ begin
         ℓ = (1/ctr[i].prim[end])^ks.gas.ω / ctr[i].prim[1] * sqrt(ctr[i].prim[end]) * ks.gas.Kn
 
         KnGLL[i] = ℓ / L
-        regime1[i] = ifelse(KnGLL[i] >= 0.05, 2, 1)
+        regime1[i] = ifelse(KnGLL[i] >= 0.05, 1, 0)
     end
 end
 
