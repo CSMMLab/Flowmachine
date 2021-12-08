@@ -2,8 +2,8 @@ using KitBase, Plots, JLD2
 using KitBase.ProgressMeter: @showprogress
 pyplot()
 
-X = Float32.([[1.0, 0.0, 0.0, 1.0]; zeros(4); 1e-4])
-Y = Float32.([1.0, 0.0])
+global X = Float32.([[1.0, 0.0, 0.0, 1.0]; zeros(4); 1e-4])
+global Y = Float32(0.0)
 
 begin
     set = Setup(
@@ -12,11 +12,11 @@ begin
         boundary = ["maxwell", "extra", "mirror", "mirror"],
         limiter = "minmod",
         cfl = 0.5,
-        maxTime = 10.0, # time
+        maxTime = 5.0, # time
     )
     ps = CSpace2D(1.0, 6.0, 30, 0.0, π, 50, 1, 1)
     vs = VSpace2D(-10.0, 10.0, 48, -10.0, 10.0, 48)
-    gas = Gas(Kn = 1e-3, Ma = 4.0, K = 1.0)
+    gas = Gas(Kn = 1e-3, Ma = 5.0, K = 1.0)
     
     prim0 = [1.0, 0.0, 0.0, 1.0]
     prim1 = [1.0, gas.Ma * sound_speed(1.0, gas.γ), 0.0, 1.0]
@@ -41,14 +41,14 @@ end
 
 ctr, a1face, a2face = init_fvm(ks, ks.ps)
 cd(@__DIR__)
-include("../tools.jl")
-@load "kn3.jld2" ctr
+include("../common.jl")
+#@load "kn3.jld2" ctr
 
 t = 0.0
 dt = timestep(ks, ctr, 0.0)
 nt = ks.set.maxTime ÷ dt |> Int
 res = zeros(4)
-@showprogress for iter = 1:1#nt
+@showprogress for iter = 1:nt
     #reconstruct!(ks, ctr)
     #rcnew!(ks, ctr)
     evolve!(ks, ctr, a1face, a2face, dt)
@@ -68,7 +68,7 @@ res = zeros(4)
         break
     end
 
-    if iter%1 == 0
+    if iter%17 == 0
         for j = 1:ks.ps.nθ, i = 2:ks.ps.nr
             swx1 = (ctr[i+1, j].w - ctr[i-1, j].w) / (ks.ps.x[i+1, j] - ks.ps.x[i-1, j])
             swy1 = (ctr[i+1, j].w - ctr[i-1, j].w) / (ks.ps.y[i+1, j] - ks.ps.y[i-1, j])
@@ -77,13 +77,14 @@ res = zeros(4)
             swx = (swx1 + swx2) ./ 2
             swy = (swy1 + swy2) ./ 2
 
-            x, y = regime_data(ks, ctr[i, j].w, ctr[i, j].prim, swx, swy, ctr[i, j].h)
-            X = hcat(X, x)
-            Y = hcat(Y, y)
+            x, y = regime_data(ks, ctr[i, j].w, swx, swy, ctr[i, j].h)
+            global X = hcat(X, x)
+            global Y = hcat(Y, y)
         end
+        @save "kn3_auxdata.jld2" X Y
     end
 end
-
+#=
 begin
     sol = zeros(ks.ps.nr, ks.ps.nθ, 4)
     for i in axes(sol, 1), j in axes(sol, 2)
@@ -96,12 +97,12 @@ begin
         sol[:, :, 4],
         ratio = 1,
     )
-end
+end=#
 
 #cd(@__DIR__)
 #@save "kn3.jld2" ks ctr
 
-for j = 1:ks.ps.nθ, i = 2:ks.ps.nr
+#=for j = 1:ks.ps.nθ, i = 2:ks.ps.nr
     swx1 = (ctr[i+1, j].w - ctr[i-1, j].w) / (ks.ps.x[i+1, j] - ks.ps.x[i-1, j])
     swy1 = (ctr[i+1, j].w - ctr[i-1, j].w) / (ks.ps.y[i+1, j] - ks.ps.y[i-1, j])
     swx2 = (ctr[i, j+1].w - ctr[i, j-1].w) / (ks.ps.x[i, j+1] - ks.ps.x[i, j-1])
@@ -109,9 +110,9 @@ for j = 1:ks.ps.nθ, i = 2:ks.ps.nr
     swx = (swx1 + swx2) ./ 2
     swy = (swy1 + swy2) ./ 2
 
-    x, y = regime_data(ks, ctr[i, j].w, ctr[i, j].prim, swx, swy, ctr[i, j].h)
+    x, y = regime_data(ks, ctr[i, j].w, swx, swy, ctr[i, j].h)
     X = hcat(X, x)
     Y = hcat(Y, y)
-end
+end=#
 
-@save "kn3_aux.jld2" X Y
+@save "kn3_auxdata.jld2" X Y

@@ -16,7 +16,7 @@ end
 
 function judge_regime(f, fr, prim)
     L = norm((f .- fr) ./ prim[1])
-    return ifelse(L <= 0.005, 1, 2)
+    return ifelse(L <= 0.005, 0, 1)
 end
 
 function judge_regime(ks, f, prim, swx, swy)
