@@ -108,16 +108,45 @@ def load_solution(filename: str) -> list:
     return [u_neural, u_ref]
 
 
-def plot_density_fusion_1d(v_x: np.ndarray, f_l: np.ndarray, f_r: np.ndarray, f_fuse: np.ndarray, show_fig=True,
-                           save_name: str = 'fig1'):
+def plot_density_fusion_1d(v_x: np.ndarray, f_l: np.ndarray, f_r: np.ndarray, f_fuse: np.ndarray, f_ns: np.ndarray,
+                           show_fig=True, save_name: str = 'fig1'):
     plt.clf()
     sns.set_theme()
     sns.set_style("white")
-    fig, axs = plt.subplots(2)
-    fig.suptitle('Vertically stacked subplots')
-    axs[0].plot(v_x, f_l, 'r-')
-    axs[0].plot(v_x, f_r, 'b-')
-    axs[0].plot(v_x, f_fuse, 'ko')
+    # fig, axs = plt.subplots(2)
+    # fig.suptitle('Vertically stacked subplots')
+    plt.plot(v_x, f_l, 'r-')
+    plt.plot(v_x, f_r, 'b-.')
+    plt.plot(v_x, f_fuse, 'ko')
+    plt.plot(v_x, f_ns, 'g--')
+    plt.legend(["left cell", "right cell", "cell interface", "BGK reconstruction"])
+    plt.xlabel("velocity")
+    plt.ylabel("kinetic density")
+    plt.xlim(-5.0, 5.0)
+    if show_fig:
+        plt.show()
+    plt.savefig('illustrations/' + save_name + ".png", dpi=400)
+    return 0
+
+
+def plot_densities(v_x: np.ndarray, f_maxwell: np.ndarray, f_entropy: np.ndarray, f_fourier: np.ndarray,
+                   f_random: np.ndarray, f_unlikely: np.ndarray, show_fig=True, save_name: str = 'fig1'):
+    plt.clf()
+    sns.set_theme()
+    sns.set_style("white")
+    # fig, axs = plt.subplots(2)
+    # fig.suptitle('Vertically stacked subplots')
+    plt.plot(v_x, f_maxwell, 'r-')
+    plt.plot(v_x, f_entropy, 'b--')
+    plt.plot(v_x, f_unlikely, 'c-.-')
+    plt.plot(v_x, f_fourier, 'k.-')
+    plt.plot(v_x, f_random, 'g--')
+
+    plt.legend(["Maxwellian", "entropy - low condition", "entropy - high condition ", "fourier series generated",
+                "random sampling at gridpoints"])
+    plt.xlabel("velocity")
+    plt.ylabel("kinetic density")
+    plt.xlim(-5.0, 5.0)
     if show_fig:
         plt.show()
     plt.savefig('illustrations/' + save_name + ".png", dpi=400)
@@ -144,7 +173,7 @@ def plot_1d(xs, ys, labels=None, name='defaultName', log=True, folder_name="figu
         for y, lineType in zip(ys, linetypes):
             for i in range(y.shape[1]):
                 if colors[i] == 'k' and lineType in ['.', ',', 'o', 'v', '^', '<', '>']:
-                    colors[i] = 'w'
+                    colors[i] = 'r'
                 plt.plot(x, y[:, i], colors[i] + lineType, linewidth=symbol_size, markersize=2.5,
                          markeredgewidth=0.5, markeredgecolor='k')
         if labels != None:
