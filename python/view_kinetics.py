@@ -85,20 +85,21 @@ def compute_normalized_kinetic_density(alpha: list):
     alpha_complete = et.reconstruct_alpha(alpha_tf)
     f_res = et.compute_kinetic_density(alpha_complete).numpy()
     v_x = et.quadPts.numpy()
-    return v_x.reshape((f_res.shape[1])), f_res.reshape((f_res.shape[1]))
+    return v_x.reshape((f_res.shape[1])), f_res.reshape((f_res.shape[1])), alpha_complete.numpy()
 
 
 def create_illustration_data():
     """ Skript that performs all illustrations for the paper done by Steffen"""
-    [v_x, weights, f_kinetic] = load_density_function("../data/1d/a2_ev10.csv")
-    v_x = np.reshape(v_x, newshape=(v_x.shape[1]))
-    weights = np.reshape(weights, newshape=(weights.shape[1]))
+    # [v_x, weights, f_kinetic] = load_density_function("../data/1d/a2_ev10.csv")
+    nq = 1000
+    v_x = np.linspace(-5, 5, nq)
+    weights = np.asarray([1.0 / float(nq)] * nq)
     kinetics = [v_x, weights]
 
     # ----- Ilustrate Upwing Merging of two pdf -----
     # 1) Mix two Maxwellians
     f_maxwelll_L = generate_maxwellian_1d(v_x, 1.0, 0.0, 1.0)
-    f_maxwell_R = generate_maxwellian_1d(v_x, 1.0, 0.5, 1.0)
+    f_maxwell_R = generate_maxwellian_1d(v_x, 1.0, 0.1, .98)
     f_maxwell_fusion = upwind_reconstruction(v_x, f_maxwelll_L, f_maxwell_R)
     kinetics.append(f_maxwelll_L)
     kinetics.append(f_maxwell_R)
@@ -110,14 +111,16 @@ def create_illustration_data():
     alpha_2 = -0.5
     alpha_3 = 0.5
     alpha_4 = -0.1000
+    t1, t2, alpha_complete = compute_normalized_kinetic_density([alpha_1, alpha_2, alpha_3, alpha_4])
     f_L_bimod = generate_kinetic_density(v_x, alpha_0, alpha_1, alpha_2, alpha_3, alpha_4, offset=-0.4)
+
     kinetics.append(f_L_bimod)
     alpha_0 = -0.5
     alpha_1 = 0.5
     alpha_2 = -0.3
     alpha_3 = 0.2
     alpha_4 = -0.1000
-    f_R_bimod = generate_kinetic_density(v_x, alpha_0, alpha_1, alpha_2, alpha_3, alpha_4, offset=-1.2)
+    f_R_bimod = generate_kinetic_density(v_x, alpha_0, alpha_1, alpha_2, alpha_3, alpha_4, offset=-1.4)
     f_bimod_fusion = upwind_reconstruction(v_x, f_L_bimod, f_R_bimod)
     kinetics.append(f_R_bimod)
     kinetics.append(f_bimod_fusion)
@@ -131,12 +134,12 @@ def create_illustration_data():
     kinetics.append(f_L_sin)
 
     # 5) Generate unlikely entropy distributions
-    alpha_0 = -0.9
-    alpha_1 = 0.1
-    alpha_2 = -0.05
-    alpha_3 = -0.008
+    alpha_0 = -1.3
+    alpha_1 = -0.2
+    alpha_2 = -2
+    alpha_3 = -0.38  # -0.01
     alpha_4 = -0.0
-    f_unlikely = generate_kinetic_density(v_x, alpha_0, alpha_1, alpha_2, alpha_3, alpha_4, offset=-0.4)
+    f_unlikely = generate_kinetic_density(v_x, alpha_0, alpha_1, alpha_2, alpha_3, alpha_4, offset=0.4)
     kinetics.append(f_unlikely)
 
     # Save to file
@@ -144,6 +147,32 @@ def create_illustration_data():
     np.savetxt('pdfs.csv', kinetics_np, delimiter=',')
     print("Save constructed densities to file pfs.csv")
 
+    """
+    plot_1d(xs=[v_x],
+            ys=[kinetics_np[2, :].reshape(len(kinetics_np[0]), 1), kinetics_np[3, :].reshape(len(kinetics_np[0]), 1),
+                kinetics_np[4, :].reshape(len(kinetics_np[0]), 1)],
+            labels=['left', 'right', 'Interface'],
+            name='Entropy_Sampling2', log=False,
+            folder_name="illustrations", linetypes=None,
+            show_fig=False, xlim=(-5, 5), ylim=(0, 0.75), xlabel="velocity", ylabel="density",
+            title=" ")
+    plot_1d(xs=[v_x],
+            ys=[kinetics_np[5, :].reshape(len(kinetics_np[0]), 1), kinetics_np[6, :].reshape(len(kinetics_np[0]), 1),
+                kinetics_np[7, :].reshape(len(kinetics_np[0]), 1)],
+            labels=['left', 'right', 'Interface'],
+            name='Entropy_Sampling3', log=False,
+            folder_name="illustrations", linetypes=None,
+            show_fig=False, xlim=(-5, 5), ylim=(0, 0.75), xlabel="velocity", ylabel="density",
+            title=" ")
+    plot_1d(xs=[v_x],
+            ys=[kinetics_np[2, :].reshape(len(kinetics_np[0]), 1), kinetics_np[5, :].reshape(len(kinetics_np[0]), 1),
+                kinetics_np[10, :].reshape(len(kinetics_np[0]), 1)],
+            labels=['Maxwellian', 'Bimodal', 'Highly anisotropic'],
+            name='Entropy_Sampling', log=False,
+            folder_name="illustrations", linetypes=None,
+            show_fig=False, xlim=(-5, 5), ylim=(0, 0.75), xlabel="velocity", ylabel="density",
+            title=" ")
+    """
     # plot_density_fusion_1d(v_x=v_x, f_l=f_L_unlikely, f_r=f_R, f_fuse=f_res, show_fig=True,
     #                       save_name='maxwellians_fusion')
 
@@ -201,5 +230,5 @@ def paper_illustrations():
 
 
 if __name__ == '__main__':
-    # create_illustration_data()
-    paper_illustrations()
+    create_illustration_data()
+    # paper_illustrations()
