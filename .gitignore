@@ -15,3 +15,4 @@ src/2d/cylinder/log
 src/2d/cylinder/log1
 .vscode/
 */__pycache__
+.idea
