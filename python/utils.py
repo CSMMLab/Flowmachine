@@ -59,7 +59,7 @@ def load_density_function(filename: str) -> list:
     print("Loading Data from location: " + filename)
     start = time.time()
     df = pd.read_csv(filename, header=None)
-    df = df.drop(df.columns[0], axis=1)
+    # df = df.drop(df.columns[0], axis=1)
     data = df.to_numpy()
     x = data[0, :].reshape((1, len(data[0, :])))
     weights = data[1, :].reshape((1, len(data[0, :])))
@@ -173,7 +173,7 @@ def plot_1d(xs, ys, labels=None, name='defaultName', log=True, folder_name="figu
         for y, lineType in zip(ys, linetypes):
             for i in range(y.shape[1]):
                 if colors[i] == 'k' and lineType in ['.', ',', 'o', 'v', '^', '<', '>']:
-                    colors[i] = 'r'
+                    colors[i] = 'w'
                 plt.plot(x, y[:, i], colors[i] + lineType, linewidth=symbol_size, markersize=2.5,
                          markeredgewidth=0.5, markeredgecolor='k')
         if labels != None:

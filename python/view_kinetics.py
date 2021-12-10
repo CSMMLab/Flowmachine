@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from utils import load_density_function2D, load_density_function, plot_density_fusion_1d, plot_densities, plot_1d
-from entropytools import EntropyTools
+from entropytools import EntropyTools, qGaussLegendre1D
 
 
 def maxwellian_2d(v_x, v_y, rho, T):
@@ -91,9 +91,17 @@ def compute_normalized_kinetic_density(alpha: list):
 def create_illustration_data():
     """ Skript that performs all illustrations for the paper done by Steffen"""
     # [v_x, weights, f_kinetic] = load_density_function("../data/1d/a2_ev10.csv")
-    nq = 1000
-    v_x = np.linspace(-5, 5, nq)
-    weights = np.asarray([1.0 / float(nq)] * nq)
+    # v_x = np.reshape(v_x, newshape=(v_x.shape[1]))
+    # v_x = v_x[1:]
+    # weights = np.reshape(weights, newshape=(weights.shape[1]))
+    # weights = weights[1:]
+    # nq = 200
+    # v_x = np.linspace(-5, 5, nq)
+    # weights = np.asarray([5.0 / float(nq)] * nq)
+    v_x, weights = qGaussLegendre1D(200)
+    v_x = v_x * 5.0
+    weights = weights * 5.0
+    print(sum(weights))
     kinetics = [v_x, weights]
 
     # ----- Ilustrate Upwing Merging of two pdf -----
@@ -144,7 +152,7 @@ def create_illustration_data():
 
     # Save to file
     kinetics_np = np.asarray(kinetics)
-    np.savetxt('pdfs.csv', kinetics_np, delimiter=',')
+    np.savetxt('data/pdfs.csv', kinetics_np, delimiter=',')
     print("Save constructed densities to file pfs.csv")
 
     """
@@ -231,4 +239,4 @@ def paper_illustrations():
 
 if __name__ == '__main__':
     create_illustration_data()
-    # paper_illustrations()
+    paper_illustrations()

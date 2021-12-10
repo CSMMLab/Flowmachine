@@ -5,7 +5,7 @@ cd(@__DIR__)
 ###
 # parameters
 ###
-file = "pdfs.csv"
+file = "data/pdfs.csv"
 kn = [1e-3, 1e-3]
 dx = [1e-2, 1e-2]
 
@@ -21,8 +21,9 @@ for line in eachline(f)
 end
 pdfs = data[3:end];
 
-vs = VSpace1D(minimum(data[1]), maximum(data[1]), length(data[1]), data[1], data[1][2:end] .- data[1][1:end-1], data[2])
-
+vs = VSpace1D(minimum(data[1]), maximum(data[1]), length(data[1]), data[1], data[1][2:end] .- data[1][1:end - 1], data[2])
+println(vs.u)
+#println(vs.weights)
 ws = [moments_conserve(pdfs[i], vs.u, vs.weights) for i in axes(pdfs, 1)]
 wa = zeros(9, 3)
 for i in 1:9
@@ -51,14 +52,14 @@ fr2, τ2 = f_ns(vs, w[2], sw[2], kn[2])
 ###
 # Write
 ###
-df0 = DataFrame(density=wa[:, 1], velocity=wa[:, 2], energy=wa[:, 3])
-CSV.write("w.csv", df0)
+df0 = DataFrame(density = wa[:, 1], velocity = wa[:, 2], energy = wa[:, 3])
+CSV.write("data/w.csv", df0)
 
-df1 = DataFrame(gradient1=sw1, gradient2=sw2)
-CSV.write("dw.csv", df1)
+df1 = DataFrame(gradient1 = sw[1], gradient2 = sw[2])
+CSV.write("data/dw.csv", df1)
 
-df2 = DataFrame(fns1=fr1, fns2=fr2)
-CSV.write("fns.csv", df2)
+df2 = DataFrame(fns1 = fr1, fns2 = fr2)
+CSV.write("data/fns.csv", df2)
 
-df3 = DataFrame(tau=[τ1,τ2], kn=kn, dx=dx)
-CSV.write("paras.csv", df3)
+df3 = DataFrame(tau = [τ1, τ2], kn = kn, dx = dx)
+CSV.write("data/paras.csv", df3)
