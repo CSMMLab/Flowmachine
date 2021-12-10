@@ -3,7 +3,7 @@ using KitBase.JLD2
 using KitBase.ProgressMeter: @showprogress
 
 function split_regime!(regime, regime0, ks, ctr, nn)
-    @inbounds Threads.@threads for i in eachindex(regime)
+    @inbounds for i in eachindex(regime)
         if i == 0
             sw = (ctr[i+1].w .- ctr[i].w) / ks.ps.dx[i]
         else
@@ -29,7 +29,7 @@ function split_regime!(regime, regime0, ks, ctr, nn)
 end
 
 function kngll_regime!(regime, regime0, ks, ctr, nn)
-    @inbounds Threads.@threads for i in eachindex(regime)
+    @inbounds for i in eachindex(regime)
         if i == 0
             sw = (ctr[i+1].w .- ctr[i].w) / ks.ps.dx[i]
         else
@@ -61,8 +61,8 @@ function up!(KS, ctr, regime, p)
     res = zeros(5)
     avg = zeros(5)
 
-    @inbounds Threads.@threads for i = 1:ks.ps.nx
-        if regime[i] == 0
+    @inbounds for i = 1:ks.ps.nx
+        if false#regime[i] == 0
             KitBase.step!(
                 face[i].fw,
                 ctr[i].w,
@@ -102,9 +102,9 @@ cd(@__DIR__)
 #@load "../nn_scalar.jld2" nn
 @load "/home2/vavrines/Coding/Flowmachine/src/1d/sampler/nn_rif.jld2" nn
 
-set = Setup(case = "sod", space = "1d1f3v", collision = "boltzmann", maxTime = 0.15, cfl = 0.5)
+set = Setup(case = "sod", space = "1d1f3v", collision = "boltzmann", maxTime = 0.1, cfl = 0.3)
 ps = PSpace1D(0.0, 1.0, 100, 1)
-vs = VSpace3D(-8.0, 8.0, 48, -8.0, 8.0, 28, -8.0, 8.0, 28)
+vs = VSpace3D(-8.0, 8.0, 80, -8.0, 8.0, 28, -8.0, 8.0, 28)
 gas = Gas(Kn = 1e-3, Pr = 2/3, K = 0.0)
 ib = IB1F(ib_sod(set, ps, vs, gas)...)
 ks = SolverSet(set, ps, vs, gas, ib)
@@ -135,12 +135,14 @@ res = zero(ctr[1].w)
 regime = ones(Int, axes(ks.ps.x))
 regime0 = deepcopy(regime)
 
-@showprogress for iter = 1:20#nt
-    #split_regime!(regime, regime0, ks, ctr, nn)
-    kngll_regime!(regime, regime0, ks, ctr, nn)
+@time for iter = 1:nt
+    println("iteration: $iter of $nt")
 
-    for i in eachindex(face)
-        if 1 ∉ (regime[i], regime[i-1])
+    split_regime!(regime, regime0, ks, ctr, nn)
+    #kngll_regime!(regime, regime0, ks, ctr, nn)
+
+    @inbounds for i in eachindex(face)
+        if false#1 ∉ (regime[i], regime[i-1])
             flux_gks!(
                 face[i].fw,
                 ctr[i-1].w .+ ctr[i-1].sw .* ks.ps.dx[i-1] / 2,
@@ -182,4 +184,19 @@ end
 plot(ks, ctr)
 plot!(ks.ps.x[1:ks.ps.nx], regime[1:ks.ps.nx])
 
-kngll_regime!(regime, regime0, ks, ctr, nn)
+"""
+Benchmark computation cost:
+
+Kn = 1e-4
+dvm: 1211.636247 seconds (86.95 M allocations: 4.535 TiB, 5.42% gc time, 0.36% compilation time)
+adaptive: 377.118386 seconds (50.25 M allocations: 1.383 TiB, 4.01% gc time, 1.12% compilation time)
+
+Kn = 1e-3
+dvm: 1172.045585 seconds (63.84 M allocations: 4.534 TiB, 6.01% gc time)
+adaptive: 382.871913 seconds (27.70 M allocations: 1.426 TiB, 6.65% gc time)
+
+Kn = 1e-2
+dvm: 1177.973543 seconds (63.90 M allocations: 4.534 TiB, 6.02% gc time, 0.00% compilation time)
+adaptive: 741.156948 seconds (43.94 M allocations: 2.819 TiB, 4.68% gc time)
+
+"""
