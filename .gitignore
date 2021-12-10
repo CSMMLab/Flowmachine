@@ -14,3 +14,4 @@ data/2d/*
 src/2d/cylinder/log
 src/2d/cylinder/log1
 .vscode/
+*/__pycache__
