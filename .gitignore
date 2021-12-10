@@ -13,3 +13,4 @@ data/2d/
 data/2d/*
 src/2d/cylinder/log
 src/2d/cylinder/log1
+.vscode/

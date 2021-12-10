@@ -20,7 +20,7 @@ avg = zero(res)
 regime = ones(Int, axes(ks.ps.x))
 regime0 = deepcopy(regime)
 
-@showprogress for iter = 1:nt
+@time for iter = 1:nt
     #reconstruct!(ks, ctr)
     evolve!(ks, ctr, face, dt)
     update!(ks, ctr, face, dt, res)
