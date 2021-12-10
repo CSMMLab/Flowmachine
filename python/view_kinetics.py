@@ -6,9 +6,12 @@ Date 22.10.2021
 """
 
 import numpy as np
-import pandas as pd
+from random import random
 import matplotlib.pyplot as plt
-from utils import load_density_function2D, load_density_function, plot_density_fusion_1d, scatter_plot_2d
+import pandas as pd
+
+from utils import load_density_function2D, load_density_function, plot_density_fusion_1d, plot_densities, plot_1d
+from entropytools import EntropyTools
 
 
 def maxwellian_2d(v_x, v_y, rho, T):
@@ -36,20 +39,53 @@ def generate_maxwellian_1d(v_x, rho, U, T):
     return f_res
 
 
-def paper_illustrations():
-    """ Skript that performs all illustrations for the paper done by Steffen"""
-    [v_x, weights, f_kinetic] = load_density_function("data/1d/a2_ev10.csv")
-    v_x = np.reshape(v_x, newshape=(v_x.shape[1]))
-    # ----- Ilustrate Upwing Merging of two pdf -----
-    f_L = generate_maxwellian_1d(v_x, 1.0, 0.0, 1.0)
-    f_R = generate_maxwellian_1d(v_x, 1.0, 0.5, 1.0)
-    f_res = upwind_reconstruction(v_x, f_L, f_R)
-    # Save to file
-    kinetics = np.asarray([f_L, f_R, f_res])
-    np.savetxt('maxwellians.csv', kinetics, delimiter=',')
+def generate_kinetic_density(v_x, alpha_0, alpha_1, alpha_2, alpha_3, alpha_4, offset=0.0):
+    f_res = np.ndarray(shape=(len(v_x)))
+    for idx in range(len(v_x)):
+        v = v_x[idx]
+        f_res[idx] = np.exp(
+            alpha_0 + alpha_1 * v + alpha_2 * ((v - offset) ** 2) + alpha_3 * ((v - offset) ** 3) + alpha_4 * (
+                    (v - offset) ** 4))
+    return f_res
 
-    plot_density_fusion_1d(v_x=v_x, f_l=f_L, f_r=f_R, f_fuse=f_res, show_fig=True, save_name='maxwellians_fusion')
-    return 0
+
+def generate_random_density(v_x):
+    f_res = np.ndarray(shape=(len(v_x)))
+    for idx in range(len(v_x)):
+        v = v_x[idx]
+        f_res[idx] = random()
+    return f_res
+
+
+def generate_sin_density(v_x):
+    f_res = np.ndarray(shape=(len(v_x)))
+    for idx in range(len(v_x)):
+        v = v_x[idx]
+        f_res[idx] = np.sin(v) ** 2 * 0.35
+    return f_res
+
+
+def compute_condition_number(alpha: list):
+    # initialize entropy tools
+    poly_degree = len(alpha)
+    et = EntropyTools(polynomial_degree=poly_degree, spatial_dimension=1)
+    alpha = np.asarray(alpha).reshape((1, poly_degree))
+    alpha_tf = et.convert_to_tensor_float(alpha)
+    alpha_complete = et.reconstruct_alpha(alpha_tf).numpy().reshape((poly_degree + 1, 1))
+    hessian = et.entropy_hessian(alpha_complete, et.momentBasis.numpy(), et.quadWeights.numpy())
+    return np.linalg.cond(hessian)
+
+
+def compute_normalized_kinetic_density(alpha: list):
+    # initialize entropy tools
+    poly_degree = len(alpha)
+    et = EntropyTools(polynomial_degree=poly_degree, spatial_dimension=1)
+    alpha = np.asarray(alpha).reshape((1, poly_degree))
+    alpha_tf = et.convert_to_tensor_float(alpha)
+    alpha_complete = et.reconstruct_alpha(alpha_tf)
+    f_res = et.compute_kinetic_density(alpha_complete).numpy()
+    v_x = et.quadPts.numpy()
+    return v_x.reshape((f_res.shape[1])), f_res.reshape((f_res.shape[1]))
 
 
 def create_illustration_data():
@@ -57,66 +93,113 @@ def create_illustration_data():
     [v_x, weights, f_kinetic] = load_density_function("../data/1d/a2_ev10.csv")
     v_x = np.reshape(v_x, newshape=(v_x.shape[1]))
     weights = np.reshape(weights, newshape=(weights.shape[1]))
-    # ----- Ilustrate Upwing Merging of two pdf -----
-    f_L = generate_maxwellian_1d(v_x, 1.0, 0.0, 1.0)
-    f_R = generate_maxwellian_1d(v_x, 1.0, 0.5, 1.0)
-    f_res = upwind_reconstruction(v_x, f_L, f_R)
-    # Save to file
-    kinetics = np.asarray([v_x, weights, f_L, f_R, f_res])
-    np.savetxt('maxwellians.csv', kinetics, delimiter=',')
+    kinetics = [v_x, weights]
 
-    # plot_density_fusion_1d(v_x=v_x, f_l=f_L, f_r=f_R, f_fuse=f_res, show_fig=True, save_name='maxwellians_fusion')
+    # ----- Ilustrate Upwing Merging of two pdf -----
+    # 1) Mix two Maxwellians
+    f_maxwelll_L = generate_maxwellian_1d(v_x, 1.0, 0.0, 1.0)
+    f_maxwell_R = generate_maxwellian_1d(v_x, 1.0, 0.5, 1.0)
+    f_maxwell_fusion = upwind_reconstruction(v_x, f_maxwelll_L, f_maxwell_R)
+    kinetics.append(f_maxwelll_L)
+    kinetics.append(f_maxwell_R)
+    kinetics.append(f_maxwell_fusion)
+
+    # 2) Generate bimodal Distributions
+    alpha_0 = -0.9
+    alpha_1 = -0.5
+    alpha_2 = -0.5
+    alpha_3 = 0.5
+    alpha_4 = -0.1000
+    f_L_bimod = generate_kinetic_density(v_x, alpha_0, alpha_1, alpha_2, alpha_3, alpha_4, offset=-0.4)
+    kinetics.append(f_L_bimod)
+    alpha_0 = -0.5
+    alpha_1 = 0.5
+    alpha_2 = -0.3
+    alpha_3 = 0.2
+    alpha_4 = -0.1000
+    f_R_bimod = generate_kinetic_density(v_x, alpha_0, alpha_1, alpha_2, alpha_3, alpha_4, offset=-1.2)
+    f_bimod_fusion = upwind_reconstruction(v_x, f_L_bimod, f_R_bimod)
+    kinetics.append(f_R_bimod)
+    kinetics.append(f_bimod_fusion)
+
+    # 3) Generate random Distributions
+    f_random = generate_random_density(v_x)
+    kinetics.append(f_random)
+
+    # 4) Generate sinusoidal Distributions
+    f_L_sin = generate_sin_density(v_x)
+    kinetics.append(f_L_sin)
+
+    # 5) Generate unlikely entropy distributions
+    alpha_0 = -0.9
+    alpha_1 = 0.1
+    alpha_2 = -0.05
+    alpha_3 = -0.008
+    alpha_4 = -0.0
+    f_unlikely = generate_kinetic_density(v_x, alpha_0, alpha_1, alpha_2, alpha_3, alpha_4, offset=-0.4)
+    kinetics.append(f_unlikely)
+
+    # Save to file
+    kinetics_np = np.asarray(kinetics)
+    np.savetxt('pdfs.csv', kinetics_np, delimiter=',')
+    print("Save constructed densities to file pfs.csv")
+
+    # plot_density_fusion_1d(v_x=v_x, f_l=f_L_unlikely, f_r=f_R, f_fuse=f_res, show_fig=True,
+    #                       save_name='maxwellians_fusion')
+
+    # ------ with condition number
+
+    #  some tests for condition number
+    # cond_maxwellian = compute_condition_number([0.0, -0.5])
+    # pts, f_test = compute_normalized_kinetic_density([0.0, -0.5])
+    # plt.plot(pts, f_test)
+    # plt.show()
+    # cond_maxwellian2 = compute_condition_number([2.0, -0.5])
+    # cond_maxwellian3 = compute_condition_number([0.0, -0.05])
     return 0
 
 
-"""
-def main():
-    print("---------- Start Result Illustration Suite ------------")
-    [x, y, w, kinetic_f] = load_density_function2D("xxx.csv")
-    fig = plt.figure(figsize=(5.8, 4.7), dpi=400)
-    ax = fig.add_subplot(111)  # , projection='3d')
-    out = plt.scatter(x, y, c=kinetic_f)
-    cbar = fig.colorbar(out, ax=ax, extend='both')
-    # plt.show()
-    sum = 0
-    sum2 = 0
-    rec_U = 0.0
-    rec_T = 0
-    kin = []
-    nq = kinetic_f.shape[0]
-    w2 = 25.0 / nq
-    for i in range(kinetic_f.shape[0]):
-        kin.append(maxwellian2D(x[0, i], y[0, i], 1, 1))
-        sum += kinetic_f[i] * w[0, i]
-        sum2 += (x[0, i] ** 2 + y[0, i] ** 2) / 2 * kinetic_f[i] * w[0, i]
-        rec_U += maxwellian2D(x[0, i], y[0, i], 1, 2) * w[0, i]
-        rec_T += (x[0, i] ** 2 + y[0, i] ** 2) / 2 * maxwellian2D(x[0, i], y[0, i], 1, 2) * w[0, i]  # * w[0, i]
-    print(rec_U)
-    print(rec_T)
-    print("...")
-    print(sum)
-    print(sum2)
-    print("_---")
-    kin = np.asarray(kin)
+def paper_illustrations():
+    """ Skript that performs all illustrations for the paper done by Steffen"""
+    [v_x, weights, f_kinetic] = load_density_function("data/pdfs.csv")
+    f_ns = pd.read_csv("data/fns.csv").to_numpy()
+    grads = pd.read_csv("data/gradient_w.csv").to_numpy()
+    params = pd.read_csv("data/paras.csv").to_numpy()
+    conservative_variables = pd.read_csv("data/w.csv").to_numpy()
 
-    fig = plt.figure(figsize=(5.8, 4.7), dpi=400)
-    ax = fig.add_subplot(111)  # , projection='3d')
-    out = plt.scatter(x, y, c=kin)
-    cbar = fig.colorbar(out, ax=ax, extend='both')
-    # plt.show()
+    # ----- Ilustrate Upwing Merging of two pdf -----
+    v_x = np.reshape(v_x, newshape=(v_x.shape[1]))
 
-    # plt.ylim(0, 1)
-    # plt.xlim(-5, 5)
-    # plt.show()
-    #  plt.savefig("test_a10_ev5")
-    # for i in range(int(kinetic_f.shape[0] / 5)):
-    #    kinetic_list = [kinetic_f[i + 0], kinetic_f[i + 1], kinetic_f[i + 2], kinetic_f[i + 3], kinetic_f[i + 4]]
-    #    plot_1d(x, kinetic_list, show_fig=False, log=False, name='kinetics_kond3_' + str(i).zfill(3), ylim=[0, 3],
-    #            xlim=[x[0, 0], x[0, -1]])
+    # plot_density_fusion_1d(v_x=v_x, f_l=f_kinetic[0], f_r=f_kinetic[1], f_fuse=f_kinetic[2], f_ns=f_ns[:, 0],
+    #                       show_fig=False, save_name='maxwellians_fusion')
+    # plot_density_fusion_1d(v_x=v_x, f_l=f_kinetic[3], f_r=f_kinetic[4], f_fuse=f_kinetic[5], f_ns=f_ns[:, 1],
+    #                       show_fig=False, save_name='bimodal_fusion')
 
-    return True
-"""
+    plot_1d(xs=[v_x], ys=[f_kinetic[0, :].reshape(len(f_kinetic[0]), 1), f_kinetic[1, :].reshape(len(f_kinetic[0]), 1),
+                          f_kinetic[2, :].reshape(len(f_kinetic[0]), 1), f_ns[:, 0].reshape(len(f_kinetic[0]), 1)],
+            labels=['left cell', 'right cell', 'interface', 'BGK reconstruction'], name='maxwell_fusion', log=False,
+            folder_name="illustrations", linetypes=['-', '--', 'o', '-.'], show_fig=False, xlim=(-5, 5), ylim=(0, 0.75),
+            xlabel="velocity", ylabel="density", title=" ")
+    plot_1d(xs=[v_x], ys=[f_kinetic[3, :].reshape(len(f_kinetic[0]), 1), f_kinetic[4, :].reshape(len(f_kinetic[0]), 1),
+                          f_kinetic[5, :].reshape(len(f_kinetic[0]), 1), f_ns[:, 1].reshape(len(f_kinetic[0]), 1)],
+            labels=['left cell', 'right cell', 'interface', 'BGK reconstruction'], name='bimodal_fusion', log=False,
+            folder_name="illustrations", linetypes=['-', '--', 'o', '-.'], show_fig=False, xlim=(-5, 5), ylim=(0, 0.75),
+            xlabel="velocity", ylabel="density", title=" ")
+
+    plot_1d(xs=[v_x], ys=[f_kinetic[0, :].reshape(len(f_kinetic[0]), 1), f_kinetic[3, :].reshape(len(f_kinetic[0]), 1),
+                          f_kinetic[8, :].reshape(len(f_kinetic[0]), 1)],
+            labels=['Maxwellian', 'Bimodal', 'Highly anisotropic'],
+            name='Entropy_Sampling', log=False,
+            folder_name="illustrations", linetypes=None,
+            show_fig=False, xlim=(-5, 5), ylim=(0, 0.75), xlabel="velocity", ylabel="density",
+            title=" ")
+
+    # plot_densities(v_x=v_x, f_maxwell=f_kinetic[0], f_entropy=f_kinetic[4], f_fourier=f_kinetic[6],
+    #               f_random=f_kinetic[7], f_unlikely=f_kinetic[8], show_fig=False, save_name='example_densities')
+
+    return 0
+
 
 if __name__ == '__main__':
-    create_illustration_data()
-    # paper_illustrations()
+    # create_illustration_data()
+    paper_illustrations()
