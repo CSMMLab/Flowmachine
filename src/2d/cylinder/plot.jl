@@ -1,5 +1,6 @@
-using KitBase, Plots, JLD2
-pyplot()
+using KitBase, KitBase.JLD2, KitBase.WriteVTK
+#using Plots; pyplot()
+using PyPlot
 
 begin
     set = Setup(
@@ -36,7 +37,7 @@ begin
 end
 
 cd(@__DIR__)
-@load "kn2kt.jld2" ctr
+@load "kn3ref.jld2" ctr
 
 begin
     sol = zeros(ks.ps.nr, ks.ps.nθ, 4)
@@ -46,11 +47,40 @@ begin
     end
 end
 
+#--- Plots ---#
 contourf(
     ps.x[1:ks.ps.nr, 1:ks.ps.nθ],
     ps.y[1:ks.ps.nr, 1:ks.ps.nθ],
     sol[:, :, 4],
-    ratio = 1,
+    #ratio = 1,
     xlabel = "x",
     ylabel = "y",
 )
+
+#--- PyPlot ---#
+begin
+    close("all")
+    fig = figure("contour", figsize=(8, 4))
+    PyPlot.contourf(
+        ps.x[1:ks.ps.nr, 1:ks.ps.nθ],
+        ps.y[1:ks.ps.nr, 1:ks.ps.nθ],
+        sol[:, :, 4],
+        aspect=1,
+        levels=20,
+        cmap=ColorMap("inferno"),
+    )
+    #axis("off")
+    colorbar()
+    xlabel("x")
+    ylabel("y")
+    #axis("equal")
+    tight_layout()
+    #PyPlot.title("U-velocity")
+    xlim(-6, 6)
+    ylim(0, 6)
+    #PyPlot.grid("on")
+    #display(gcf())
+    display(fig)
+end
+
+fig.savefig("cylinder_kn3.pdf")
