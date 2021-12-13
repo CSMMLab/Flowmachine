@@ -80,7 +80,7 @@ begin
     ylim(0, 6)
     #PyPlot.grid("on")
     #display(gcf())
-    display(fig)
+    #display(fig)
 end
 
-fig.savefig("cylinder_kn3.pdf")
+fig.savefig("cylinder_t_kn3.pdf")
