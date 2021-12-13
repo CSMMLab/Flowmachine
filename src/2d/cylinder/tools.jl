@@ -3,27 +3,6 @@ mutable struct CellInfo
     ispdf::Bool
 end
 
-function recon_pdf(ks, prim, swx, swy)
-    Mu, Mv, Mxi, _, _1 = gauss_moments(prim, ks.gas.K)
-    a = pdf_slope(prim, swx, ks.gas.K)
-    b = pdf_slope(prim, swy, ks.gas.K)
-    sw = -prim[1] .* (moments_conserve_slope(a, Mu, Mv, Mxi, 1, 0) .+ moments_conserve_slope(b, Mu, Mv, Mxi, 0, 1))
-    A = pdf_slope(prim, sw, ks.gas.K)
-    tau = vhs_collision_time(prim, ks.gas.μᵣ, ks.gas.ω)
-
-    return chapman_enskog(ks.vs.u, ks.vs.v, prim, a, b, A, tau)
-end
-
-function judge_regime(f, fr, prim)
-    L = norm((f .- fr) ./ prim[1])
-    return ifelse(L <= 0.005, 0, 1)
-end
-
-function judge_regime(ks, f, prim, swx, swy)
-    fr = recon_pdf(ks, prim, swx, swy)
-    return judge_regime(f, fr, prim)
-end
-
 function rc!(
     KS::X,
     ctr::Y,
