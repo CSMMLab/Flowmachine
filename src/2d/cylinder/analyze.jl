@@ -16,8 +16,8 @@ begin
     )
     ps = CSpace2D(1.0, 6.0, 60, 0.0, π, 50, 1, 1)
     vs = VSpace2D(-10.0, 10.0, 48, -10.0, 10.0, 48)
-    #gas = Gas(Kn = 1e-3, Ma = 5.0, K = 1.0)
-    gas = Gas(Kn = 1e-2, Ma = 5.0, K = 1.0)
+    gas = Gas(Kn = 1e-3, Ma = 5.0, K = 1.0)
+    #gas = Gas(Kn = 1e-2, Ma = 5.0, K = 1.0)
 
     prim0 = [1.0, 0.0, 0.0, 1.0]
     prim1 = [1.0, gas.Ma * sound_speed(1.0, gas.γ), 0.0, 1.0]
@@ -41,8 +41,8 @@ begin
 end
 
 cd(@__DIR__)
-#@load "kn3ref.jld2" ctr
-@load "kn2ref.jld2" ctr
+@load "kn3ref.jld2" ctr
+#@load "kn2ref.jld2" ctr
 
 begin
     sol = zeros(ks.ps.nr, ks.ps.nθ, 4)
@@ -91,8 +91,8 @@ begin
     PyPlot.contourf(
         ps.x[1:ks.ps.nr, 1:ks.ps.nθ],
         ps.y[1:ks.ps.nr, 1:ks.ps.nθ],
-        #rg_ref,
-        rg_kngll,
+        rg_ref,
+        #rg_kngll,
         levels = 20,
         cmap = ColorMap("inferno"),
     )
@@ -104,3 +104,5 @@ begin
     ylim(0, 6)
     display(fig)
 end
+#fig.savefig("cylinder_rgref_kn3.pdf")
+#fig.savefig("cylinder_rgkngll_kn3.pdf")
