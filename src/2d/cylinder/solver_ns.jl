@@ -91,6 +91,21 @@ function ev!(KS, ctr, a1face, a2face, dt)
 
     # r direction
     @inbounds Threads.@threads for j = 1:ny
+        w = local_frame(ctr[1, j].w, a1face[1, j].n[1], a1face[1, j].n[2])
+        flux_boundary_maxwell!(
+            a1face[1, j].fw,
+            [1.0, 0.0, 0.0, 1.0],
+            w,
+            KS.gas.K,
+            KS.gas.γ,
+            dt,
+            a1face[1, j].len,
+            1,
+        )
+        a1face[1, j].fw .=
+                global_frame(a1face[1, j].fw, a1face[1, j].n[1], a1face[1, j].n[2])
+    end
+    @inbounds Threads.@threads for j = 2:ny
         for i = idx0:idx1
             wL = local_frame(ctr[i-1, j].w, a1face[i, j].n[1], a1face[i, j].n[2])
             wR = local_frame(ctr[i, j].w, a1face[i, j].n[1], a1face[i, j].n[2])
@@ -199,7 +214,7 @@ res = zeros(4)
 end
 @save "kn2ns.jld2" ctr a1face a2face
 
-#=begin
+begin
     sol = zeros(ks.ps.nr, ks.ps.nθ, 4)
     for i in axes(sol, 1), j in axes(sol, 2)
         sol[i, j, :] .= ctr[i, j].prim
@@ -214,4 +229,4 @@ end
         xlabel = "x",
         ylabel = "y",
     )
-end=#
+end
