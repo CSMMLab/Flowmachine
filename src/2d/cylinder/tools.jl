@@ -1,7 +1,9 @@
+"""
 mutable struct CellInfo
     regime::String
     ispdf::Bool
 end
+"""
 
 function rc!(
     KS::X,
