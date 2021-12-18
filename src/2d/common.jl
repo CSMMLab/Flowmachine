@@ -31,9 +31,18 @@ function accuracy(nn, X, Z)
     return accuracy
 end
 
+# cylinder
 function judge_regime(ks, f, prim, swx, swy)
     τ = vhs_collision_time(prim, ks.gas.μᵣ, ks.gas.ω)
     fr = chapman_enskog(ks.vs.u, ks.vs.v, prim, swx, swy, ks.gas.K, τ)
+
+    return judge_regime(f, fr, prim)
+end
+
+# layer
+function judge_regime(ks, f, prim, swx, swy = zero(swx), swz = zero(swx))
+    τ = vhs_collision_time(prim, ks.gas.μᵣ, ks.gas.ω)
+    fr = chapman_enskog(ks.vs.u, ks.vs.v, ks.vs.w, prim, swx, swy, swz, ks.gas.K, τ)
 
     return judge_regime(f, fr, prim)
 end

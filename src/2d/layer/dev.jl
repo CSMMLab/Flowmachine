@@ -1,8 +1,9 @@
-using KitBase, Plots
+using Kinetic, Plots
 using KitBase.JLD2
 using Base.Threads: @threads
 using KitBase.ProgressMeter: @showprogress
 cd(@__DIR__)
+@load "model/nn_layer.jld2" nn
 
 function up!(ks, ctr, face, dt, p)
     kn_bzm, nm, phi, psi, phipsi = p
@@ -31,29 +32,6 @@ function up!(ks, ctr, face, dt, p)
             avg,
             :fsm,
         )
-
-        #=KitBase.step!(
-            face[i].fw,
-            face[i].ff,
-            ctr[i].w,
-            ctr[i].prim,
-            ctr[i].f,
-            face[i+1].fw,
-            face[i+1].ff,
-            ks.vs.u,
-            ks.vs.v,
-            ks.vs.w,
-            ks.vs.weights,
-            ks.gas.γ,
-            ks.gas.μᵣ,
-            ks.gas.ω,
-            ks.gas.Pr,
-            ks.ps.dx[i],
-            dt,
-            res,
-            avg,
-            :bgk,
-        )=#
     end
 
     return nothing
@@ -61,9 +39,9 @@ end
 
 begin
     set = Setup(case = "layer", space = "1d1f3v", maxTime = 0.2, boundary = ["fix", "fix"], cfl = 0.5)
-    ps = PSpace1D(-0.5, 0.5, 500, 1)
-    #ps = PSpace1D(-0.5, 0.5, 100, 1)
-    vs = VSpace3D(-6.0, 6.0, 28, -6.0, 6.0, 64, -6.0, 6.0, 28)
+    #ps = PSpace1D(-0.5, 0.5, 500, 1)
+    ps = PSpace1D(-0.5, 0.5, 200, 1)
+    vs = VSpace3D(-6.0, 6.0, 28, -6.0, 6.0, 28, -6.0, 6.0, 28)
     gas = Gas(Kn = 5e-3, K = 0.0)
     fw = function(x)
         prim = zeros(5)
@@ -89,9 +67,7 @@ dt = timestep(ks, ctr, t)
 nt = Int(tmax ÷ dt)
 res = zero(ctr[1].w)
 
-@showprogress for iter = 1:nt
-    #reconstruct!(ks, ctr)
-
+@showprogress for iter = 1:10
     @inbounds @threads for i = 1:ks.ps.nx+1
         flux_kfvs!(
             face[i].fw,
@@ -112,14 +88,7 @@ res = zero(ctr[1].w)
     up!(ks, ctr, face, dt, fsm)
 
     global t += dt
-
-    if abs(t - τ0) < dt
-        @save "sol_t.jld2" ctr face
-    elseif abs(t - 10 * τ0) < dt
-        @save "sol_10t.jld2" ctr face
-    end
 end
-@save "sol_50t.jld2" ctr face
 
 # field
 sol = zeros(ks.ps.nx, 5)
@@ -128,9 +97,25 @@ for i in axes(sol, 1)
     sol[i, end] = 1 / sol[i, end]
 end
 
-plot(ks.ps.x[1:ks.ps.nx], sol[:, 1])
+plot(ks.ps.x[1:ks.ps.nx], sol)
 
-# distribution function
-fc = (ctr[end÷2].f + ctr[end÷2+1].f) ./ 2
-hc = reduce_distribution(fc, vs.weights[:, 1, :], 2)
-plot(ks.vs.v[1, :, 1], hc)
+rg_ref = zeros(Int, ks.ps.nx)
+for i = 1:ks.ps.nx
+    sw = (ctr[i+1].w .- ctr[i-1].w) / ks.ps.dx[i] / 2
+    x, y = regime_data(ks, ctr[i].w, sw, zero(sw), zero(sw), ctr[i].f)
+    rg_ref[i] = y
+end
+
+rg_nn = zeros(Int, ks.ps.nx)
+@inbounds Threads.@threads for i = 1:ks.ps.nx
+    sw = (ctr[i+1].w - ctr[i-1].w) / (1e-6 + ks.ps.x[i+1] - ks.ps.x[i-1])
+    tau = vhs_collision_time(ctr[i].prim, ks.gas.μᵣ, ks.gas.ω)
+    rg_nn[i] = nn([ctr[i].w[1:3]; ctr[i].w[end]; sw[1:3]; sw[end]; tau])[1] |> round |> Int
+end
+
+plot(ks.ps.x[1:ks.ps.nx], rg_ref)
+plot!(ks.ps.x[1:ks.ps.nx], rg_nn)
+
+
+@load "data/dataset.jld2" X Y
+

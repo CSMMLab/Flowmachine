@@ -5,8 +5,8 @@ using KitBase.ProgressMeter: @showprogress
 cd(@__DIR__)
 
 begin
-    set = Setup(case = "layer", space = "1d0f0v", maxTime = 0.2, boundary = ["fix", "fix"])
-    ps = PSpace1D(-1.0, 1.0, 1000, 1)
+    set = Setup(case = "layer", space = "1d0f0v", maxTime = 0.2, boundary = ["fix", "fix"], cfl = 0.3)
+    ps = PSpace1D(-0.5, 0.5, 500, 1)
     vs = nothing
     gas = Gas(Kn = 5e-3, K = 0.0)
     fw = function(x)
@@ -25,14 +25,14 @@ begin
 end
 
 τ0 = vhs_collision_time(ctr[1].prim, ks.gas.μᵣ, ks.gas.ω)
-tmax = 100 * τ0
+tmax = 50 * τ0
 t = 0.0
 dt = timestep(ks, ctr, t)
 nt = Int(tmax ÷ dt)
 res = zero(ctr[1].w)
 
-@showprogress for iter = 1:100#nt
-    reconstruct!(ks, ctr)
+@showprogress for iter = 1:nt
+    #reconstruct!(ks, ctr)
 
     @inbounds @threads for i = 1:ks.ps.nx+1
         flux_gks!(
@@ -55,13 +55,14 @@ res = zero(ctr[1].w)
     update!(ks, ctr, face, dt, res)
 
     global t += dt
-#=
+
     if abs(t - τ0) < dt
-        @save "sol_t.jld2" ctr face
+        @save "solns_t.jld2" ctr face
     elseif abs(t - 10 * τ0) < dt
-        @save "sol_10t.jld2" ctr face
-    end=#
+        @save "solns_10t.jld2" ctr face
+    end
 end
+@save "solns_50t.jld2" ctr face
 
 sol = zeros(ks.ps.nx, 5)
 for i in axes(sol, 1)
