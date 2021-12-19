@@ -62,7 +62,6 @@ end
 begin
     set = Setup(case = "layer", space = "1d1f3v", maxTime = 0.2, boundary = ["fix", "fix"], cfl = 0.5)
     ps = PSpace1D(-0.5, 0.5, 500, 1)
-    #ps = PSpace1D(-0.5, 0.5, 100, 1)
     vs = VSpace3D(-6.0, 6.0, 28, -6.0, 6.0, 64, -6.0, 6.0, 28)
     gas = Gas(Kn = 5e-3, K = 0.0)
     fw = function(x)
@@ -82,14 +81,13 @@ end
 
 fsm = fsm_kernel(ks.vs, ks.gas.μᵣ)
 τ0 = vhs_collision_time(ctr[1].prim, ks.gas.μᵣ, ks.gas.ω)
-tmax = 50 * τ0
-#tmax = 100 * τ0
+tmax = 10τ0#50τ0
 t = 0.0
 dt = timestep(ks, ctr, t)
 nt = Int(tmax ÷ dt)
 res = zero(ctr[1].w)
 
-@showprogress for iter = 1:nt
+@time @showprogress for iter = 1:nt
     #reconstruct!(ks, ctr)
 
     @inbounds @threads for i = 1:ks.ps.nx+1
@@ -111,15 +109,14 @@ res = zero(ctr[1].w)
 
     up!(ks, ctr, face, dt, fsm)
 
-    global t += dt
-
+    #=global t += dt
     if abs(t - τ0) < dt
         @save "sol_t.jld2" ctr face
     elseif abs(t - 10 * τ0) < dt
         @save "sol_10t.jld2" ctr face
-    end
+    end=#
 end
-@save "sol_50t.jld2" ctr face
+#@save "sol_50t.jld2" ctr face
 
 # field
 sol = zeros(ks.ps.nx, 5)
