@@ -74,6 +74,7 @@ rg_kngll = zeros(ks.ps.nr, ks.ps.nθ)
         L = abs(ctr[i, j].w[1] / sw[1])
         ℓ = (1 / ctr[i, j].prim[end])^ks.gas.ω / ctr[i, j].prim[1] * sqrt(ctr[i, j].prim[end]) * ks.gas.Kn
         rg_kngll[i, j] = ifelse(ℓ / L > 0.05, 1, 0)
+        #rg_kngll[i, j] = ifelse(ℓ / L > 0.01, 1, 0)
     end
 end
 
@@ -84,8 +85,8 @@ begin
         ps.x[1:ks.ps.nr, 1:ks.ps.nθ],
         ps.y[1:ks.ps.nr, 1:ks.ps.nθ],
         #rg_ref,
-        #rg_kngll,
-        rg_nn,
+        rg_kngll,
+        #rg_nn,
         levels = 20,
         cmap = plt.ColorMap("inferno"),
     )
@@ -98,7 +99,7 @@ begin
     plt.display(fig)
 end
 #fig.savefig("cylinder_rgref_kn3.pdf")
-#fig.savefig("cylinder_rgkngll_kn3.pdf")
+#fig.savefig("cylinder_rgkngll_kn2_c001.pdf")
 
 @load "nn_pro.jld2" nn
 
