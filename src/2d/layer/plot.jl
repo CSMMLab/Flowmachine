@@ -80,14 +80,14 @@ begin
     savefig("figure/layer_u_t.pdf")
 
     begin
-        plot(ks.ps.x[211:290], solkt[211:290, 3], lw=1.5, label="Kinetic", xlabel="x", ylabel="U")
+        plot(ks.ps.x[211:290], solkt[211:290, 3], lw=1.5, label="Kinetic", xlabel="x", ylabel="V")
         plot!(ks.ps.x[211:290], solns[211:290, 3], lw=1.5, line=:dash, label="NS")
         scatter!(ks.ps.x[211:290], solad[211:290, 3], alpha=0.6, label="Adaptive")
     end
     savefig("figure/layer_v_t.pdf")
 
     begin
-        plot(ks.ps.x[211:290], solkt[211:290, 5], lw=1.5, label="Kinetic", xlabel="x", ylabel="U")
+        plot(ks.ps.x[211:290], solkt[211:290, 5], lw=1.5, label="Kinetic", xlabel="x", ylabel="T")
         plot!(ks.ps.x[211:290], solns[211:290, 5], lw=1.5, line=:dash, label="NS")
         scatter!(ks.ps.x[211:290], solad[211:290, 5], alpha=0.6, label="Adaptive")
     end
@@ -151,14 +151,14 @@ begin
     savefig("figure/layer_u_10t.pdf")
 
     begin
-        plot(ks.ps.x[201:300], solkt[201:300, 3], lw=1.5, label="Kinetic", xlabel="x", ylabel="U")
+        plot(ks.ps.x[201:300], solkt[201:300, 3], lw=1.5, label="Kinetic", xlabel="x", ylabel="V")
         plot!(ks.ps.x[201:300], solns[201:300, 3], lw=1.5, line=:dash, label="NS")
         scatter!(ks.ps.x[201:300], solad[201:300, 3], alpha=0.6, label="Adaptive")
     end
     savefig("figure/layer_v_10t.pdf")
 
     begin
-        plot(ks.ps.x[201:300], solkt[201:300, 5], lw=1.5, label="Kinetic", xlabel="x", ylabel="U")
+        plot(ks.ps.x[201:300], solkt[201:300, 5], lw=1.5, label="Kinetic", xlabel="x", ylabel="T")
         plot!(ks.ps.x[201:300], solns[201:300, 5], lw=1.5, line=:dash, label="NS")
         scatter!(ks.ps.x[201:300], solad[201:300, 5], alpha=0.6, label="Adaptive")
     end
@@ -224,14 +224,14 @@ begin
     savefig("figure/layer_u_50t.pdf")
 
     begin
-        plot(ks.ps.x[1:ks.ps.nx], solkt[:, 3], lw=1.5, label="Kinetic", xlabel="x", ylabel="U")
+        plot(ks.ps.x[1:ks.ps.nx], solkt[:, 3], lw=1.5, label="Kinetic", xlabel="x", ylabel="V")
         plot!(ks.ps.x[1:ks.ps.nx], solns[:, 3], lw=1.5, line=:dash, label="NS")
         scatter!(ks.ps.x[1:ks.ps.nx], solad[:, 3], alpha=0.6, label="Adaptive")
     end
     savefig("figure/layer_v_50t.pdf")
 
     begin
-        plot(ks.ps.x[1:ks.ps.nx], solkt[:, 5], lw=1.5, label="Kinetic", xlabel="x", ylabel="U")
+        plot(ks.ps.x[1:ks.ps.nx], solkt[:, 5], lw=1.5, label="Kinetic", xlabel="x", ylabel="T")
         plot!(ks.ps.x[1:ks.ps.nx], solns[:, 5], lw=1.5, line=:dash, label="NS")
         scatter!(ks.ps.x[1:ks.ps.nx], solad[:, 5], alpha=0.6, label="Adaptive")
     end
