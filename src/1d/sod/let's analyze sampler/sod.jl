@@ -1,6 +1,8 @@
 """
 Please add the latest Kinetic.jl package as it fixes the issue with the regime classifier.
-
+Backend requirement: 
+- KitBase: v0.7.6
+- KitML: v0.4.4
 """
 
 using Kinetic, NPZ, Plots, LinearAlgebra
