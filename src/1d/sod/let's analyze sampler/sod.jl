@@ -22,12 +22,12 @@ dt = timestep(ks, ctr, t)
 nt = Int(ks.set.maxTime ÷ dt) + 1
 res = zero(ctr[1].w)
 
-X, Y, Z = begin
+X, Y, Z, I = begin
     prim = [1.0, 0.0, 1.0]
     w = prim_conserve(prim, ks.gas.γ)
     sw = zeros(3)
     M = maxwellian(ks.vs.u, prim)
-    [[1e-4, 0.0, 1e-4]; zeros(3); 1.0], 0.0, M
+    [[1e-4, 0.0, 1e-4]; zeros(3); 1.0], 0.0, M, 0
 end
 
 @showprogress for iter = 1:nt
@@ -41,10 +41,11 @@ end
             global X = hcat(X, x)
             global Y = hcat(Y, y)
             global Z = hcat(Z, ctr[i].f)
+            global I = hcat(I, iter)
         end
     end
 end
 
 #plot(ks, ctr)
 
-npzwrite("data.npz", Dict("X" => X, "Y" => Y, "Z" => Z))
+npzwrite("data.npz", Dict("I" => I, "X" => X, "Y" => Y, "Z" => Z))
