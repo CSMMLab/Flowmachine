@@ -5,7 +5,7 @@ Backend requirement:
 - KitML: v0.4.4
 """
 
-using Kinetic, NPZ, Plots, LinearAlgebra
+using Kinetic, NPZ, Plots
 using KitBase.ProgressMeter: @showprogress
 cd(@__DIR__)
 
