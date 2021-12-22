@@ -97,8 +97,16 @@ end
 # model
 ###
 
-@load "../../nn_scalar.jld2" nn
+#@load "../../nn_scalar.jld2" nn
+#@load "nn_sod.jld2" nn
 @load "data_sod.jld2" X Y
+
+nn = Chain(
+    Dense(7, 28, sigmoid),
+    Dense(28, 56, sigmoid),
+    Dense(56, 28, sigmoid),
+    Dense(28, 1, sigmoid),
+)
 
 data = Flux.Data.DataLoader((X, Y), shuffle = true)
 ps = params(nn)
@@ -107,5 +115,49 @@ cb = () -> println("loss: $(loss(X, Y))")
 opt = ADAM()
 
 @epochs 5 Flux.train!(loss, ps, data, opt, cb = Flux.throttle(cb, 1))
+
+#--- test ---#
+
+function accuracy(nn, X, Z)
+    Z1 = nn(X)
+
+    ZA1 = [round(Z1[1, i]) for i in axes(Z1, 2)]
+    ZA = [round(Z[1, i]) for i in axes(Z, 2)]
+
+    accuracy = 0.0
+    for i in eachindex(ZA)
+        if ZA[i] == ZA1[i]
+            accuracy += 1.0
+        end
+    end
+    accuracy /= length(ZA)
+
+    return accuracy
+end
+
+accuracy(nn, X, Y)
+
+function split_regime!(regime, ks, ctr, nn)
+    regime[0] = 0
+    regime[end] = 0
+
+    @inbounds @threads for i = 1:ks.ps.nx
+        wR = [ctr[i+1].w[1:2]; ctr[i+1].w[end]]
+        wL = [ctr[i-1].w[1:2]; ctr[i-1].w[end]]
+        w = [ctr[i].w[1:2]; ctr[i].w[end]]
+        sw = (wR .- wL) ./ ks.ps.dx[i] ./ 2
+        τ = vhs_collision_time(ctr[i].prim, ks.gas.μᵣ, ks.gas.ω)
+        regime[i] = Int(round(nn([w; abs.(sw); τ])[1]))
+    end
+
+    return nothing
+end
+
+regime = ones(Int, axes(ks.ps.x))
+split_regime!(regime, ks, ctr, nn)
+
+plot(ks, ctr)
+plot!(ks.ps.x[1:ks.ps.nx], regime[1:ks.ps.nx])
+
 
 @save "nn_sod.jld2" nn

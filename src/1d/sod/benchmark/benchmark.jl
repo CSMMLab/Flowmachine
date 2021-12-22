@@ -45,7 +45,12 @@ function sbr!(
     boltzmann_fft!(Q, f, Kn_bz, nm, phi, psi, phipsi)
 
     for k in axes(f, 3), j in axes(f, 2), i in axes(f, 1)
-        f[i, j, k] = (f[i, j, k] + (ffL[i, j, k] - ffR[i, j, k]) / dx + dt * (M[i, j, k] / τ * (1 - exp(-dt / τ)) + Q[i, j, k] * exp(-dt / τ))) / (1.0 + dt / τ * (1 - exp(-dt / τ)))
+        f[i, j, k] =
+            (
+                f[i, j, k] +
+                (ffL[i, j, k] - ffR[i, j, k]) / dx +
+                dt * (M[i, j, k] / τ * (1 - exp(-dt / τ)) + Q[i, j, k] * exp(-dt / τ))
+            ) / (1.0 + dt / τ * (1 - exp(-dt / τ)))
     end
 
 end
@@ -67,7 +72,17 @@ function split_regime!(regime, regime0, ks, ctr, nn)
             a = pdf_slope(ctr[i].prim, [sw[1:2]; zeros(2); sw[end]], ks.gas.K)
             swt = -ctr[i].prim[1] .* moments_conserve_slope(a, Mu, Mv, Mw, 1, 0, 0)
             A = pdf_slope(ctr[i].prim, swt, ks.gas.K)
-            ctr[i].f = chapman_enskog(ks.vs.u, ks.vs.v, ks.vs.w, ctr[i].prim, a, zero(a), zero(a), A, τ)
+            ctr[i].f = chapman_enskog(
+                ks.vs.u,
+                ks.vs.v,
+                ks.vs.w,
+                ctr[i].prim,
+                a,
+                zero(a),
+                zero(a),
+                A,
+                τ,
+            )
         end
     end
 
@@ -145,8 +160,14 @@ function up!(ks, ctr, face, dt, regime, p)
 end
 
 begin
-    set = Setup(case = "sod", space = "1d1f3v", maxTime = 0.15, collision = "fsm", boundary = ["fix", "fix"])
-    ps = PSpace1D(0, 1, 200, 1)
+    set = Setup(
+        case = "sod",
+        space = "1d1f3v",
+        maxTime = 0.15,
+        collision = "fsm",
+        boundary = ["fix", "fix"],
+    )
+    ps = PSpace1D(0, 1, 100, 1)
     vs = VSpace3D(-6.0, 6.0, 64, -6.0, 6.0, 28, -6.0, 6.0, 28)
     gas = begin
         Kn = 1e-4
@@ -205,15 +226,19 @@ regime0 = deepcopy(regime)
     up!(ks, ctr, face, dt, regime, ks.gas.fsm)
 end
 
+plot(ks, ctr)
 plot(regime[1:ks.ps.nx])
 
 """
 Kn = 1e-4
-
+7.856452 seconds (6.88 M allocations: 9.526 GiB, 3.15% gc time, 7.59% compilation time) ~ 200
+81.253323 seconds (35.72 M allocations: 100.876 GiB, 2.06% gc time, 4.02% compilation time) ~ 200
 
 Kn = 1e-3
+171.219305 seconds (20.46 M allocations: 235.016 GiB, 3.12% gc time, 1.61% compilation time) ~ 200
 553.393995 seconds (36.64 M allocations: 752.581 GiB, 2.42% gc time, 0.06% compilation time)
 
 Kn = 1e-2
+378.002585 seconds (24.71 M allocations: 971.264 GiB, 2.83% gc time, 0.11% compilation time) ~ 200
 
 """
