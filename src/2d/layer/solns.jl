@@ -31,7 +31,7 @@ dt = timestep(ks, ctr, t)
 nt = Int(tmax ÷ dt)
 res = zero(ctr[1].w)
 
-@showprogress for iter = 1:nt
+@time @showprogress for iter = 1:nt
     #reconstruct!(ks, ctr)
 
     @inbounds @threads for i = 1:ks.ps.nx+1
@@ -54,20 +54,20 @@ res = zero(ctr[1].w)
 
     update!(ks, ctr, face, dt, res)
 
-    global t += dt
-
+    #=global t += dt
     if abs(t - τ0) < dt
         @save "solns_t.jld2" ctr face
     elseif abs(t - 10 * τ0) < dt
         @save "solns_10t.jld2" ctr face
-    end
+    end=#
 end
-@save "solns_50t.jld2" ctr face
+#@save "solns_50t.jld2" ctr face
 
-sol = zeros(ks.ps.nx, 5)
+#=sol = zeros(ks.ps.nx, 5)
 for i in axes(sol, 1)
     sol[i, :] .= ctr[i].prim
     sol[i, end] = 1 / sol[i, end]
 end
 
 plot(ks.ps.x[1:ks.ps.nx], sol)
+=#

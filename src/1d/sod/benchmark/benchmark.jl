@@ -1,37 +1,70 @@
-"""
-Note that ∇w takes its absolute value.
-"""
-
-using KitBase, Plots, Flux
+using Kinetic, Plots, Flux
 using KitBase.JLD2
-using Base.Threads: @threads
 using KitBase.ProgressMeter: @showprogress
+using Base.Threads: @threads
 cd(@__DIR__)
-include("../common.jl")
-@load "model/nn_layer.jld2" nn
+@load "nn_sod.jld2" nn
+
+function sbr!(
+    fwL::T1,
+    ffL::T2,
+    w::T3,
+    prim::T3,
+    f::T4,
+    fwR::T1,
+    ffR::T2,
+    uVelo::T5,
+    vVelo::T5,
+    wVelo::T5,
+    γ,
+    μᵣ,
+    ω,
+    Kn_bz,
+    nm,
+    phi,
+    psi,
+    phipsi,
+    dx,
+    dt,
+    RES,
+    AVG,
+    collision = :fsm::Symbol,
+) where {T1,T2,T3,T4,T5}
+
+    w_old = deepcopy(w)
+    @. w += (fwL - fwR) / dx
+    prim .= conserve_prim(w, γ)
+
+    M = maxwellian(uVelo, vVelo, wVelo, prim)
+    τ = vhs_collision_time(prim, μᵣ, ω)
+
+    @. RES += (w - w_old)^2
+    @. AVG += abs(w)
+
+    Q = zero(f[:, :, :])
+    boltzmann_fft!(Q, f, Kn_bz, nm, phi, psi, phipsi)
+
+    for k in axes(f, 3), j in axes(f, 2), i in axes(f, 1)
+        f[i, j, k] = (f[i, j, k] + (ffL[i, j, k] - ffR[i, j, k]) / dx + dt * (M[i, j, k] / τ * (1 - exp(-dt / τ)) + Q[i, j, k] * exp(-dt / τ))) / (1.0 + dt / τ * (1 - exp(-dt / τ)))
+    end
+
+end
 
 function split_regime!(regime, regime0, ks, ctr, nn)
     regime[0] = 0
     regime[end] = 0
 
-    @inbounds Threads.@threads for i = 1:ks.ps.nx
-        wR = [ctr[i+1].w[1:3]; ctr[i+1].w[end]]
-        wL = [ctr[i-1].w[1:3]; ctr[i-1].w[end]]
-        w = [ctr[i].w[1:3]; ctr[i].w[end]]
+    @inbounds @threads for i = 1:ks.ps.nx
+        wR = [ctr[i+1].w[1:2]; ctr[i+1].w[end]]
+        wL = [ctr[i-1].w[1:2]; ctr[i-1].w[end]]
+        w = [ctr[i].w[1:2]; ctr[i].w[end]]
         sw = (w .- wL) ./ ks.ps.dx[i]
         τ = vhs_collision_time(ctr[i].prim, ks.gas.μᵣ, ks.gas.ω)
         regime[i] = Int(round(nn([w; abs.(sw); τ])[1]))
-        #=regime[i] = begin
-            if abs(ctr[i].prim[2]) > 0.1
-                1
-            else
-                Int(round(nn([w; sw; τ])[1]))
-            end
-        end=#
 
         if regime[i] == 1 && regime0[i] == 0
             Mu, Mv, Mw, t1, t2 = gauss_moments(ctr[i].prim, ks.gas.K)
-            a = pdf_slope(ctr[i].prim, [sw[1:3]; 0.0; sw[end]], ks.gas.K)
+            a = pdf_slope(ctr[i].prim, [sw[1:2]; zeros(2); sw[end]], ks.gas.K)
             swt = -ctr[i].prim[1] .* moments_conserve_slope(a, Mu, Mv, Mw, 1, 0, 0)
             A = pdf_slope(ctr[i].prim, swt, ks.gas.K)
             ctr[i].f = chapman_enskog(ks.vs.u, ks.vs.v, ks.vs.w, ctr[i].prim, a, zero(a), zero(a), A, τ)
@@ -62,7 +95,7 @@ function up!(ks, ctr, face, dt, regime, p)
                 avg,
             )
         else
-            KitBase.step!(
+            #=KitBase.step!(
                 face[i].fw,
                 face[i].ff,
                 ctr[i].w,
@@ -81,41 +114,52 @@ function up!(ks, ctr, face, dt, regime, p)
                 res,
                 avg,
                 :fsm,
+            )=#
+            sbr!(
+                face[i].fw,
+                face[i].ff,
+                ctr[i].w,
+                ctr[i].prim,
+                ctr[i].f,
+                face[i+1].fw,
+                face[i+1].ff,
+                ks.vs.u,
+                ks.vs.v,
+                ks.vs.w,
+                ks.gas.γ,
+                ks.gas.μᵣ,
+                ks.gas.ω,
+                kn_bzm,
+                nm,
+                phi,
+                psi,
+                phipsi,
+                ks.ps.dx[i],
+                dt,
+                res,
+                avg,
+                :fsm,
             )
         end
     end
 end
 
 begin
-    set = Setup(case = "layer", space = "1d1f3v", maxTime = 0.2, boundary = ["fix", "fix"])
-    ps = PSpace1D(-0.5, 0.5, 500, 1)
-    vs = VSpace3D(-6.0, 6.0, 28, -6.0, 6.0, 64, -6.0, 6.0, 28)
-    #ps = PSpace1D(-0.5, 0.5, 300, 1)
-    #vs = VSpace3D(-6.0, 6.0, 28, -6.0, 6.0, 48, -6.0, 6.0, 28)
+    set = Setup(case = "sod", space = "1d1f3v", maxTime = 0.15, collision = "fsm", boundary = ["fix", "fix"])
+    ps = PSpace1D(0, 1, 200, 1)
+    vs = VSpace3D(-6.0, 6.0, 64, -6.0, 6.0, 28, -6.0, 6.0, 28)
     gas = begin
-        Kn = 5e-3
+        Kn = 1e-4
         Gas(Kn = Kn, K = 0.0, fsm = fsm_kernel(vs, ref_vhs_vis(Kn, 1.0, 0.5)))
     end
-    fw = function(x)
-        prim = zeros(5)
-        if x <= 0
-            prim .= [1.0, 0.0, 1.0, 0.0, 1.0]
-        else
-            prim .= [1.0, 0.0, -1.0, 0.0, 2.0]
-        end
-
-        return prim_conserve(prim, ks.gas.γ)
-    end
-    ib = IB1F(fw, vs, gas)
+    ib = IB1F(ib_sod(set, ps, vs, gas)...)
     ks = SolverSet(set, ps, vs, gas, ib)
-    ctr, face = init_fvm(ks, ks.ps)
+    ctr, face = init_fvm(ks)
 end
 
-τ0 = vhs_collision_time(ctr[1].prim, ks.gas.μᵣ, ks.gas.ω)
-tmax = 10τ0#50τ0
 t = 0.0
 dt = timestep(ks, ctr, t)
-nt = Int(tmax ÷ dt)
+nt = Int(ks.set.maxTime ÷ dt)
 res = zero(ctr[1].w)
 regime = ones(Int, axes(ks.ps.x))
 regime0 = deepcopy(regime)
@@ -159,28 +203,17 @@ regime0 = deepcopy(regime)
     end
 
     up!(ks, ctr, face, dt, regime, ks.gas.fsm)
-
-    #=global t += dt
-    if abs(t - τ0) < dt
-        @save "solad_t.jld2" ctr face
-    elseif abs(t - 10 * τ0) < dt
-        @save "solad_10t.jld2" ctr face
-    end=#
-end
-#@save "solad_50t.jld2" ctr face
-#=
-sol = zeros(ks.ps.nx, 5)
-for i in axes(sol, 1)
-    sol[i, :] .= ctr[i].prim
-    sol[i, end] = 1 / sol[i, end]
 end
 
-plot(ks.ps.x[1:ks.ps.nx], sol)
-plot(ks.ps.x[1:ks.ps.nx], regime[1:ks.ps.nx])
-=#
+plot(regime[1:ks.ps.nx])
 
 """
-adaptive: 623.054187 seconds (134.63 M allocations: 1.365 TiB, 1.29% gc time, 3.23% compilation time)
-kinetic: 1985.342956 seconds (400.14 M allocations: 15.922 TiB, 1.82% gc time, 0.46% compilation time)
-NS: 11.066222 seconds (78.66 M allocations: 5.628 GiB, 11.32% gc time, 86.02% compilation time)
+Kn = 1e-4
+
+
+Kn = 1e-3
+553.393995 seconds (36.64 M allocations: 752.581 GiB, 2.42% gc time, 0.06% compilation time)
+
+Kn = 1e-2
+
 """
