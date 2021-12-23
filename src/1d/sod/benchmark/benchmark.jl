@@ -110,7 +110,7 @@ function up!(ks, ctr, face, dt, regime, p)
                 avg,
             )
         else
-            #=KitBase.step!(
+            KitBase.step!(
                 face[i].fw,
                 face[i].ff,
                 ctr[i].w,
@@ -129,8 +129,8 @@ function up!(ks, ctr, face, dt, regime, p)
                 res,
                 avg,
                 :fsm,
-            )=#
-            sbr!(
+            )
+            #=sbr!(
                 face[i].fw,
                 face[i].ff,
                 ctr[i].w,
@@ -154,7 +154,7 @@ function up!(ks, ctr, face, dt, regime, p)
                 res,
                 avg,
                 :fsm,
-            )
+            )=#
         end
     end
 end
@@ -167,7 +167,7 @@ begin
         collision = "fsm",
         boundary = ["fix", "fix"],
     )
-    ps = PSpace1D(0, 1, 100, 1)
+    ps = PSpace1D(0, 1, 200, 1)
     vs = VSpace3D(-6.0, 6.0, 64, -6.0, 6.0, 28, -6.0, 6.0, 28)
     gas = begin
         Kn = 1e-4
@@ -231,14 +231,14 @@ plot(regime[1:ks.ps.nx])
 
 """
 Kn = 1e-4
-7.856452 seconds (6.88 M allocations: 9.526 GiB, 3.15% gc time, 7.59% compilation time) ~ 200
+7.856452 seconds (6.88 M allocations: 9.526 GiB, 3.15% gc time, 7.59% compilation time) ~ 100
 81.253323 seconds (35.72 M allocations: 100.876 GiB, 2.06% gc time, 4.02% compilation time) ~ 200
 
 Kn = 1e-3
-171.219305 seconds (20.46 M allocations: 235.016 GiB, 3.12% gc time, 1.61% compilation time) ~ 200
-553.393995 seconds (36.64 M allocations: 752.581 GiB, 2.42% gc time, 0.06% compilation time)
+171.219305 seconds (20.46 M allocations: 235.016 GiB, 3.12% gc time, 1.61% compilation time) ~ 100
+514.904113 seconds (36.01 M allocations: 713.923 GiB, 2.51% gc time, 0.07% compilation time) ~ 200
 
 Kn = 1e-2
-378.002585 seconds (24.71 M allocations: 971.264 GiB, 2.83% gc time, 0.11% compilation time) ~ 200
+378.002585 seconds (24.71 M allocations: 971.264 GiB, 2.83% gc time, 0.11% compilation time) ~ 100
 
 """

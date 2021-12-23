@@ -61,7 +61,7 @@ function up!(ks, ctr, face, dt, regime, p)
     avg = zeros(5)
 
     @inbounds Threads.@threads for i = 1:ks.ps.nx
-        #=KitBase.step!(
+        KitBase.step!(
             face[i].fw,
             face[i].ff,
             ctr[i].w,
@@ -80,8 +80,8 @@ function up!(ks, ctr, face, dt, regime, p)
             res,
             avg,
             :fsm,
-        )=#
-        sbr!(
+        )
+        #=sbr!(
             face[i].fw,
             face[i].ff,
             ctr[i].w,
@@ -105,7 +105,7 @@ function up!(ks, ctr, face, dt, regime, p)
             res,
             avg,
             :fsm,
-        )
+        )=#
     end
 end
 
@@ -117,7 +117,7 @@ begin
         collision = "fsm",
         boundary = ["fix", "fix"],
     )
-    ps = PSpace1D(0, 1, 100, 1)
+    ps = PSpace1D(0, 1, 200, 1)
     vs = VSpace3D(-6.0, 6.0, 64, -6.0, 6.0, 28, -6.0, 6.0, 28)
     gas = begin
         Kn = 1e-2
@@ -165,4 +165,76 @@ Kn = 1e-3
 
 Kn = 1e-2
 421.556153 seconds (41.96 M allocations: 1.842 TiB, 2.45% gc time, 0.08% compilation time)
+1649.024909 seconds (164.98 M allocations: 7.351 TiB, 2.56% gc time, 0.02% compilation time)
+
+NS:
+0.552949 seconds (6.36 M allocations: 591.885 MiB, 17.68% gc time, 71.81% compilation time)
 """
+
+function up!(ks, ctr, face, dt, regime, p)
+    kn_bzm, nm, phi, psi, phipsi = p
+
+    res = zeros(5)
+    avg = zeros(5)
+
+    @inbounds Threads.@threads for i = 1:ks.ps.nx
+        KitBase.step!(
+            face[i].fw,
+            ctr[i].w,
+            ctr[i].prim,
+            face[i+1].fw,
+            ks.gas.γ,
+            ks.ps.dx[i],
+            res,
+            avg,
+        )
+    end
+end
+
+begin
+    set = Setup(
+        case = "sod",
+        space = "1d1f3v",
+        maxTime = 0.15,
+        collision = "fsm",
+        boundary = ["fix", "fix"],
+    )
+    ps = PSpace1D(0, 1, 200, 1)
+    vs = VSpace3D(-6.0, 6.0, 64, -6.0, 6.0, 28, -6.0, 6.0, 28)
+    gas = begin
+        Kn = 1e-4
+        Gas(Kn = Kn, K = 0.0, fsm = fsm_kernel(vs, ref_vhs_vis(Kn, 1.0, 0.5)))
+    end
+    ib = IB1F(ib_sod(set, ps, vs, gas)...)
+    ks = SolverSet(set, ps, vs, gas, ib)
+    ctr, face = init_fvm(ks)
+end
+
+t = 0.0
+dt = timestep(ks, ctr, t)
+nt = Int(ks.set.maxTime ÷ dt)
+res = zero(ctr[1].w)
+regime = ones(Int, axes(ks.ps.x))
+regime0 = deepcopy(regime)
+
+@time @showprogress for iter = 1:nt
+    @inbounds @threads for i = 1:ks.ps.nx+1
+        flux_gks!(
+            face[i].fw,
+            ctr[i-1].w .+ 0.5 .* ctr[i-1].sw .* ks.ps.dx[i-1],
+            ctr[i].w .- 0.5 .* ctr[i].sw .* ks.ps.dx[i],
+            ks.gas.K,
+            ks.gas.γ,
+            ks.gas.μᵣ,
+            ks.gas.ω,
+            dt,
+            ks.ps.dx[i-1] / 2,
+            ks.ps.dx[i] / 2,
+            1.0,
+            ctr[i-1].sw,
+            ctr[i].sw,
+        )
+    end
+
+    up!(ks, ctr, face, dt, regime, ks.gas.fsm)
+end
