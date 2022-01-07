@@ -231,8 +231,8 @@ def scatter_plot_2d(x_in: np.ndarray, z_in: np.ndarray, lim_x: tuple = (-1, 1), 
         out = ax.scatter(x, y, s=6, c=z, cmap=c_map, norm=colors.LogNorm())
     else:
         out = ax.scatter(x, y, s=6, c=z, cmap=c_map)
-    # plt.xlim(lim_x[0], lim_x[1])
-    # plt.ylim(lim_y[0], lim_y[1])
+    plt.xlim(lim_x[0], lim_x[1])
+    plt.ylim(lim_y[0], lim_y[1])
     ax.set_title(title, fontsize=14)
     ax.set_xlabel(label_x)
     ax.set_ylabel(label_y)
@@ -261,6 +261,7 @@ def scatter_plot_2d_N2(x_in: np.ndarray, z_in: np.ndarray, lim_x: tuple = (-1, 1
         c_map = cm.hot
 
     plt.plot()
+    plt.clf()
     fig = plt.figure(figsize=(5.8, 4.7), dpi=400)
     ax = fig.add_subplot(111)  # , projection='3d')
 
