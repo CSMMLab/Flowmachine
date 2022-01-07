@@ -1,46 +1,57 @@
-using Kinetic, Plots, JLD2, LinearAlgebra
+using Kinetic, Plots, LinearAlgebra
+using KitBase.JLD2
 using Flux: onecold
-
 cd(@__DIR__)
+
+begin
+    set = Setup(case = "sod", space = "1d2f1v", maxTime = 0.15)
+    ps = PSpace1D(0.0, 1.0, 200, 1)
+    vs = VSpace1D(-5.0, 5.0, 100)
+    #gas = Gas(Kn = 1e-4, K = 2, γ = 5/3)
+    gas = Gas(Kn = 1e-3, K = 2, γ = 5/3)
+    #gas = Gas(Kn = 1e-2, K = 2, γ = 5/3)
+    ib = IB2F(ib_sod(set, ps, vs, gas)...)
+    ks = SolverSet(set, ps, vs, gas, ib)
+end
 
 # Kn = 1e-4
 ctrs = []
 begin
-    @load "kn=1e-4/nn.jld2" ks ctr
+    @load "kn=1e-4/nn.jld2" ctr
     push!(ctrs, ctr)
-    @load "kn=1e-4/kngll.jld2" ks ctr
+    @load "kn=1e-4/kngll.jld2" ctr
     push!(ctrs, ctr)
-    @load "kn=1e-4/pure_kinetic.jld2" ks ctr
+    @load "kn=1e-4/pure_kinetic.jld2" ctr
     push!(ctrs, ctr)
-    @load "kn=1e-4/pure_ns.jld2" ks ctr
+    @load "kn=1e-4/pure_ns.jld2" ctr
     push!(ctrs, ctr)
 end
 
 # Kn = 1e-3
 ctrs = []
 begin
-    @load "kn=1e-3/nn.jld2" ks ctr
+    @load "kn=1e-3/nn.jld2" ctr
     push!(ctrs, ctr)
-    @load "kn=1e-3/kngll.jld2" ks ctr
+    @load "kn=1e-3/kngll.jld2" ctr
     push!(ctrs, ctr)
-    @load "kn=1e-3/pure_kinetic.jld2" ks ctr
+    @load "kn=1e-3/pure_kinetic.jld2" ctr
     push!(ctrs, ctr)
-    @load "kn=1e-3/pure_ns.jld2" ks ctr
+    @load "kn=1e-3/pure_ns.jld2" ctr
     push!(ctrs, ctr)
 end
 
 # Kn = 1e-2
 ctrs = []
 begin
-    @load "kn=1e-2/nn.jld2" ks ctr
+    @load "kn=1e-2/nn.jld2" ctr
     push!(ctrs, ctr)
-    @load "kn=1e-2/kngll.jld2" ks ctr
+    @load "kn=1e-2/kngll.jld2" ctr
     push!(ctrs, ctr)
-    @load "kn=1e-2/pure_kinetic.jld2" ks ctr
+    @load "kn=1e-2/pure_kinetic.jld2" ctr
     push!(ctrs, ctr)
-    @load "kn=1e-3/pure_ns.jld2" ks ctr
+    @load "kn=1e-3/pure_ns.jld2" ctr
     push!(ctrs, ctr)
-    @load "kn=1e-2/pure_kinetic.jld2" ks ctr
+    @load "kn=1e-2/pure_kinetic.jld2" ctr
 end
 
 sols = []
@@ -55,28 +66,14 @@ begin
     end
 end
 
-function regime_data(ks, w, prim, sw, f)
-    Mu, Mxi, _, _1 = gauss_moments(prim, ks.gas.K)
-    a = pdf_slope(prim, sw, ks.gas.K)
-    sw = -prim[1] .* moments_conserve_slope(a, Mu, Mxi, 1)
-    A = pdf_slope(prim, sw, ks.gas.K)
-    tau = vhs_collision_time(prim, ks.gas.μᵣ, ks.gas.ω)
-    fr = chapman_enskog(ks.vs.u, prim, a, A, tau)
-    L = norm((f .- fr) ./ prim[1])
-
-    x = [w; sw; tau]
-    y = ifelse(L <= 0.005, [1.0, 0.0], [0.0, 1.0])
-    return x, y
-end
-
 begin
     ctr = ctrs[3]
 
     rg_ce = zeros(Int, ks.ps.nx)
     for i = 1:ks.ps.nx
         sw = (ctr[i+1].w .- ctr[i-1].w) / ks.ps.dx[i] / 2.0
-        x, y = regime_data(ks, ctr[i].w, ctr[i].prim, sw, ctr[i].h)
-        rg_ce[i] = onecold(y)
+        x, y = regime_data(ks, ctr[i].w, sw, ctr[i].h)
+        rg_ce[i] = floor(y) |> Int
     end
 
     rg_kn = zeros(Int, ks.ps.nx)
@@ -87,7 +84,7 @@ begin
         ℓ = (1/ctr[i].prim[end])^ks.gas.ω / ctr[i].prim[1] * sqrt(ctr[i].prim[end]) * ks.gas.Kn
 
         KnGLL[i] = ℓ / L
-        rg_kn[i] = ifelse(KnGLL[i] >= 0.05, 2, 1)
+        rg_kn[i] = ifelse(KnGLL[i] >= 0.05, 1, 0)
     end
 end
 
@@ -95,9 +92,9 @@ scatter(ks.ps.x[1:ks.ps.nx], rg_ce, alpha=0.7, label="NN", xlabel="x", ylabel="r
 scatter!(ks.ps.x[1:ks.ps.nx], rg_kn, alpha=0.7, label="KnGLL")
 plot!(ks.ps.x[1:ks.ps.nx], rg_ce, lw=1.5, line=:dot, color=:gray27, label="True", xlabel="x", ylabel="regime")
 
-#savefig("kn4_regime.pdf")
-#savefig("kn3_regime.pdf")
-#savefig("kn2_regime.pdf")
+#savefig("figs/kn4_regime.pdf")
+#savefig("figs/kn3_regime.pdf")
+#savefig("figs/kn2_regime.pdf")
 
 function curve(idx, s, lgd=:topright; ns=true)
     fig = plot(ks.ps.x[idx], sols[1][idx, s], lw=1.5, label="NN", legend=lgd)

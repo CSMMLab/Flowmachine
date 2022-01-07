@@ -182,4 +182,5 @@ plot(ks.ps.x[1:ks.ps.nx], regime[1:ks.ps.nx])
 """
 adaptive: 623.054187 seconds (134.63 M allocations: 1.365 TiB, 1.29% gc time, 3.23% compilation time)
 kinetic: 1985.342956 seconds (400.14 M allocations: 15.922 TiB, 1.82% gc time, 0.46% compilation time)
+NS: 11.066222 seconds (78.66 M allocations: 5.628 GiB, 11.32% gc time, 86.02% compilation time)
 """
