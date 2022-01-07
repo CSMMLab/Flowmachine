@@ -1,30 +1,5 @@
 using KitBase, LinearAlgebra
 
-function regime_data(w, swx, swy, f, u, v, K, Kn, μ=ref_vhs_vis(Kn, 1.0, 0.5), ω=0.81)
-    γ = heat_capacity_ratio(K, 2)
-    prim = conserve_prim(w, γ)
-    
-    Mu, Mv, Mxi, _, _1 = gauss_moments(prim, K)
-    a = pdf_slope(prim, swx, K)
-    b = pdf_slope(prim, swy, K)
-    swt = -prim[1] .* (moments_conserve_slope(a, Mu, Mv, Mxi, 1, 0) .+ moments_conserve_slope(b, Mu, Mv, Mxi, 0, 1))
-    A = pdf_slope(prim, swt, K)
-    tau = vhs_collision_time(prim, μ, ω)
-    
-    fr = chapman_enskog(u, v, prim, a, b, A, tau)
-    L = norm((f .- fr) ./ prim[1])
-
-    sw = (swx.^2 + swy.^2).^0.5
-    x = [w; sw; tau]
-    y = ifelse(L <= 0.005, 0.0, 1.0)
-
-    return x, y
-end
-
-function regime_data(ks::SolverSet, w, swx, swy, f)
-    regime_data(w, swx, swy, f, ks.vs.u, ks.vs.v, ks.gas.K, ks.gas.Kn)
-end
-
 function regime_number(Y, rg=0)
     idx = 0
      for i in axes(Y, 2)
@@ -54,4 +29,25 @@ function accuracy(nn, X, Z)
     accuracy /= length(ZA)
 
     return accuracy
+end
+
+# cylinder
+function judge_regime(ks, f::AbstractMatrix, prim, swx, swy)
+    τ = vhs_collision_time(prim, ks.gas.μᵣ, ks.gas.ω)
+    fr = chapman_enskog(ks.vs.u, ks.vs.v, prim, swx, swy, ks.gas.K, τ)
+
+    return judge_regime(f, fr, prim)
+end
+
+# layer
+function judge_regime(ks, f, prim, swx, swy = zero(swx), swz = zero(swx))
+    τ = vhs_collision_time(prim, ks.gas.μᵣ, ks.gas.ω)
+    fr = chapman_enskog(ks.vs.u, ks.vs.v, ks.vs.w, prim, swx, swy, swz, ks.gas.K, τ)
+
+    return judge_regime(f, fr, prim)
+end
+
+function judge_regime(f, fr, prim)
+    L = norm((f .- fr) ./ prim[1])
+    return ifelse(L <= 0.005, 0, 1)
 end

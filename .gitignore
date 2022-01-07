@@ -17,5 +17,4 @@ src/2d/cylinder/log1
 */__pycache__
 .idea
 .ipynb_checkpoints/
-
-
+src/2d/layer/log

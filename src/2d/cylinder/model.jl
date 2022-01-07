@@ -1,18 +1,27 @@
 using KitBase, Flux, Plots
 using KitBase.JLD2
 using Flux: @epochs
-pyplot()
+import PyPlot as plt
+
+###
+# model
+###
 
 cd(@__DIR__)
 #@load "../nn.jld2" nn
-@load "../sampler/nn_rif.jld2" nn
+#@load "../sampler/nn_rif.jld2" nn
+@load "nn_pro.jld2" nn
 
 @load "kn3_ma4_aux.jld2" X Y
 X1, Y1 = deepcopy(X), deepcopy(Y)
 @load "kn3_ma5_aux.jld2" X Y
 X2, Y2 = deepcopy(X), deepcopy(Y)
-X = hcat(X1, X2)
-Y = hcat(Y1, Y2)
+@load "kn2_ma4_aux.jld2" X Y
+X3, Y3 = deepcopy(X), deepcopy(Y)
+@load "kn2_ma5_aux.jld2" X Y
+X4, Y4 = deepcopy(X), deepcopy(Y)
+X = hcat(X1, X2, X3, X4)
+Y = hcat(Y1, Y2, Y3, Y4)
 
 device = cpu
 data = Flux.Data.DataLoader((X, Y), shuffle = true) |> device
@@ -29,6 +38,10 @@ include("../common.jl")
 accuracy(nn, X, Y)
 
 @save "nn_pro.jld2" nn
+
+###
+# analysis
+###
 
 @load "kn3ref.jld2" ctr
 #@load "kn2ref.jld2" ctr
@@ -108,4 +121,4 @@ begin
     )
 end
 
-savefig("nn.png")
+savefig("nn.pdf")
