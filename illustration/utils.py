@@ -207,7 +207,7 @@ def plot_1d(xs, ys, labels=None, name='defaultName', log=True, folder_name="figu
 
 
 def scatter_plot_2d(x_in: np.ndarray, z_in: np.ndarray, lim_x: tuple = (-1, 1), lim_y: tuple = (0, 1),
-                    lim_z: tuple = (0, 1), label_x: str = r"$u_1^r$", label_y: str = r"$u_2^r$",
+                    label_x: str = r"$u_1^r$", label_y: str = r"$u_2^r$",
                     title: str = r"$h^n$ over ${\mathcal{R}^r}$", name: str = 'defaultName', log: bool = True,
                     folder_name: str = "figures", show_fig: bool = False, color_map: int = 0):
     '''
@@ -228,11 +228,11 @@ def scatter_plot_2d(x_in: np.ndarray, z_in: np.ndarray, lim_x: tuple = (-1, 1), 
     y = x_in[:, 1]
     z = z_in
     if log:
-        out = ax.scatter(x, y, s=6, c=z, cmap=c_map, norm=colors.LogNorm(), vmin=lim_z[0], vmax=lim_z[1])
+        out = ax.scatter(x, y, s=6, c=z, cmap=c_map, norm=colors.LogNorm())
     else:
-        out = ax.scatter(x, y, s=6, c=z, cmap=c_map, vmin=lim_z[0], vmax=lim_z[1])
-    plt.xlim(lim_x[0], lim_x[1])
-    plt.ylim(lim_y[0], lim_y[1])
+        out = ax.scatter(x, y, s=6, c=z, cmap=c_map)
+    # plt.xlim(lim_x[0], lim_x[1])
+    # plt.ylim(lim_y[0], lim_y[1])
     ax.set_title(title, fontsize=14)
     ax.set_xlabel(label_x)
     ax.set_ylabel(label_y)
@@ -274,9 +274,9 @@ def scatter_plot_2d_N2(x_in: np.ndarray, z_in: np.ndarray, lim_x: tuple = (-1, 1
     y = x_in[:, 1]
     z = z_in
     if log:
-        out = ax.scatter(x, y, s=6, c=z, cmap=c_map, norm=colors.LogNorm(), vmin=lim_z[0], vmax=lim_z[1])
+        out = ax.scatter(x, y, s=6, c=z, cmap=c_map, norm=colors.LogNorm())
     else:
-        out = ax.scatter(x, y, s=6, c=z, cmap=c_map, vmin=lim_z[0], vmax=lim_z[1])
+        out = ax.scatter(x, y, s=6, c=z, cmap=c_map)
     plt.xlim(lim_x[0], lim_x[1])
     plt.ylim(lim_y[0], lim_y[1])
     ax.set_title(title, fontsize=14)
@@ -290,79 +290,48 @@ def scatter_plot_2d_N2(x_in: np.ndarray, z_in: np.ndarray, lim_x: tuple = (-1, 1
     return 0
 
 
-def write_config_file(options, neural_closure_model):
-    # create String to create a python runscript
-    runScript = "python callNeuralClosure.py \\\n"
-    runScript = runScript + "--sampling=" + str(int(options.sampling)) + " \\\n"
-    runScript = runScript + "--batch=" + str(options.batch) + " \\\n"
-    runScript = runScript + "--curriculum=" + str(options.curriculum) + " \\\n"
-    runScript = runScript + "--degree=" + str(options.degree) + " \\\n"
-    runScript = runScript + "--epoch=" + str(options.epoch) + " \\\n"
-    runScript = runScript + "--folder=" + str(options.folder) + " \\\n"
-    runScript = runScript + "--loadModel=" + str(1) + " \\\n"  # force to load
-    runScript = runScript + "--model=" + str(options.model) + " \\\n"
-    runScript = runScript + "--normalized=" + str(int(options.normalized)) + " \\\n"
-    runScript = runScript + "--scaledOutput=" + str(int(options.scaledOutput)) + " \\\n"
-    runScript = runScript + "--decorrInput=" + str(int(options.decorrInput)) + " \\\n"
-    runScript = runScript + "--objective=" + str(options.objective) + " \\\n"
-    runScript = runScript + "--processingmode=" + str(options.processingmode) + " \\\n"
-    runScript = runScript + "--spatialDimension=" + str(options.spatial_dimension) + " \\\n"
-    runScript = runScript + "--training=" + str(options.training) + " \\\n"
-    runScript = runScript + "--verbosity=" + str(options.verbosity) + " \\\n"
-    runScript = runScript + "--networkwidth=" + str(options.networkwidth) + " \\\n"
-    runScript = runScript + "--networkdepth=" + str(options.networkdepth)
+def scatter_plot_3d(xyz_in: np.ndarray, color_in: np.ndarray, lim_x: tuple = (-1, 1), lim_y: tuple = (0, 1),
+                    lim_z: tuple = (0, 1), label_x: str = r"$\nabla_x\rho$", label_y: str = r"$\nabla_x U$",
+                    label_z: str = r"$\nabla_x T$",
+                    title: str = r"$h^n$ over ${\mathcal{R}^r}$", name: str = 'defaultName', log: bool = True,
+                    folder_name: str = "figures", show_fig: bool = False, color_map: int = 0):
+    '''
+    brief: Compute a scatter plot
+    input: x_in = [x1,x2] function arguments
+           y_in = function values
+    return: True if exit successfully
+    '''
+    # choose colormap
+    if color_map == 1:
+        c_map = cm.summer
+    else:
+        c_map = cm.hot
 
-    # Getting filename
-    rsFile = neural_closure_model.folder_name + '/runScript_001_'
-    count = 0
+    fig = plt.figure(figsize=(5.8, 4.7), dpi=600)
+    ax = fig.add_subplot(projection='3d')
 
-    # create directory if it does not exist
-    make_directory(neural_closure_model.folder_name)
+    x = xyz_in[:, 0]
+    y = xyz_in[:, 1]
+    z = xyz_in[:, 2]
+    if log:
+        out = ax.scatter(x, y, z, c=color_in, cmap=c_map, norm=colors.LogNorm())
+    else:
+        out = ax.scatter(x, y, z, c=color_in, cmap=c_map)
+    # plt.xlim(lim_x[0], lim_x[1])
+    # plt.ylim(lim_y[0], lim_y[1])
+    # plt.zlim(lim_z[0], lim_z[1])
 
-    while os.path.isfile(rsFile + '.sh'):
-        count += 1
-        rsFile = neural_closure_model.folder_name + '/runScript_' + str(count).zfill(3) + '_'
+    ax.set_title(title, fontsize=14)
+    ax.set_xlabel(label_x)
+    ax.set_ylabel(label_y)
+    ax.set_zlabel(label_z)
 
-    rsFile = rsFile + '.sh'
-
-    print("Writing config to " + rsFile)
-    f = open(rsFile, "w")
-    f.write(runScript)
-    f.close()
-
-    repo = git.Repo(search_parent_directories=True)
-    sha = repo.head.object.hexsha
-    print("Current git checkout: " + str(sha))
-    # Print chosen options to csv
-    d = {'git_version': [sha],
-         'sampling': [options.sampling],
-         'batch': [options.batch],
-         'curriculum': [options.curriculum],
-         'degree': [options.degree],
-         'epoch': [options.epoch],
-         'folder': [options.folder],
-         'loadModel': [options.loadmodel],
-         'model': [options.model],
-         'normalized moments': [options.normalized],
-         'decorrelate inputs': [options.decorrInput],
-         'scaled outputs': [options.scaledOutput],
-         'objective': [options.objective],
-         'processingmode': [options.processingmode],
-         'spatial Dimension': [options.spatial_dimension],
-         'verbosity': [options.verbosity],
-         'training': [options.training],
-         'network width': [options.networkwidth],
-         'network depth': [options.networkdepth]}
-
-    count = 0
-    cfg_file = neural_closure_model.folder_name + '/config_001_'
-
-    while os.path.isfile(cfg_file + '.csv'):
-        count += 1
-        cfg_file = neural_closure_model.folder_name + '/config_' + str(count).zfill(3) + '_'
-    cfg_file = cfg_file + '.csv'
-    pd.DataFrame.from_dict(data=d, orient='index').to_csv(cfg_file, header=False, sep=';')
-    return True
+    ax.set_aspect('auto')
+    cbar = fig.colorbar(out, ax=ax, extend='both')
+    if show_fig:
+        plt.show()
+    plt.savefig(folder_name + "/" + name + ".png", dpi=600)
+    return 0
 
 
 def make_directory(path_to_directory):
