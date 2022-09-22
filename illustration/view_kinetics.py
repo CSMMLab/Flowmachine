@@ -10,7 +10,8 @@ from random import random
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from utils import load_density_function2D, load_density_function, plot_density_fusion_1d, plot_densities, plot_1d
+from utils import load_density_function2D, load_density_function, plot_density_fusion_1d, plot_densities, plot_1d, \
+    plot_1dv2
 from entropytools import EntropyTools, qGaussLegendre1D
 
 
@@ -212,24 +213,25 @@ def paper_illustrations():
     # plot_density_fusion_1d(v_x=v_x, f_l=f_kinetic[3], f_r=f_kinetic[4], f_fuse=f_kinetic[5], f_ns=f_ns[:, 1],
     #                       show_fig=False, save_name='bimodal_fusion')
 
-    plot_1d(xs=[v_x], ys=[f_kinetic[0, :].reshape(len(f_kinetic[0]), 1), f_kinetic[1, :].reshape(len(f_kinetic[0]), 1),
-                          f_kinetic[2, :].reshape(len(f_kinetic[0]), 1), f_ns[:, 0].reshape(len(f_kinetic[0]), 1)],
-            labels=['left cell', 'right cell', 'interface', 'BGK reconstruction'], name='maxwell_fusion', log=False,
-            folder_name="illustrations", linetypes=['-', '--', 'o', '-.'], show_fig=False, xlim=(-5, 5), ylim=(0, 0.75),
-            xlabel="velocity", ylabel="density", title=" ")
-    plot_1d(xs=[v_x], ys=[f_kinetic[3, :].reshape(len(f_kinetic[0]), 1), f_kinetic[4, :].reshape(len(f_kinetic[0]), 1),
-                          f_kinetic[5, :].reshape(len(f_kinetic[0]), 1), f_ns[:, 1].reshape(len(f_kinetic[0]), 1)],
-            labels=['left cell', 'right cell', 'interface', 'BGK reconstruction'], name='bimodal_fusion', log=False,
-            folder_name="illustrations", linetypes=['-', '--', 'o', '-.'], show_fig=False, xlim=(-5, 5), ylim=(0, 0.75),
-            xlabel="velocity", ylabel="density", title=" ")
+    plot_1dv2(xs=[v_x],
+              ys=[f_kinetic[0, :].reshape(len(f_kinetic[0]), 1), f_kinetic[1, :].reshape(len(f_kinetic[0]), 1),
+                  f_kinetic[2, :].reshape(len(f_kinetic[0]), 1), f_ns[:, 0].reshape(len(f_kinetic[0]), 1)],
+              labels=['left cell', 'right cell', 'interface', 'BGK reconstruction'], name='maxwell_fusion', log=False,
+              folder_name="illustrations", linetypes=['-', '--', 'o', '-.'], show_fig=False, xlim=(-5, 5),
+              ylim=(0, 0.5), xlabel=r"$v$", ylabel=r"$f(v)$", black_first=True)
 
-    plot_1d(xs=[v_x], ys=[f_kinetic[0, :].reshape(len(f_kinetic[0]), 1), f_kinetic[3, :].reshape(len(f_kinetic[0]), 1),
-                          f_kinetic[8, :].reshape(len(f_kinetic[0]), 1)],
-            labels=['Maxwellian', 'Bimodal', 'Highly anisotropic'],
-            name='Entropy_Sampling', log=False,
-            folder_name="illustrations", linetypes=None,
-            show_fig=False, xlim=(-5, 5), ylim=(0, 0.75), xlabel="velocity", ylabel="density",
-            title=" ")
+    plot_1dv2(xs=[v_x],
+              ys=[f_kinetic[3, :].reshape(len(f_kinetic[0]), 1), f_kinetic[4, :].reshape(len(f_kinetic[0]), 1),
+                  f_kinetic[5, :].reshape(len(f_kinetic[0]), 1), f_ns[:, 1].reshape(len(f_kinetic[0]), 1)],
+              labels=['left cell', 'right cell', 'interface', 'BGK reconstruction'], name='bimodal_fusion', log=False,
+              folder_name="illustrations", linetypes=['-', '--', 'o', '-.'], show_fig=False, xlim=(-5, 5),
+              ylim=(0, 0.6), xlabel=r"$v$", ylabel=r"$f(v)$", black_first=True)
+
+    plot_1dv2(xs=[v_x],
+              ys=[f_kinetic[0, :].reshape(len(f_kinetic[0]), 1), f_kinetic[3, :].reshape(len(f_kinetic[0]), 1),
+                  f_kinetic[8, :].reshape(len(f_kinetic[0]), 1)], labels=['Maxwellian', 'bimodal', 'anisotropic'],
+              name='Entropy_Sampling', log=False, folder_name="illustrations", linetypes=None, show_fig=False,
+              xlim=(-5, 5), ylim=(0, 0.75), xlabel=r"$v$", ylabel=r"$f(v)$", black_first=True)
 
     # plot_densities(v_x=v_x, f_maxwell=f_kinetic[0], f_entropy=f_kinetic[4], f_fourier=f_kinetic[6],
     #               f_random=f_kinetic[7], f_unlikely=f_kinetic[8], show_fig=False, save_name='example_densities')
