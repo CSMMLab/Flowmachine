@@ -19,15 +19,39 @@ def main():
 def print_sod_regime():
     folder_name = "paper_data/sod1D/regime/"
     x_data = np.load(folder_name + "sod_x.npy")
+    n_jump = 2
     # ----- KN=1e-4 ----------
     regime = "1e-4"
     nn_data = np.load(folder_name + "sod_Kn_" + regime + "_NN.npy")
     kn_gll_data = np.load(folder_name + "sod_Kn_" + regime + "_KnGLL.npy")
     ground_truth_data = np.load(folder_name + "sod_Kn_" + regime + "_True.npy")
 
-    plot_1dv2(xs=[x_data], ys=[ground_truth_data, nn_data, kn_gll_data], labels=['ground truth', 'NN', 'KnGLL'],
-              name='Regime_labels' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlim=(0, 1), ylim=(0, 1), xlabel=r"$x$", ylabel=r"regime", black_first=True)
+    plot_1dv2(xs=[x_data[::n_jump]], ys=[ground_truth_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['true', 'NN', 'KnGLL'], legend_pos="upper left",
+              name='Regime_labels' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=["-", "o", "^"],
+              show_fig=False, xlim=(0, 1), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime", black_first=True)
+
+    # ----- KN=1e-3 ----------
+    regime = "1e-3"
+    nn_data = np.load(folder_name + "sod_Kn_" + regime + "_NN.npy")
+    kn_gll_data = np.load(folder_name + "sod_Kn_" + regime + "_KnGLL.npy")
+    ground_truth_data = np.load(folder_name + "sod_Kn_" + regime + "_True.npy")
+
+    plot_1dv2(xs=[x_data[::n_jump]], ys=[ground_truth_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['true', 'NN', 'KnGLL'], legend_pos="upper left",
+              name='Regime_labels' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=["-", "o", "^"],
+              show_fig=False, xlim=(0, 1), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime", black_first=True)
+
+    # ----- KN=1e-2 ----------
+    regime = "1e-2"
+    nn_data = np.load(folder_name + "sod_Kn_" + regime + "_NN.npy")
+    kn_gll_data = np.load(folder_name + "sod_Kn_" + regime + "_KnGLL.npy")
+    ground_truth_data = np.load(folder_name + "sod_Kn_" + regime + "_True.npy")
+
+    plot_1dv2(xs=[x_data[::n_jump]], ys=[ground_truth_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['true', 'NN', 'KnGLL'], legend_pos="upper left",
+              name='Regime_labels' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=["-", "o", "^"],
+              show_fig=False, xlim=(0, 1), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime label", black_first=True)
 
     return 0
 
