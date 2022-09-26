@@ -90,8 +90,8 @@ def compute_normalized_kinetic_density(alpha: list):
 
 
 def create_illustration_data():
-    """ Skript that performs all illustrations for the paper done by Steffen"""
-    # [v_x, weights, f_kinetic] = load_density_function("../data/1d/a2_ev10.csv")
+    """ Skript that performs all illustration for the paper done by Steffen"""
+    # [v_x, weights, f_kinetic] = load_density_function("../paper_data/1d/a2_ev10.csv")
     # v_x = np.reshape(v_x, newshape=(v_x.shape[1]))
     # v_x = v_x[1:]
     # weights = np.reshape(weights, newshape=(weights.shape[1]))
@@ -153,7 +153,7 @@ def create_illustration_data():
 
     # Save to file
     kinetics_np = np.asarray(kinetics)
-    np.savetxt('data/pdfs.csv', kinetics_np, delimiter=',')
+    np.savetxt('paper_data/pdfs.csv', kinetics_np, delimiter=',')
     print("Save constructed densities to file pfs.csv")
 
     """
@@ -162,7 +162,7 @@ def create_illustration_data():
                 kinetics_np[4, :].reshape(len(kinetics_np[0]), 1)],
             labels=['left', 'right', 'Interface'],
             name='Entropy_Sampling2', log=False,
-            folder_name="illustrations", linetypes=None,
+            folder_name="illustration", linetypes=None,
             show_fig=False, xlim=(-5, 5), ylim=(0, 0.75), xlabel="velocity", ylabel="density",
             title=" ")
     plot_1d(xs=[v_x],
@@ -170,7 +170,7 @@ def create_illustration_data():
                 kinetics_np[7, :].reshape(len(kinetics_np[0]), 1)],
             labels=['left', 'right', 'Interface'],
             name='Entropy_Sampling3', log=False,
-            folder_name="illustrations", linetypes=None,
+            folder_name="illustration", linetypes=None,
             show_fig=False, xlim=(-5, 5), ylim=(0, 0.75), xlabel="velocity", ylabel="density",
             title=" ")
     plot_1d(xs=[v_x],
@@ -178,7 +178,7 @@ def create_illustration_data():
                 kinetics_np[10, :].reshape(len(kinetics_np[0]), 1)],
             labels=['Maxwellian', 'Bimodal', 'Highly anisotropic'],
             name='Entropy_Sampling', log=False,
-            folder_name="illustrations", linetypes=None,
+            folder_name="illustration", linetypes=None,
             show_fig=False, xlim=(-5, 5), ylim=(0, 0.75), xlabel="velocity", ylabel="density",
             title=" ")
     """
@@ -198,12 +198,12 @@ def create_illustration_data():
 
 
 def paper_illustrations():
-    """ Skript that performs all illustrations for the paper done by Steffen"""
-    [v_x, weights, f_kinetic] = load_density_function("data/pdfs.csv")
-    f_ns = pd.read_csv("data/fns.csv").to_numpy()
-    grads = pd.read_csv("data/gradient_w.csv").to_numpy()
-    params = pd.read_csv("data/paras.csv").to_numpy()
-    conservative_variables = pd.read_csv("data/w.csv").to_numpy()
+    """ Skript that performs all illustration for the paper done by Steffen"""
+    [v_x, weights, f_kinetic] = load_density_function("paper_data/pdfs.csv")
+    f_ns = pd.read_csv("paper_data/fns.csv").to_numpy()
+    grads = pd.read_csv("paper_data/gradient_w.csv").to_numpy()
+    params = pd.read_csv("paper_data/paras.csv").to_numpy()
+    conservative_variables = pd.read_csv("paper_data/w.csv").to_numpy()
 
     # ----- Ilustrate Upwing Merging of two pdf -----
     v_x = np.reshape(v_x, newshape=(v_x.shape[1]))
@@ -217,20 +217,20 @@ def paper_illustrations():
               ys=[f_kinetic[0, :].reshape(len(f_kinetic[0]), 1), f_kinetic[1, :].reshape(len(f_kinetic[0]), 1),
                   f_kinetic[2, :].reshape(len(f_kinetic[0]), 1), f_ns[:, 0].reshape(len(f_kinetic[0]), 1)],
               labels=['left cell', 'right cell', 'interface', 'BGK reconstruction'], name='maxwell_fusion', log=False,
-              folder_name="illustrations", linetypes=['-', '--', 'o', '-.'], show_fig=False, xlim=(-5, 5),
+              folder_name="illustration", linetypes=['-', '--', 'o', '-.'], show_fig=False, xlim=(-5, 5),
               ylim=(0, 0.5), xlabel=r"$v$", ylabel=r"$f(v)$", black_first=True)
 
     plot_1dv2(xs=[v_x],
               ys=[f_kinetic[3, :].reshape(len(f_kinetic[0]), 1), f_kinetic[4, :].reshape(len(f_kinetic[0]), 1),
                   f_kinetic[5, :].reshape(len(f_kinetic[0]), 1), f_ns[:, 1].reshape(len(f_kinetic[0]), 1)],
               labels=['left cell', 'right cell', 'interface', 'BGK reconstruction'], name='bimodal_fusion', log=False,
-              folder_name="illustrations", linetypes=['-', '--', 'o', '-.'], show_fig=False, xlim=(-5, 5),
+              folder_name="illustration", linetypes=['-', '--', 'o', '-.'], show_fig=False, xlim=(-5, 5),
               ylim=(0, 0.6), xlabel=r"$v$", ylabel=r"$f(v)$", black_first=True)
 
     plot_1dv2(xs=[v_x],
               ys=[f_kinetic[0, :].reshape(len(f_kinetic[0]), 1), f_kinetic[3, :].reshape(len(f_kinetic[0]), 1),
                   f_kinetic[8, :].reshape(len(f_kinetic[0]), 1)], labels=['Maxwellian', 'bimodal', 'anisotropic'],
-              name='Entropy_Sampling', log=False, folder_name="illustrations", linetypes=None, show_fig=False,
+              name='Entropy_Sampling', log=False, folder_name="illustration", linetypes=None, show_fig=False,
               xlim=(-5, 5), ylim=(0, 0.75), xlabel=r"$v$", ylabel=r"$f(v)$", black_first=True)
 
     # plot_densities(v_x=v_x, f_maxwell=f_kinetic[0], f_entropy=f_kinetic[4], f_fourier=f_kinetic[6],

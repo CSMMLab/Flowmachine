@@ -125,7 +125,7 @@ def plot_density_fusion_1d(v_x: np.ndarray, f_l: np.ndarray, f_r: np.ndarray, f_
     plt.xlim(-5.0, 5.0)
     if show_fig:
         plt.show()
-    plt.savefig('illustrations/' + save_name + ".png", dpi=400)
+    plt.savefig('illustration/' + save_name + ".png", dpi=400)
     return 0
 
 
@@ -149,7 +149,7 @@ def plot_densities(v_x: np.ndarray, f_maxwell: np.ndarray, f_entropy: np.ndarray
     plt.xlim(-5.0, 5.0)
     if show_fig:
         plt.show()
-    plt.savefig('illustrations/' + save_name + ".png", dpi=400)
+    plt.savefig('illustration/' + save_name + ".png", dpi=400)
     return 0
 
 

@@ -6,8 +6,30 @@ Date 21.12.2021
 """
 
 import numpy as np
-import pandas as pd
-from utils import load_density_function, scatter_plot_2d_N2, scatter_plot_3d, scatter_plot_2d
+from utils import plot_1dv2
+
+
+def main():
+    print_sod_regime()
+
+    # paper_illustrations()
+    return 0
+
+
+def print_sod_regime():
+    folder_name = "paper_data/sod1D/regime/"
+    x_data = np.load(folder_name + "sod_x.npy")
+    # ----- KN=1e-4 ----------
+    regime = "1e-4"
+    nn_data = np.load(folder_name + "sod_Kn_" + regime + "_NN.npy")
+    kn_gll_data = np.load(folder_name + "sod_Kn_" + regime + "_KnGLL.npy")
+    ground_truth_data = np.load(folder_name + "sod_Kn_" + regime + "_True.npy")
+
+    plot_1dv2(xs=[x_data], ys=[ground_truth_data, nn_data, kn_gll_data], labels=['ground truth', 'NN', 'KnGLL'],
+              name='Regime_labels' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
+              show_fig=False, xlim=(0, 1), ylim=(0, 1), xlabel=r"$x$", ylabel=r"regime", black_first=True)
+
+    return 0
 
 
 def paper_illustrations():
@@ -64,4 +86,4 @@ def paper_illustrations():
 
 
 if __name__ == '__main__':
-    paper_illustrations()
+    main()
