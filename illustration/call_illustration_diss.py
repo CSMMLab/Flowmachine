@@ -77,10 +77,10 @@ def print_macroscopic_var():
               ylim=(0, 1), xlabel=r"$U$", ylabel=r"$T$", black_first=False)
     plot_1dv2(xs=[w_data_generator_d[:, 0]], ys=[w_data_generator_d[:, 1]], labels=None, name='generated_moments_grad',
               log=False, folder_name=save_folder_name, linetypes=['o'], show_fig=False, xlim=(-10, 10),
-              ylim=(-10, 10), xlabel=r"$U$", ylabel=r"$T$", black_first=False)
+              ylim=(-10, 10), xlabel=r"$\nabla U$", ylabel=r"$\nabla  T$", black_first=False)
     plot_1dv2(xs=[sod_data_generator_d[:, 0]], ys=[sod_data_generator_d[:, 1]], labels=None, name='sod_moments_grad',
               log=False, folder_name=save_folder_name, linetypes=['o'], show_fig=False, xlim=(-10, 10),
-              ylim=(-10, 10), xlabel=r"$U$", ylabel=r"$T$", black_first=False)
+              ylim=(-10, 10), xlabel=r"$\nabla  U$", ylabel=r"$\nabla T$", black_first=False)
 
     return 0
 
