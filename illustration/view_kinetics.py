@@ -240,5 +240,5 @@ def paper_illustrations():
 
 
 if __name__ == '__main__':
-    create_illustration_data()
+    # create_illustration_data()
     paper_illustrations()

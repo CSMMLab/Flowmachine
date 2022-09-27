@@ -6,16 +6,82 @@ Date 21.12.2021
 """
 
 import numpy as np
-from utils import plot_1dv2
+import pandas as pd
+from utils import plot_1dv2, load_density_function  # , scatter_plot_2d_N2,  scatter_plot_3d, scatter_plot_2d
 
 
 def main():
+    # ------ 0. Data Generator -------
+    print_densities()
+    # print_macroscopic_var()
+    # ------ 1. Sod 1D ---------------
     # print_sod_regime()
     # print_sod_solution()
+    # ------ 2. Shear Layer 2D -------
     # print_shear_layer_regime()
     # print_shear_layer_solution()
-    print_shear_layer_distribution()
+    # print_shear_layer_distribution()
+    # ------ 3. Cylinder 2D ----------
+    # print_cylinder_solution()
     # paper_illustrations()
+    return 0
+
+
+def print_densities():
+    save_folder_name = "illustration/generator"
+
+    """ Skript that performs all illustration for the paper done by Steffen"""
+    [v_x, weights, f_kinetic] = load_density_function("paper_data/pdfs.csv")
+    f_ns = pd.read_csv("paper_data/fns.csv").to_numpy()
+    grads = pd.read_csv("paper_data/gradient_w.csv").to_numpy()
+    params = pd.read_csv("paper_data/paras.csv").to_numpy()
+    conservative_variables = pd.read_csv("paper_data/w.csv").to_numpy()
+
+    # ----- Ilustrate Upwing Merging of two pdf -----
+    v_x = np.reshape(v_x, newshape=(v_x.shape[1]))
+
+    plot_1dv2(xs=[v_x],
+              ys=[f_kinetic[0, :].reshape(len(f_kinetic[0]), 1), f_kinetic[1, :].reshape(len(f_kinetic[0]), 1),
+                  f_kinetic[2, :].reshape(len(f_kinetic[0]), 1), f_ns[:, 0].reshape(len(f_kinetic[0]), 1)],
+              labels=['left cell', 'right cell', 'interface', 'BGK reconstruction'], name='maxwell_fusion', log=False,
+              folder_name=save_folder_name, linetypes=['-', '--', 'o', '-.'], show_fig=False, xlim=(-5, 5),
+              ylim=(0, 0.5), xlabel=r"$v$", ylabel=r"$f(v)$", black_first=True)
+    plot_1dv2(xs=[v_x],
+              ys=[f_kinetic[3, :].reshape(len(f_kinetic[0]), 1), f_kinetic[4, :].reshape(len(f_kinetic[0]), 1),
+                  f_kinetic[5, :].reshape(len(f_kinetic[0]), 1), f_ns[:, 1].reshape(len(f_kinetic[0]), 1)],
+              labels=['left cell', 'right cell', 'interface', 'BGK reconstruction'], name='bimodal_fusion', log=False,
+              folder_name=save_folder_name, linetypes=['-', '--', 'o', '-.'], show_fig=False, xlim=(-5, 5),
+              ylim=(0, 0.6), xlabel=r"$v$", ylabel=r"$f(v)$", black_first=True)
+    plot_1dv2(xs=[v_x],
+              ys=[f_kinetic[0, :].reshape(len(f_kinetic[0]), 1), f_kinetic[3, :].reshape(len(f_kinetic[0]), 1),
+                  f_kinetic[8, :].reshape(len(f_kinetic[0]), 1)], labels=['Maxwellian', 'bimodal', 'anisotropic'],
+              name='Entropy_Sampling', log=False, folder_name=save_folder_name, linetypes=None, show_fig=False,
+              xlim=(-5, 5), ylim=(0, 0.75), xlabel=r"$v$", ylabel=r"$f(v)$", black_first=True)
+    return 0
+
+
+def print_macroscopic_var():
+    save_folder_name = "illustration/generator"
+
+    # ---- illustrate moment dynamics
+    w_data_generator = np.load('paper_data/generator1D/generated_macroscopic_variables_normalized.npy')
+    w_data_generator_d = np.load('paper_data/generator1D/generated_macroscopic_variables_normalized_gradients.npy')
+    sod_data_generator = np.load('paper_data/generator1D/sod_macroscopic_variables_normalized.npy')
+    sod_data_generator_d = np.load('paper_data/generator1D/sod_macroscopic_variables_gradients.npy')
+
+    plot_1dv2(xs=[w_data_generator[:, 0]], ys=[w_data_generator[:, 1]], labels=None, name='generated_moments',
+              log=False, folder_name=save_folder_name, linetypes=['o'], show_fig=False, xlim=(-1.5, 1.5),
+              ylim=(0, 1), xlabel=r"$U$", ylabel=r"$T$", black_first=False)
+    plot_1dv2(xs=[sod_data_generator[:, 0]], ys=[sod_data_generator[:, 1]], labels=None, name='sod_moments',
+              log=False, folder_name=save_folder_name, linetypes=['o'], show_fig=False, xlim=(-1.5, 1.5),
+              ylim=(0, 1), xlabel=r"$U$", ylabel=r"$T$", black_first=False)
+    plot_1dv2(xs=[w_data_generator_d[:, 0]], ys=[w_data_generator_d[:, 1]], labels=None, name='generated_moments_grad',
+              log=False, folder_name=save_folder_name, linetypes=['o'], show_fig=False, xlim=(-10, 10),
+              ylim=(-10, 10), xlabel=r"$U$", ylabel=r"$T$", black_first=False)
+    plot_1dv2(xs=[sod_data_generator_d[:, 0]], ys=[sod_data_generator_d[:, 1]], labels=None, name='sod_moments_grad',
+              log=False, folder_name=save_folder_name, linetypes=['o'], show_fig=False, xlim=(-10, 10),
+              ylim=(-10, 10), xlabel=r"$U$", ylabel=r"$T$", black_first=False)
+
     return 0
 
 
@@ -449,56 +515,80 @@ def print_shear_layer_distribution():
     return 0
 
 
-def paper_illustrations():
-    # ---- illustrate moment dynamics
-    x_dat = np.load('paper_data/sod1D/X.npy')
-    y_dat = np.load('paper_data/sod1D/Y.npy')
-    z_dat = np.load('paper_data/sod1D/Z.npy')
-    iter_dat = np.load('paper_data/sod1D/I.npy')
+def print_cylinder_solution():
+    folder_name = "paper_data/cylinder_2d/solution/"
+    save_folder_name = "illustration/cylinder_2d"
 
-    # 1) moment - Sod test case
-    moment_u = x_dat[:3, :]
-    # normalize everything
-    u_normal = moment_u / moment_u[0, :]
-    scatter_plot_2d_N2(x_in=u_normal[1:, :].reshape((u_normal.shape[1], 2)), z_in=iter_dat[0], show_fig=False,
-                       log=False,
-                       folder_name='illustration', color_map=1, name='moment_dynamics', label_x='velocity',
-                       label_y='temperature', title='macroscopic variables over time')
+    n_jump = 1
 
-    # 2) gradient - sod test case
-    grad_u = x_dat[3:6, :]
-    scatter_plot_3d(xyz_in=grad_u.reshape((u_normal.shape[1], 3)), color_in=iter_dat[0], show_fig=False, log=False,
-                    folder_name='illustration', color_map=1, name='grad_moment_dynamics',
-                    title='gradient macroscopic variables over time', lim_x=(-1, 10),
-                    lim_y=(0, 10), lim_z=(0, 10))
-    scatter_plot_2d(x_in=grad_u[1:, :].reshape((u_normal.shape[1], 2)), z_in=iter_dat[0], show_fig=False, log=False,
-                    folder_name='illustration', color_map=1, name='grad_moment_dynamics2D', label_x=r"$\nabla_x U$",
-                    label_y=r"$\nabla_x T$", title='gradient macroscopic variables over time')
+    # ----- kn=1e-2----------
+    regime = "2"
+    x_lim = (-6, -1)
+    # density
+    x_data = np.load(folder_name + "0_cylinder_f_n_kn" + regime + "_x.npy")
+    nn_data = np.load(folder_name + "0_cylinder_f_n_kn" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "0_cylinder_f_n_kn" + regime + "_kinetic.npy")
+    ns_data = np.load(folder_name + "0_cylinder_f_n_kn" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper left", linetypes=["-", "--", "o"],
+              name='cylinder_rho_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=x_lim, ylim=(0, 14))
+    # U velocity
+    x_data = np.load(folder_name + "0_cylinder_f_u_kn" + regime + "_x.npy")
+    nn_data = np.load(folder_name + "0_cylinder_f_u_kn" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "0_cylinder_f_u_kn" + regime + "_kinetic.npy")
+    ns_data = np.load(folder_name + "0_cylinder_f_u_kn" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="lower left", linetypes=["-", "--", "o"],
+              name='cylinder_u_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U_1$", black_first=True, xlim=x_lim, ylim=(0, 5))
+    # T
+    x_data = np.load(folder_name + "0_cylinder_f_t_kn" + regime + "_x.npy")
+    nn_data = np.load(folder_name + "0_cylinder_f_t_kn" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "0_cylinder_f_t_kn" + regime + "_kinetic.npy")
+    ns_data = np.load(folder_name + "0_cylinder_f_t_kn" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper left", linetypes=["-", "--", "o"],
+              name='cylinder_T_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=x_lim, ylim=(0, 10))
 
-    # II ----- illustrate generated paper_data
-    x_dat = np.load('paper_data/generator1D/X.npy')
-    y_dat = np.load('paper_data/generator1D/Y.npy')
-    # 1) moment - generated
-    moment_u = x_dat[:3, :]
-    # normalize everything
-    u_normal = moment_u / moment_u[0, :]
-    scatter_plot_2d_N2(x_in=u_normal[1:, :].reshape((u_normal.shape[1], 2)), z_in=np.zeros(shape=(u_normal.shape[1])),
-                       show_fig=False, log=False,
-                       folder_name='illustration', color_map=1, name='moment_dynamics_genData', label_x='velocity',
-                       label_y='temperature', title='macroscopic variables (generated)')
+    # ----- kn=1e-3----------
+    regime = "3"
+    x_lim = (-6, -1)
+    # density
+    x_data = np.load(folder_name + "0_cylinder_f_n_kn" + regime + "_x.npy")
+    nn_data = np.load(folder_name + "0_cylinder_f_n_kn" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "0_cylinder_f_n_kn" + regime + "_kinetic.npy")
+    ns_data = np.load(folder_name + "0_cylinder_f_n_kn" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper left", linetypes=["-", "--", "o"],
+              name='cylinder_rho_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=x_lim, ylim=(0, 14))
+    # U velocity
+    x_data = np.load(folder_name + "0_cylinder_f_u_kn" + regime + "_x.npy")
+    nn_data = np.load(folder_name + "0_cylinder_f_u_kn" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "0_cylinder_f_u_kn" + regime + "_kinetic.npy")
+    ns_data = np.load(folder_name + "0_cylinder_f_u_kn" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="lower left", linetypes=["-", "--", "o"],
+              name='cylinder_u_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U_1$", black_first=True, xlim=x_lim, ylim=(0, 5))
+    # T
+    x_data = np.load(folder_name + "0_cylinder_f_t_kn" + regime + "_x.npy")
+    nn_data = np.load(folder_name + "0_cylinder_f_t_kn" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "0_cylinder_f_t_kn" + regime + "_kinetic.npy")
+    ns_data = np.load(folder_name + "0_cylinder_f_t_kn" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper left", linetypes=["-", "--", "o"],
+              name='cylinder_T_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=x_lim, ylim=(0, 10))
 
-    # 2) gradient - generated
-    grad_u = x_dat[3:6, :]
-    scatter_plot_3d(xyz_in=grad_u.reshape((u_normal.shape[1], 3)),
-                    color_in=np.zeros(shape=(u_normal.shape[1])), show_fig=False, log=False,
-                    folder_name='illustration', color_map=1, name='grad_moment_dynamics_genData',
-                    title='gradient macroscopic variables (generated)', lim_x=(-1, 10),
-                    lim_y=(0, 10), lim_z=(0, 10))
-    scatter_plot_2d(x_in=grad_u[1:, :].reshape((u_normal.shape[1], 2)),
-                    z_in=np.zeros(shape=(u_normal.shape[1])), show_fig=False, log=False,
-                    folder_name='illustration', color_map=1, name='grad_moment_dynamics2D_genData',
-                    label_x=r"$\nabla_x U$", label_y=r"$\nabla_x T$",
-                    title='gradient macroscopic variables (generated)')
     return 0
 
 
