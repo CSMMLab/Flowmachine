@@ -12,7 +12,9 @@ from utils import plot_1dv2
 def main():
     # print_sod_regime()
     # print_sod_solution()
-    print_shear_layer_regime()
+    # print_shear_layer_regime()
+    # print_shear_layer_solution()
+    print_shear_layer_distribution()
     # paper_illustrations()
     return 0
 
@@ -230,7 +232,7 @@ def print_shear_layer_regime():
     folder_name = "paper_data/shear_layer_2d/regime/"
     save_folder_name = "illustration/shear_layer_2d"
     x_data = np.load(folder_name + "layer_f_regime_x_1.npy")
-    n_jump = 2
+    n_jump = 4
     # ----- KN=1tau ----------
     regime = "1"
     nn_data = np.load(folder_name + "layer_f_regime_tau_" + regime + "_NN.npy")
@@ -239,8 +241,9 @@ def print_shear_layer_regime():
 
     plot_1dv2(xs=[x_data[::n_jump]], ys=[ground_truth_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
               labels=['true', 'NN', 'KnGLL'], legend_pos="upper left",
-              name='Regime_labels' + regime, log=False, folder_name=save_folder_name, linetypes=["-", "o", "^"],
-              show_fig=False, xlim=(0, 1), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime", black_first=True)
+              name='Regime_labels_shear_layer' + regime, log=False, folder_name=save_folder_name,
+              linetypes=["-", "o", "^"],
+              show_fig=False, xlim=(-0.5, 0.5), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime", black_first=True)
 
     # ----- KN=1tau ----------
     regime = "2"
@@ -250,8 +253,9 @@ def print_shear_layer_regime():
 
     plot_1dv2(xs=[x_data[::n_jump]], ys=[ground_truth_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
               labels=['true', 'NN', 'KnGLL'], legend_pos="upper left",
-              name='Regime_labels' + regime, log=False, folder_name=save_folder_name, linetypes=["-", "o", "^"],
-              show_fig=False, xlim=(0, 1), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime", black_first=True)
+              name='Regime_labels_shear_layer' + regime, log=False, folder_name=save_folder_name,
+              linetypes=["-", "o", "^"],
+              show_fig=False, xlim=(-0.5, 0.5), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime", black_first=True)
 
     # ----- KN=50tau ----------
     regime = "3"
@@ -261,9 +265,187 @@ def print_shear_layer_regime():
 
     plot_1dv2(xs=[x_data[::n_jump]], ys=[ground_truth_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
               labels=['true', 'NN', 'KnGLL'], legend_pos="upper left",
-              name='Regime_labels' + regime, log=False, folder_name=save_folder_name, linetypes=["-", "o", "^"],
-              show_fig=False, xlim=(0, 1), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime label", black_first=True)
+              name='Regime_labels_shear_layer' + regime, log=False, folder_name=save_folder_name,
+              linetypes=["-", "o", "^"],
+              show_fig=False, xlim=(-0.5, 0.5), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime label",
+              black_first=True)
 
+    return 0
+
+
+def print_shear_layer_solution():
+    folder_name = "paper_data/shear_layer_2d/solution/"
+    save_folder_name = "illustration/shear_layer_2d"
+
+    n_jump = 1
+
+    # ----- t=\tau----------
+    regime = "1"
+    # density
+    x_data = np.load(folder_name + "layer_n_t_x_" + regime + ".npy")
+    nn_data = np.load(folder_name + "layer_n_t_tau_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_n_t_tau_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_n_t_tau_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper right", linetypes=["-", "--", "o"],
+              name='shear_rho_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=(-0.06, 0.06), ylim=(.8, 1.2))
+    # U_1
+    nn_data = np.load(folder_name + "layer_u_t_tau_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_u_t_tau_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_u_t_tau_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper right", linetypes=["-", "--", "o"],
+              name='shear_u1_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U_1$", black_first=True, xlim=(-0.06, 0.06), ylim=(-0.015, .25))
+    # U_2
+    nn_data = np.load(folder_name + "layer_v_t_tau_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_v_t_tau_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_v_t_tau_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper right", linetypes=["-", "--", "o"],
+              name='shear_u2_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U_2$", black_first=True, xlim=(-0.06, 0.06), ylim=(-1.05, 1.05))
+    # T
+    nn_data = np.load(folder_name + "layer_t_t_tau_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_t_t_tau_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_t_t_tau_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper right", linetypes=["-", "--", "o"],
+              name='shear_T_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=(-0.06, 0.06), ylim=(.48, 1.37))
+
+    # ----- t=10\tau----------
+    n_jump = 2
+    regime = "2"
+    x_lim = (-0.1, .1)
+    # rho
+    x_data = np.load(folder_name + "layer_n_t_x_" + regime + ".npy")
+    nn_data = np.load(folder_name + "layer_n_t_tau_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_n_t_tau_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_n_t_tau_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper left", linetypes=["-", "--", "o"],
+              name='shear_rho_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=x_lim, ylim=(.65, 1.35))
+    # U_1
+    nn_data = np.load(folder_name + "layer_u_t_tau_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_u_t_tau_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_u_t_tau_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper left", linetypes=["-", "--", "o"],
+              name='shear_u1_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U_1$", black_first=True, xlim=x_lim, ylim=(-0.01, .21))
+    # U_2
+    nn_data = np.load(folder_name + "layer_v_t_tau_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_v_t_tau_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_v_t_tau_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper right", linetypes=["-", "--", "o"],
+              name='shear_u2_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U_2$", black_first=True, xlim=x_lim, ylim=(-1.05, 1.05))
+    # T
+    nn_data = np.load(folder_name + "layer_t_t_tau_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_t_t_tau_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_t_t_tau_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper right", linetypes=["-", "--", "o"],
+              name='shear_T_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=x_lim, ylim=(.48, 1.27))
+
+    # ----- t=50\tau----------
+    n_jump = 7
+    regime = "3"
+    x_lim = (-0.5, .5)
+    # rho
+    x_data = np.load(folder_name + "layer_n_t_x_" + regime + ".npy")
+    nn_data = np.load(folder_name + "layer_n_t_tau_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_n_t_tau_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_n_t_tau_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper left", linetypes=["-", "--", "o"],
+              name='shear_rho_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=x_lim, ylim=(.65, 1.37))
+    # U_1
+    nn_data = np.load(folder_name + "layer_u_t_tau_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_u_t_tau_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_u_t_tau_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper left", linetypes=["-", "--", "o"],
+              name='shear_u1_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U_1$", black_first=True, xlim=x_lim, ylim=(-0.01, .22))
+    # U_2
+    nn_data = np.load(folder_name + "layer_v_t_tau_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_v_t_tau_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_v_t_tau_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper right", linetypes=["-", "--", "o"],
+              name='shear_u2_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U_2$", black_first=True, xlim=x_lim, ylim=(-1.05, 1.05))
+    # T
+    nn_data = np.load(folder_name + "layer_t_t_tau_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_t_t_tau_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_t_t_tau_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper right", linetypes=["-", "--", "o"],
+              name='shear_T_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=x_lim, ylim=(.48, 1.19))
+
+    return 0
+
+
+def print_shear_layer_distribution():
+    folder_name = "paper_data/shear_layer_2d/solution/"
+    save_folder_name = "illustration/shear_layer_2d"
+    n_jump = 1
+    x_lim = (-5, 5)
+    # t=tau
+    regime = "1"
+    x_data = np.load(folder_name + "layer_f_t_x_" + regime + ".npy")
+    nn_data = np.load(folder_name + "layer_f_t_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_f_t_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_f_t_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper right", linetypes=["-", "--", "o"],
+              name='shear_f_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$f$", black_first=True, xlim=x_lim, ylim=(0, .08))
+
+    # t=10tau
+    regime = "2"
+    x_data = np.load(folder_name + "layer_f_t_x_" + regime + ".npy")
+    nn_data = np.load(folder_name + "layer_f_t_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_f_t_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_f_t_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper right", linetypes=["-", "--", "o"],
+              name='shear_f_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$f$", black_first=True, xlim=x_lim, ylim=(0, .08))
+
+    # t=50tau
+    regime = "3"
+    x_data = np.load(folder_name + "layer_f_t_x_" + regime + ".npy")
+    nn_data = np.load(folder_name + "layer_f_t_" + regime + "_Adaptive.npy")
+    kinetic_data = np.load(folder_name + "layer_f_t_" + regime + "_Kinetic.npy")
+    ns_data = np.load(folder_name + "layer_f_t_" + regime + "_NS.npy")
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper right", linetypes=["-", "--", "o"],
+              name='shear_f_' + regime, log=False, folder_name=save_folder_name,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$f$", black_first=True, xlim=x_lim, ylim=(0, 0.095))
     return 0
 
 
