@@ -7,22 +7,23 @@ Date 21.12.2021
 
 import numpy as np
 import pandas as pd
+
 from utils import plot_1dv2, load_density_function  # , scatter_plot_2d_N2,  scatter_plot_3d, scatter_plot_2d
 
 
 def main():
     # ------ 0. Data Generator -------
-    print_densities()
+    # print_densities()
     # print_macroscopic_var()
     # ------ 1. Sod 1D ---------------
     # print_sod_regime()
-    # print_sod_solution()
+    print_sod_solution()
     # ------ 2. Shear Layer 2D -------
     # print_shear_layer_regime()
     # print_shear_layer_solution()
     # print_shear_layer_distribution()
     # ------ 3. Cylinder 2D ----------
-    print_cylinder_solution()
+    # print_cylinder_solution()
     # paper_illustrations()
     return 0
 
@@ -96,7 +97,7 @@ def print_sod_regime():
     ground_truth_data = np.load(folder_name + "sod_Kn_" + regime + "_True.npy")
 
     plot_1dv2(xs=[x_data[::n_jump]], ys=[ground_truth_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['true', 'NN', 'KnGLL'], legend_pos="upper left",
+              labels=['true', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
               name='Regime_labels' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=["-", "o", "^"],
               show_fig=False, xlim=(0, 1), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime", black_first=True)
 
@@ -107,7 +108,7 @@ def print_sod_regime():
     ground_truth_data = np.load(folder_name + "sod_Kn_" + regime + "_True.npy")
 
     plot_1dv2(xs=[x_data[::n_jump]], ys=[ground_truth_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['true', 'NN', 'KnGLL'], legend_pos="upper left",
+              labels=['true', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
               name='Regime_labels' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=["-", "o", "^"],
               show_fig=False, xlim=(0, 1), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime", black_first=True)
 
@@ -118,7 +119,7 @@ def print_sod_regime():
     ground_truth_data = np.load(folder_name + "sod_Kn_" + regime + "_True.npy")
 
     plot_1dv2(xs=[x_data[::n_jump]], ys=[ground_truth_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['true', 'NN', 'KnGLL'], legend_pos="upper left",
+              labels=['true', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
               name='Regime_labels' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=["-", "o", "^"],
               show_fig=False, xlim=(0, 1), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime label", black_first=True)
 
@@ -129,7 +130,6 @@ def print_sod_solution():
     folder_name = "paper_data/sod1D/solution/"
     x_data = np.load(folder_name + "sod_sol_x_1.npy")
     n_jump = 1
-    zoom_idx = range(120, 160)
 
     # ----- KN=1e-4 ----------
     regime = "1e-4"
@@ -141,14 +141,22 @@ def print_sod_solution():
 
     plot_1dv2(xs=[x_data[::n_jump]],
               ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper right",
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper right",
               name='solution_rho' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=(0, 1), ylim=(.1, 1.05))
-    plot_1dv2(xs=[x_data[zoom_idx]],
-              ys=[kinetic_data[zoom_idx], ns_data[zoom_idx], nn_data[zoom_idx], kn_gll_data[zoom_idx]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper right",
-              name='solution_rho_zoom' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=(0.6, 0.8), ylim=(.1, .5))
+              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=(0, 1), ylim=(.1, 1.05),
+              font_size=20)
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper right",
+              name='solution_rho_zoom1_' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=(0.58, 0.67), ylim=(.2, .5),
+              font_size=20)
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper right",
+              name='solution_rho_zoom2_' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=(0.4, 0.5), ylim=(.47, .7),
+              font_size=20)
 
     s = "2"
     nn_data = np.load(folder_name + "sod_sol_Kn_" + regime + "_NN_" + s + ".npy")
@@ -158,14 +166,23 @@ def print_sod_solution():
 
     plot_1dv2(xs=[x_data[::n_jump]],
               ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper left",
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
               name='solution_U' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$U$", black_first=True, xlim=(0, 1), ylim=(-0.05, 0.9))
-    plot_1dv2(xs=[x_data[zoom_idx]],
-              ys=[kinetic_data[zoom_idx], ns_data[zoom_idx], nn_data[zoom_idx], kn_gll_data[zoom_idx]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper left",
-              name='solution_U_zoom' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$U$", black_first=True, xlim=(0.6, 0.8), ylim=(-0.05, 0.9))
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U$", black_first=True, xlim=(0, 1), ylim=(-0.05, 0.9),
+              font_size=20)
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="lower right",
+              name='solution_U_zoom1_' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U$", black_first=True, xlim=(0.4, 0.6),
+              xticks=[0.4, 0.45, 0.5, 0.55, 0.6], ylim=(0.5, 0.85),
+              font_size=20)
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
+              name='solution_U_zoom2_' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U$", black_first=True, xlim=(0.25, 0.35), ylim=(-0.001, 0.25),
+              font_size=20)
 
     s = "3"
     nn_data = np.load(folder_name + "sod_sol_Kn_" + regime + "_NN_" + s + ".npy")
@@ -175,14 +192,22 @@ def print_sod_solution():
 
     plot_1dv2(xs=[x_data[::n_jump]],
               ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper left",
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
               name='solution_T' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True)  # , xlim=(0, 1), ylim=(.1, 1.05))
-    plot_1dv2(xs=[x_data[zoom_idx]],
-              ys=[kinetic_data[zoom_idx], ns_data[zoom_idx], nn_data[zoom_idx], kn_gll_data[zoom_idx]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper left",
-              name='solution_T_zoom' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=(0.6, 0.8), ylim=(1.24, 2.7))
+              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True,
+              font_size=20)  # , xlim=(0, 1), ylim=(.1, 1.05))
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper right",
+              name='solution_T_zoom1_' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=(0.44, 0.55), ylim=(1.22, 1.4),
+              font_size=20)
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
+              name='solution_T_zoom2_' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=(0.58, 0.68), ylim=(1.22, 2.65),
+              font_size=20)
 
     # ----- KN=1e-3 ----------
     regime = "1e-3"
@@ -194,14 +219,22 @@ def print_sod_solution():
 
     plot_1dv2(xs=[x_data[::n_jump]],
               ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper right",
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper right",
               name='solution_rho' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=(0, 1), ylim=(.1, 1.05))
-    plot_1dv2(xs=[x_data[zoom_idx]],
-              ys=[kinetic_data[zoom_idx], ns_data[zoom_idx], nn_data[zoom_idx], kn_gll_data[zoom_idx]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper right",
-              name='solution_rho_zoom' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=(0.6, 0.8), ylim=(.1, .5))
+              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=(0, 1), ylim=(.1, 1.05),
+              font_size=20)
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper right",
+              name='solution_rho_zoom1_' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=(0.55, 0.68), ylim=(.2, .5),
+              font_size=20)
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper right",
+              name='solution_rho_zoom2_' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=(0.7, 0.85), ylim=(.122, .24),
+              font_size=20)
 
     s = "2"
     nn_data = np.load(folder_name + "sod_sol_Kn_" + regime + "_NN_" + s + ".npy")
@@ -211,14 +244,22 @@ def print_sod_solution():
 
     plot_1dv2(xs=[x_data[::n_jump]],
               ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper left",
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
               name='solution_U' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$U$", black_first=True, xlim=(0, 1), ylim=(-0.05, 0.9))
-    plot_1dv2(xs=[x_data[zoom_idx]],
-              ys=[kinetic_data[zoom_idx], ns_data[zoom_idx], nn_data[zoom_idx], kn_gll_data[zoom_idx]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper left",
-              name='solution_U_zoom' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$U$", black_first=True, xlim=(0.6, 0.8), ylim=(-0.05, 0.9))
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U$", black_first=True, xlim=(0, 1), ylim=(-0.05, 0.9),
+              font_size=20)
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="lower left",
+              name='solution_U_zoom1_' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U$", black_first=True, xlim=(0.56, 0.76), ylim=(0.8, 0.88),
+              font_size=20, xticks=[0.57, 0.62, 0.67, 0.72, 0.77])
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
+              name='solution_U_zoom2_' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$U$", black_first=True, xlim=(0.27, 0.33), ylim=(-0.001, 0.15),
+              font_size=20, xticks=[0.28, 0.3, 0.32], yticks=[0.0, 0.05, 0.1, 0.15])
 
     s = "3"
     nn_data = np.load(folder_name + "sod_sol_Kn_" + regime + "_NN_" + s + ".npy")
@@ -228,15 +269,22 @@ def print_sod_solution():
 
     plot_1dv2(xs=[x_data[::n_jump]],
               ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper left",
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
               name='solution_T' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True)  # , xlim=(0, 1), ylim=(.1, 1.05))
-    plot_1dv2(xs=[x_data[zoom_idx]],
-              ys=[kinetic_data[zoom_idx], ns_data[zoom_idx], nn_data[zoom_idx], kn_gll_data[zoom_idx]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper left",
-              name='solution_T_zoom' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=(0.6, 0.8), ylim=(1.24, 2.7),
-              symbolsize=2)
+              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True,
+              font_size=20)  # , xlim=(0, 1), ylim=(.1, 1.05))
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper right",
+              name='solution_T_zoom1_' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=(0.44, 0.55), ylim=(1.22, 1.4),
+              font_size=20)
+    plot_1dv2(xs=[x_data[::n_jump]],
+              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
+              name='solution_T_zoom2_' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
+              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=(0.58, 0.68), ylim=(1.22, 2.65),
+              font_size=20)
 
     # ----- KN=1e-2 ----------
     regime = "1e-2"
@@ -312,7 +360,8 @@ def print_sod_solution():
               ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
               labels=['Kinetic', 'Navier-Stokes', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper right",
               name='solution_T_zoom2_' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=(0.7, 0.9), ylim=(1.6, 2.65),
+              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=(0.7, 0.9),
+              xticks=[0.7, 0.75, 0.8, 0.85, 0.9], ylim=(1.6, 2.65),
               font_size=20)
 
     return 0
@@ -330,7 +379,7 @@ def print_shear_layer_regime():
     ground_truth_data = np.load(folder_name + "layer_f_regime_tau_" + regime + "_True.npy")
 
     plot_1dv2(xs=[x_data[::n_jump]], ys=[ground_truth_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['true', 'NN', 'KnGLL'], legend_pos="upper left",
+              labels=['true', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
               name='Regime_labels_shear_layer' + regime, log=False, folder_name=save_folder_name,
               linetypes=["-", "o", "^"],
               show_fig=False, xlim=(-0.1, 0.1), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime", black_first=True,
@@ -344,7 +393,7 @@ def print_shear_layer_regime():
     ground_truth_data = np.load(folder_name + "layer_f_regime_tau_" + regime + "_True.npy")
 
     plot_1dv2(xs=[x_data[::n_jump]], ys=[ground_truth_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['true', 'NN', 'KnGLL'], legend_pos="upper left",
+              labels=['true', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
               name='Regime_labels_shear_layer' + regime, log=False, folder_name=save_folder_name,
               linetypes=["-", "o", "^"],
               show_fig=False, xlim=(-0.15, 0.15), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime", black_first=True,
@@ -358,7 +407,7 @@ def print_shear_layer_regime():
     ground_truth_data = np.load(folder_name + "layer_f_regime_tau_" + regime + "_True.npy")
 
     plot_1dv2(xs=[x_data[::n_jump]], ys=[ground_truth_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['true', 'NN', 'KnGLL'], legend_pos="upper left",
+              labels=['true', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left",
               name='Regime_labels_shear_layer' + regime, log=False, folder_name=save_folder_name,
               linetypes=["-", "o", "^"],
               show_fig=False, xlim=(-0.5, 0.5), ylim=(-0.05, 1.05), xlabel=r"$x$", ylabel=r"regime",
@@ -575,7 +624,8 @@ def print_cylinder_solution():
 
     # ----- kn=1e-2----------
     regime = "2"
-    x_lim = (-2, -1)
+    x_lim = (-5, -1)
+    x_ticks = [-5, -4, -3, -2, -1]
     # density
     x_data = np.load(folder_name + "0_cylinder_f_n_kn" + regime + "_x.npy")
     nn_data = np.load(folder_name + "0_cylinder_f_n_kn" + regime + "_Adaptive.npy")
@@ -585,7 +635,8 @@ def print_cylinder_solution():
               ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
               labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper left", linetypes=["-", "--", "o"],
               name='cylinder_rho_' + regime, log=False, folder_name=save_folder_name,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=x_lim, ylim=(0, 14))
+              show_fig=False, xlabel=r"$x_1$", ylabel=r"$\rho$", black_first=True, ylim=(0, 13), xlim=x_lim,
+              xticks=x_ticks, font_size=20)
     # U velocity
     x_data = np.load(folder_name + "0_cylinder_f_u_kn" + regime + "_x.npy")
     nn_data = np.load(folder_name + "0_cylinder_f_u_kn" + regime + "_Adaptive.npy")
@@ -595,7 +646,8 @@ def print_cylinder_solution():
               ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
               labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="lower left", linetypes=["-", "--", "o"],
               name='cylinder_u_' + regime, log=False, folder_name=save_folder_name,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$U_1$", black_first=True, xlim=x_lim, ylim=(0, 5))
+              show_fig=False, xlabel=r"$x_1$", ylabel=r"$U_1$", black_first=True, ylim=(0, 5), xlim=x_lim,
+              xticks=x_ticks, font_size=20)
     # T
     x_data = np.load(folder_name + "0_cylinder_f_t_kn" + regime + "_x.npy")
     nn_data = np.load(folder_name + "0_cylinder_f_t_kn" + regime + "_Adaptive.npy")
@@ -605,11 +657,13 @@ def print_cylinder_solution():
               ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
               labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper left", linetypes=["-", "--", "o"],
               name='cylinder_T_' + regime, log=False, folder_name=save_folder_name,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=x_lim, ylim=(0, 10))
+              show_fig=False, xlabel=r"$x_1$", ylabel=r"$T$", black_first=True, ylim=(0, 10), xlim=x_lim,
+              xticks=x_ticks, font_size=20)
 
     # ----- kn=1e-3----------
     regime = "3"
-    x_lim = (-6, -1)
+    x_lim = (-5, -1)
+    x_ticks = [-5, -4, -3, -2, -1]
     # density
     x_data = np.load(folder_name + "0_cylinder_f_n_kn" + regime + "_x.npy")
     nn_data = np.load(folder_name + "0_cylinder_f_n_kn" + regime + "_Adaptive.npy")
@@ -619,7 +673,8 @@ def print_cylinder_solution():
               ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
               labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper left", linetypes=["-", "--", "o"],
               name='cylinder_rho_' + regime, log=False, folder_name=save_folder_name,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=x_lim, ylim=(0, 14))
+              show_fig=False, xlabel=r"$x_1$", ylabel=r"$\rho$", black_first=True, ylim=(0, 13), xlim=x_lim,
+              xticks=x_ticks, font_size=20)
     # U velocity
     x_data = np.load(folder_name + "0_cylinder_f_u_kn" + regime + "_x.npy")
     nn_data = np.load(folder_name + "0_cylinder_f_u_kn" + regime + "_Adaptive.npy")
@@ -629,7 +684,8 @@ def print_cylinder_solution():
               ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
               labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="lower left", linetypes=["-", "--", "o"],
               name='cylinder_u_' + regime, log=False, folder_name=save_folder_name,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$U_1$", black_first=True, xlim=x_lim, ylim=(0, 5))
+              show_fig=False, xlabel=r"$x_1$", ylabel=r"$U_1$", black_first=True, ylim=(0, 5), xlim=x_lim,
+              xticks=x_ticks, font_size=20)
     # T
     x_data = np.load(folder_name + "0_cylinder_f_t_kn" + regime + "_x.npy")
     nn_data = np.load(folder_name + "0_cylinder_f_t_kn" + regime + "_Adaptive.npy")
@@ -639,7 +695,8 @@ def print_cylinder_solution():
               ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump]],
               labels=['Kinetic', 'Navier-Stokes', 'Adaptive'], legend_pos="upper left", linetypes=["-", "--", "o"],
               name='cylinder_T_' + regime, log=False, folder_name=save_folder_name,
-              show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=x_lim, ylim=(0, 10))
+              show_fig=False, xlabel=r"$x_1$", ylabel=r"$T$", black_first=True, ylim=(0, 10), xlim=x_lim,
+              xticks=x_ticks, font_size=20)
 
     return 0
 
