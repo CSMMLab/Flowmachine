@@ -247,13 +247,13 @@ def print_sod_solution():
     ns_data = np.load(folder_name + "sod_sol_Kn_" + regime + "_NS_" + s + ".npy")
 
     plot_1dv2(xs=[x_data[::n_jump]],
-              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper right",
+              ys=[kinetic_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'NN', 'KnGLL'], legend_pos="upper right",
               name='solution_rho' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
               show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=(0, 1), ylim=(.1, 1.05))
     plot_1dv2(xs=[x_data[zoom_idx]],
-              ys=[kinetic_data[zoom_idx], ns_data[zoom_idx], nn_data[zoom_idx], kn_gll_data[zoom_idx]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper right",
+              ys=[kinetic_data[zoom_idx], nn_data[zoom_idx], kn_gll_data[zoom_idx]],
+              labels=['Kinetic', 'NN', 'KnGLL'], legend_pos="upper right",
               name='solution_rho_zoom' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
               show_fig=False, xlabel=r"$x$", ylabel=r"$\rho$", black_first=True, xlim=(0.6, 0.8), ylim=(.1, .5))
 
@@ -264,13 +264,13 @@ def print_sod_solution():
     ns_data = np.load(folder_name + "sod_sol_Kn_" + regime + "_NS_" + s + ".npy")
 
     plot_1dv2(xs=[x_data[::n_jump]],
-              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper left",
+              ys=[kinetic_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'NN', 'KnGLL'], legend_pos="upper left",
               name='solution_U' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
               show_fig=False, xlabel=r"$x$", ylabel=r"$U$", black_first=True, xlim=(0, 1), ylim=(-0.05, 0.9))
     plot_1dv2(xs=[x_data[zoom_idx]],
-              ys=[kinetic_data[zoom_idx], ns_data[zoom_idx], nn_data[zoom_idx], kn_gll_data[zoom_idx]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper left",
+              ys=[kinetic_data[zoom_idx], nn_data[zoom_idx], kn_gll_data[zoom_idx]],
+              labels=['Kinetic', 'NN', 'KnGLL'], legend_pos="upper left",
               name='solution_U_zoom' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
               show_fig=False, xlabel=r"$x$", ylabel=r"$U$", black_first=True, xlim=(0.6, 0.8), ylim=(-0.05, 0.9))
 
@@ -281,16 +281,15 @@ def print_sod_solution():
     ns_data = np.load(folder_name + "sod_sol_Kn_" + regime + "_NS_" + s + ".npy")
 
     plot_1dv2(xs=[x_data[::n_jump]],
-              ys=[kinetic_data[::n_jump], ns_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper left",
+              ys=[kinetic_data[::n_jump], nn_data[::n_jump], kn_gll_data[::n_jump]],
+              labels=['Kinetic', 'NN', 'KnGLL'], legend_pos="upper left",
               name='solution_T' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
               show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True)  # , xlim=(0, 1), ylim=(.1, 1.05))
     plot_1dv2(xs=[x_data[zoom_idx]],
-              ys=[kinetic_data[zoom_idx], ns_data[zoom_idx], nn_data[zoom_idx], kn_gll_data[zoom_idx]],
-              labels=['Kinetic', 'Navier-Stokes', 'NN', 'KnGLL'], legend_pos="upper left",
+              ys=[kinetic_data[zoom_idx], nn_data[zoom_idx], kn_gll_data[zoom_idx]],
+              labels=['Kinetic', 'NN', 'KnGLL'], legend_pos="upper left",
               name='solution_T_zoom' + regime, log=False, folder_name="illustration/Sod1d/", linetypes=None,
               show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=(0.6, 0.8), ylim=(1.24, 2.7))
-
     return 0
 
 
