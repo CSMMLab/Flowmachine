@@ -4,15 +4,16 @@ Date: 15.03.2021
 Author: Steffen Schotthöfer
 '''
 
-import numpy as np
-import time
-import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib import colors
-from matplotlib import cm
-import seaborn as sns
 import os
+import time
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
+from matplotlib import cm
+from matplotlib import colors
 
 
 # plt.style.use("kitish")
@@ -209,13 +210,18 @@ def plot_1d(xs, ys, labels=None, name='defaultName', log=True, folder_name="figu
 
 def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, folder_name="figures", linetypes=None,
               show_fig=False, xlim=None, ylim=None, xlabel=None, ylabel=None, legend_pos="upper right",
-              black_first=False, symbolsize=2):
+              black_first=False, symbolsize=2, font_size=14, yticks=None, xticks=None):
     """
     Expected shape for x in xs : (nx,)
                        y in ys : (1,nx)
     """
     plt.clf()
+
     plt.figure(figsize=(5.8, 4.7), dpi=400)
+    sns.set_theme()
+    sns.set_style("white")
+    sns.set_theme(style='white')
+
     if not linetypes:
         linetypes = ['-', '--', '-.', ':', ':', '.', ',', 'o', 'v', '^', '<', '>', '1', '2', '3', '4', 's', 'p', '*',
                      'h',
@@ -224,13 +230,11 @@ def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, f
         if labels is not None:
             linetypes = linetypes[0:len(labels)]
 
-    sns.set_theme()
-    sns.set_style("white")
     colors = ['r', 'g', 'b', 'k']
     if black_first:
         colors = ['k', 'r', 'g', 'b']
     symbol_size = symbolsize
-    marker_size = 4
+    marker_size = 6
     marker_width = 0.5
     if len(xs) == 1:
         x = xs[0]
@@ -267,11 +271,16 @@ def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, f
     if xlim is not None:
         plt.xlim(xlim[0], xlim[1])
     if xlabel is not None:
-        plt.xlabel(xlabel, fontsize=14)
-        # plt.xticks(fontsize=6)
-        # plt.yticks(fontsize=6)
+        plt.xlabel(xlabel, fontsize=font_size)
+        plt.xticks(fontsize=int(font_size * 0.7))
+        if xticks is not None:
+            plt.xticks(xticks, fontsize=int(font_size * 0.7))
     if ylabel is not None:
-        plt.ylabel(ylabel, fontsize=14)
+        plt.ylabel(ylabel, fontsize=font_size)
+        plt.yticks(fontsize=int(font_size * 0.7))
+        if yticks is not None:
+            plt.yticks(yticks, fontsize=int(font_size * 0.7))
+
     # plt.title(title, fontsize=14)
     plt.tight_layout()
     plt.savefig(folder_name + "/" + name + ".png", dpi=500)
