@@ -210,7 +210,7 @@ def plot_1d(xs, ys, labels=None, name='defaultName', log=True, folder_name="figu
 
 def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, folder_name="figures", linetypes=None,
               show_fig=False, xlim=None, ylim=None, xlabel=None, ylabel=None, legend_pos="upper right",
-              black_first=False, symbolsize=2, font_size=14, yticks=None, xticks=None):
+              black_first=False, symbolsize=2, marker_size=6, font_size=14, yticks=None, xticks=None):
     """
     Expected shape for x in xs : (nx,)
                        y in ys : (1,nx)
@@ -234,7 +234,7 @@ def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, f
     if black_first:
         colors = ['k', 'r', 'g', 'b']
     symbol_size = symbolsize
-    marker_size = 6
+    marker_size = marker_size
     marker_width = 0.5
     if len(xs) == 1:
         x = xs[0]
