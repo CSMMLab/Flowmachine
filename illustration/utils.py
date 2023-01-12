@@ -208,9 +208,97 @@ def plot_1d(xs, ys, labels=None, name='defaultName', log=True, folder_name="figu
     return 0
 
 
+def beautify_img(load_name: str, xlabel: str = None, ylabel: str = None, xticks: list = None, yticks: list = None,
+                 font_size: int = 14, folder_name: str = "figures", name: str = 'defaultName', cbar: str = None):
+    plt.clf()
+    fig = plt.figure(figsize=(5.8, 4.7), dpi=400)
+    ax = plt.axes()
+
+    sns.set_theme()
+    sns.set_style("white")
+    sns.set_theme(style='white')
+
+    if xlabel is not None:
+        plt.xlabel(xlabel, fontsize=font_size)
+        plt.xticks(fontsize=int(0.7 * font_size))
+        if xticks is not None:
+            plt.xticks(xticks, fontsize=int(0.7 * font_size))
+    if ylabel is not None:
+        plt.ylabel(ylabel, fontsize=font_size)
+        plt.yticks(fontsize=int(0.7 * font_size))
+        if yticks is not None:
+            plt.yticks(yticks, fontsize=int(0.7 * font_size))
+
+    if cbar == "pred":
+        im = plt.imshow(np.array([[0, 1]]), cmap="inferno")
+    elif cbar == "tmp":
+        im = plt.imshow(np.array([[0.8, 9.2]]), cmap="inferno")
+    elif cbar == "vel":
+        im = plt.imshow(np.array([[0, 4.5]]), cmap="inferno")
+
+    img = plt.imread(load_name)
+    plt.imshow(img, extent=[-6, 6, 0, 6])
+
+    if cbar is not None:
+        cax = fig.add_axes([ax.get_position().x1 + 0.01, ax.get_position().y0, 0.02, ax.get_position().height])
+        plt.colorbar(im, cax=cax)  # Similar to fig.colorbar(im, cax = cax)
+
+    # plt.tight_layout()
+    plt.savefig(folder_name + "/" + name + ".png", dpi=500, bbox_inches='tight', pad_inches=0)
+    print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".png"))
+    plt.close()
+    plt.clf()
+
+    return 0
+
+
+def plot_cylinder_colorbars():
+    # create dummy invisible image
+    # 1) prediction
+    sns.set_theme()
+    sns.set_style("white")
+    sns.set_theme(style='white')
+
+    img = plt.imshow(np.array([[0, 1]]), cmap="inferno")
+    img.set_visible(False)
+    cbar = plt.colorbar(orientation="vertical")
+    cbar.ax.tick_params(labelsize=14)
+    plt.savefig("illustration/cylinder_2d/colorbar_pred.png", dpi=500, transparent=True,
+                bbox_inches='tight', pad_inches=0)
+    plt.clf()
+
+    # 1) temp
+    sns.set_theme()
+    sns.set_style("white")
+    sns.set_theme(style='white')
+
+    img = plt.imshow(np.array([[0.8, 9.2]]), cmap="inferno")
+    img.set_visible(False)
+    cbar = plt.colorbar(orientation="vertical")
+    cbar.ax.tick_params(labelsize=14)
+    plt.savefig("illustration/cylinder_2d/colorbar_temp.png", dpi=500, transparent=True,
+                bbox_inches='tight', pad_inches=0)
+    plt.clf()
+
+    # 2) velocity
+    sns.set_theme()
+    sns.set_style("white")
+    sns.set_theme(style='white')
+
+    img = plt.imshow(np.array([[0, 4.5]]), cmap="inferno")
+    img.set_visible(False)
+    cbar = plt.colorbar(orientation="vertical")
+    cbar.ax.tick_params(labelsize=14)
+    plt.savefig("illustration/cylinder_2d/colorbar_velocity.png", dpi=500, transparent=True,
+                bbox_inches='tight', pad_inches=0)
+    plt.clf()
+
+    return 0
+
+
 def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, folder_name="figures", linetypes=None,
               show_fig=False, xlim=None, ylim=None, xlabel=None, ylabel=None, legend_pos="upper right",
-              black_first=False, symbolsize=2, marker_size=6, font_size=14, yticks=None, xticks=None):
+              black_first=False, symbolsize=2, marker_size=6, font_size=18, yticks=None, xticks=None):
     """
     Expected shape for x in xs : (nx,)
                        y in ys : (1,nx)

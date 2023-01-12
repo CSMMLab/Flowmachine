@@ -4,11 +4,10 @@ Author: Steffen Schotthoefer
 Version: 0.1
 Date 21.12.2021
 """
-
 import numpy as np
 import pandas as pd
 
-from utils import plot_1dv2, load_density_function  # , scatter_plot_2d_N2,  scatter_plot_3d, scatter_plot_2d
+from utils import plot_1dv2, load_density_function, plot_cylinder_colorbars, beautify_img
 
 
 def main():
@@ -17,7 +16,7 @@ def main():
     # print_macroscopic_var()
     # ------ 1. Sod 1D ---------------
     # print_sod_regime()
-    print_sod_solution()
+    # print_sod_solution()
     # ------ 2. Shear Layer 2D -------
     # print_shear_layer_regime()
     # print_shear_layer_solution()
@@ -25,6 +24,63 @@ def main():
     # ------ 3. Cylinder 2D ----------
     # print_cylinder_solution()
     # paper_illustrations()
+    beautify_old_img()
+    return 0
+
+
+def beautify_old_img():
+    # plotting colorbards
+    plot_cylinder_colorbars()
+
+    name = "cylinder_rgkngll_kn2"
+    img_path = "paper_data/cylinder_2d/img/" + name + ".png"
+    beautify_img(load_name=img_path, folder_name="illustration/cylinder_2d", name=name, xlabel=r"$x_1$",
+                 ylabel=r"$x_2$", cbar="pred")
+    name = "cylinder_rgkngll_kn2_c001"
+    img_path = "paper_data/cylinder_2d/img/" + name + ".png"
+    beautify_img(load_name=img_path, folder_name="illustration/cylinder_2d", name=name, xlabel=r"$x_1$",
+                 ylabel=r"$x_2$", cbar="pred")
+    name = "cylinder_rgkngll_kn3"
+    img_path = "paper_data/cylinder_2d/img/" + name + ".png"
+    beautify_img(load_name=img_path, folder_name="illustration/cylinder_2d", name=name, xlabel=r"$x_1$",
+                 ylabel=r"$x_2$", cbar="pred")
+    name = "cylinder_rgkngll_kn3_c001"
+    img_path = "paper_data/cylinder_2d/img/" + name + ".png"
+    beautify_img(load_name=img_path, folder_name="illustration/cylinder_2d", name=name, xlabel=r"$x_1$",
+                 ylabel=r"$x_2$", cbar="pred")
+    name = "cylinder_rgnn_kn2"
+    img_path = "paper_data/cylinder_2d/img/" + name + ".png"
+    beautify_img(load_name=img_path, folder_name="illustration/cylinder_2d", name=name, xlabel=r"$x_1$",
+                 ylabel=r"$x_2$", cbar="pred")
+    name = "cylinder_rgnn_kn3"
+    img_path = "paper_data/cylinder_2d/img/" + name + ".png"
+    beautify_img(load_name=img_path, folder_name="illustration/cylinder_2d", name=name, xlabel=r"$x_1$",
+                 ylabel=r"$x_2$", cbar="pred")
+    name = "cylinder_rgref_kn2"
+    img_path = "paper_data/cylinder_2d/img/" + name + ".png"
+    beautify_img(load_name=img_path, folder_name="illustration/cylinder_2d", name=name, xlabel=r"$x_1$",
+                 ylabel=r"$x_2$", cbar="pred")
+    name = "cylinder_rgref_kn3"
+    img_path = "paper_data/cylinder_2d/img/" + name + ".png"
+    beautify_img(load_name=img_path, folder_name="illustration/cylinder_2d", name=name, xlabel=r"$x_1$",
+                 ylabel=r"$x_2$", cbar="pred")
+    name = "cylinder_t_kn2"
+    img_path = "paper_data/cylinder_2d/img/" + name + ".png"
+    beautify_img(load_name=img_path, folder_name="illustration/cylinder_2d", name=name, xlabel=r"$x_1$",
+                 ylabel=r"$x_2$", cbar="tmp")
+    name = "cylinder_t_kn3"
+    img_path = "paper_data/cylinder_2d/img/" + name + ".png"
+    beautify_img(load_name=img_path, folder_name="illustration/cylinder_2d", name=name, xlabel=r"$x_1$",
+                 ylabel=r"$x_2$", cbar="tmp")
+    name = "cylinder_u_kn2"
+    img_path = "paper_data/cylinder_2d/img/" + name + ".png"
+    beautify_img(load_name=img_path, folder_name="illustration/cylinder_2d", name=name, xlabel=r"$x_1$",
+                 ylabel=r"$x_2$", cbar="vel")
+    name = "cylinder_u_kn3"
+    img_path = "paper_data/cylinder_2d/img/" + name + ".png"
+    beautify_img(load_name=img_path, folder_name="illustration/cylinder_2d", name=name, xlabel=r"$x_1$",
+                 ylabel=r"$x_2$", cbar="vel")
+
     return 0
 
 
@@ -363,7 +419,6 @@ def print_sod_solution():
               show_fig=False, xlabel=r"$x$", ylabel=r"$T$", black_first=True, xlim=(0.7, 0.9),
               xticks=[0.7, 0.75, 0.8, 0.85, 0.9], ylim=(1.6, 2.65),
               font_size=20)
-
     return 0
 
 
