@@ -296,9 +296,10 @@ def plot_cylinder_colorbars():
     return 0
 
 
-def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, folder_name="figures", linetypes=None,
-              show_fig=False, xlim=None, ylim=None, xlabel=None, ylabel=None, legend_pos="upper right",
-              black_first=False, symbolsize=2, marker_size=6, font_size=18, yticks=None, xticks=None):
+def plot_1dv2_old(xs, ys, labels=None, name='defaultName', log=True, loglog=False, folder_name="figures",
+                  linetypes=None,
+                  show_fig=False, xlim=None, ylim=None, xlabel=None, ylabel=None, legend_pos="upper right",
+                  black_first=False, symbolsize=2, marker_size=6, font_size=18, yticks=None, xticks=None):
     """
     Expected shape for x in xs : (nx,)
                        y in ys : (1,nx)
@@ -371,6 +372,93 @@ def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, f
 
     # plt.title(title, fontsize=14)
     plt.tight_layout()
+    plt.savefig(folder_name + "/" + name + ".png", dpi=500)
+    print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".png"))
+    plt.close()
+    return 0
+
+
+def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, folder_name="figures", linetypes=None,
+              show_fig=False, xlim=None, ylim=None, xlabel=None, ylabel=None, ticks=None, symbol_size=2.0,
+              marker_size=2.5, legend_pos=None, font_size=26, xticks=None, yticks=None,
+              colors=['r', 'g', 'b', 'c', 'm', 'y'],
+              black_first=False):
+    """
+    Expected shape for x in xs : (nx,)
+                       y in ys : (1,nx)
+    """
+    plt.clf()
+    plt.figure(figsize=(5.8, 4.7), dpi=500)
+    if not linetypes:
+        linetypes = ['-', '--', '-.', ':', ':', '.', ',', 'o', 'v', '^', '<', '>', '1', '2', '3', '4', 's', 'p', '*',
+                     'h', 'H', '+', 'x', 'D', 'd', '|']
+        if labels is not None:
+            linetypes = linetypes[0:len(labels)]
+
+    sns.set_theme()
+    sns.set_style("white")
+    colors = colors
+    if black_first:
+        colors = ['k', 'r', 'g', 'b']
+    symbol_size = symbol_size
+    if len(xs) == 1:
+        x = xs[0]
+        i = 0
+        for y, lineType in zip(ys, linetypes):
+            if lineType in ['.', ',', 'o', 'v', '^', '<', '>']:
+                if colors[i] == 'k':
+                    plt.plot(x, y, 'w' + lineType, linewidth=symbol_size, markersize=marker_size,
+                             markeredgewidth=0.5, markeredgecolor='k')
+                else:
+                    plt.plot(x, y, colors[i] + lineType, linewidth=symbol_size, markersize=marker_size,
+                             markeredgewidth=0.5, markeredgecolor='k')
+            else:
+                plt.plot(x, y, colors[i] + lineType, linewidth=symbol_size, markeredgecolor='k')
+            i += 1
+        if labels:
+            if legend_pos:
+                plt.legend(labels, loc=legend_pos, fontsize=int(0.6 * font_size))
+            else:
+                plt.legend(labels, fontsize=int(0.6 * font_size))
+
+    elif len(xs) is not len(ys):
+        print("Error: List of x entries must be of same length as y entries")
+        exit(1)
+    else:
+        for x, y, lineType, color in zip(xs, ys, linetypes, colors):
+            plt.plot(x, y, color + lineType, linewidth=symbol_size)
+        plt.legend(labels, fontsize=int(0.6 * font_size))  # , prop={'size': 6})
+    if log:
+        plt.yscale('log')
+    if loglog:
+        plt.yscale('log')
+        plt.xscale('log')
+    if show_fig:
+        plt.show()
+    if ylim is not None:
+        plt.ylim(ylim[0], ylim[1])
+    if xlim is not None:
+        plt.xlim(xlim[0], xlim[1])
+    if xlabel is not None:
+        plt.xlabel(xlabel, fontsize=font_size)
+        # plt.xticks(fontsize=6)
+        # plt.yticks(fontsize=6)
+    if ylabel is not None:
+        plt.ylabel(ylabel, fontsize=font_size)
+    # plt.title(title, fontsize=14)
+    plt.tight_layout()
+    if ticks:
+        plt.xticks(ticks[0])
+        plt.yticks(ticks[1])
+    else:
+        plt.xticks(fontsize=int(0.7 * font_size))
+        plt.yticks(fontsize=int(0.7 * font_size))
+    if xticks:
+        plt.xticks(xticks, fontsize=int(0.7 * font_size))
+        plt.yticks(fontsize=int(0.7 * font_size))
+    if yticks:
+        # plt.xticks(fontsize=int(0.7 * font_size))
+        plt.yticks(yticks, fontsize=int(0.7 * font_size))
     plt.savefig(folder_name + "/" + name + ".png", dpi=500)
     print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".png"))
     plt.close()
