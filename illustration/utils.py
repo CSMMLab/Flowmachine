@@ -420,14 +420,17 @@ def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, f
                 plt.legend(labels, loc=legend_pos, fontsize=int(0.6 * font_size))
             else:
                 plt.legend(labels, fontsize=int(0.6 * font_size))
-
     elif len(xs) is not len(ys):
         print("Error: List of x entries must be of same length as y entries")
         exit(1)
     else:
         for x, y, lineType, color in zip(xs, ys, linetypes, colors):
-            plt.plot(x, y, color + lineType, linewidth=symbol_size)
-        plt.legend(labels, fontsize=int(0.6 * font_size))  # , prop={'size': 6})
+            plt.plot(x, y, color + lineType, linewidth=symbol_size, markersize=marker_size, markeredgewidth=0.5,
+                     markeredgecolor='k')
+        if legend_pos:
+            plt.legend(labels, loc=legend_pos, fontsize=int(0.6 * font_size))
+        else:
+            plt.legend(labels, fontsize=int(0.6 * font_size))
     if log:
         plt.yscale('log')
     if loglog:
