@@ -444,12 +444,8 @@ def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, f
         plt.xlim(xlim[0], xlim[1])
     if xlabel is not None:
         plt.xlabel(xlabel, fontsize=font_size)
-        # plt.xticks(fontsize=6)
-        # plt.yticks(fontsize=6)
     if ylabel is not None:
         plt.ylabel(ylabel, fontsize=font_size)
-    # plt.title(title, fontsize=14)
-    plt.tight_layout()
     if ticks:
         plt.xticks(ticks[0])
         plt.yticks(ticks[1])
@@ -462,6 +458,7 @@ def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, f
     if yticks:
         # plt.xticks(fontsize=int(0.7 * font_size))
         plt.yticks(yticks, fontsize=int(0.7 * font_size))
+    plt.tight_layout()
     plt.savefig(folder_name + "/" + name + ".png", dpi=500)
     print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".png"))
     plt.close()
