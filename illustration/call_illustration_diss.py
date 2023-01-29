@@ -173,7 +173,7 @@ def print_sod_regime():
               labels=['true', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left", font_size=fontsize,
               marker_size=markersize, name='Regime_labels' + regime, log=False, folder_name="illustration/Sod1d/",
               linetypes=["-", "o", "^"], show_fig=False, xlim=(0, 1), ylim=(-0.05, 1.05), xlabel=r"$x$",
-              ylabel=r"regime", black_first=True)
+              ylabel=r"regime", black_first=True, yticks=[0, 1])
 
     # ----- KN=1e-3 ----------
     regime = "1e-3"
@@ -186,7 +186,7 @@ def print_sod_regime():
               labels=['true', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="upper left", font_size=fontsize,
               marker_size=markersize, name='Regime_labels' + regime, log=False, folder_name="illustration/Sod1d/",
               linetypes=["-", "o", "^"], show_fig=False, xlim=(0, 1), ylim=(-0.05, 1.05), xlabel=r"$x$",
-              ylabel=r"regime", black_first=True)
+              ylabel=r"regime", black_first=True, yticks=[0, 1])
 
     # ----- KN=1e-2 ----------
     regime = "1e-2"
@@ -199,7 +199,7 @@ def print_sod_regime():
               labels=['true', r'$\rm{N}_\theta$', r'$\rm{Kn}_{GLL}$'], legend_pos="lower right", font_size=fontsize,
               marker_size=markersize, name='Regime_labels' + regime, log=False, folder_name="illustration/Sod1d/",
               linetypes=["-", "o", "^"], show_fig=False, xlim=(0, 1), ylim=(-0.05, 1.05), xlabel=r"$x$",
-              ylabel=r"regime", black_first=True)
+              ylabel=r"regime", black_first=True, yticks=[0, 1])
 
     return 0
 

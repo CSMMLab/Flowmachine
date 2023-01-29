@@ -113,7 +113,8 @@ def plot_density_fusion_1d(v_x: np.ndarray, f_l: np.ndarray, f_r: np.ndarray, f_
                            show_fig=True, save_name: str = 'fig1'):
     plt.clf()
     sns.set_theme()
-    sns.set_style("white")
+    sns.set_style("ticks")
+
     # fig, axs = plt.subplots(2)
     # fig.suptitle('Vertically stacked subplots')
     plt.plot(v_x, f_l, 'r-')
@@ -134,7 +135,8 @@ def plot_densities(v_x: np.ndarray, f_maxwell: np.ndarray, f_entropy: np.ndarray
                    f_random: np.ndarray, f_unlikely: np.ndarray, show_fig=True, save_name: str = 'fig1'):
     plt.clf()
     sns.set_theme()
-    sns.set_style("white")
+    sns.set_style("ticks")
+
     # fig, axs = plt.subplots(2)
     # fig.suptitle('Vertically stacked subplots')
     plt.plot(v_x, f_maxwell, 'r-')
@@ -166,7 +168,8 @@ def plot_1d(xs, ys, labels=None, name='defaultName', log=True, folder_name="figu
             linetypes = linetypes[0:len(labels)]
 
     sns.set_theme()
-    sns.set_style("white")
+    sns.set_style("ticks")
+
     colors = ['k', 'r', 'g', 'b']
     symbol_size = 0.7
     if len(xs) == 1:
@@ -211,12 +214,11 @@ def plot_1d(xs, ys, labels=None, name='defaultName', log=True, folder_name="figu
 def beautify_img(load_name: str, xlabel: str = None, ylabel: str = None, xticks: list = None, yticks: list = None,
                  font_size: int = 14, folder_name: str = "figures", name: str = 'defaultName', cbar: str = None):
     plt.clf()
-    fig = plt.figure(figsize=(5.8, 4.7), dpi=400)
+    fig = plt.figure(figsize=(5.8, 4.7), dpi=500)
     ax = plt.axes()
 
     sns.set_theme()
-    sns.set_style("white")
-    sns.set_theme(style='white')
+    sns.set_style("ticks")
 
     if xlabel is not None:
         plt.xlabel(xlabel, fontsize=font_size)
@@ -256,8 +258,7 @@ def plot_cylinder_colorbars():
     # create dummy invisible image
     # 1) prediction
     sns.set_theme()
-    sns.set_style("white")
-    sns.set_theme(style='white')
+    sns.set_style("ticks")
 
     img = plt.imshow(np.array([[0, 1]]), cmap="inferno")
     img.set_visible(False)
@@ -269,8 +270,9 @@ def plot_cylinder_colorbars():
 
     # 1) temp
     sns.set_theme()
-    sns.set_style("white")
-    sns.set_theme(style='white')
+    sns.set_style("ticks")
+
+    # sns.set_theme(style='white')
 
     img = plt.imshow(np.array([[0.8, 9.2]]), cmap="inferno")
     img.set_visible(False)
@@ -282,8 +284,9 @@ def plot_cylinder_colorbars():
 
     # 2) velocity
     sns.set_theme()
-    sns.set_style("white")
-    sns.set_theme(style='white')
+    sns.set_style("ticks")
+
+    # sns.set_theme(style='white')
 
     img = plt.imshow(np.array([[0, 4.5]]), cmap="inferno")
     img.set_visible(False)
@@ -308,8 +311,9 @@ def plot_1dv2_old(xs, ys, labels=None, name='defaultName', log=True, loglog=Fals
 
     plt.figure(figsize=(5.8, 4.7), dpi=400)
     sns.set_theme()
-    sns.set_style("white")
-    sns.set_theme(style='white')
+    sns.set_style("ticks")
+
+    # sns.set_theme(style='white')
 
     if not linetypes:
         linetypes = ['-', '--', '-.', ':', ':', '.', ',', 'o', 'v', '^', '<', '>', '1', '2', '3', '4', 's', 'p', '*',
@@ -396,7 +400,7 @@ def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, f
             linetypes = linetypes[0:len(labels)]
 
     sns.set_theme()
-    sns.set_style("white")
+    sns.set_style("ticks")
     colors = colors
     if black_first:
         colors = ['k', 'r', 'g', 'b']
