@@ -113,7 +113,8 @@ def plot_density_fusion_1d(v_x: np.ndarray, f_l: np.ndarray, f_r: np.ndarray, f_
                            show_fig=True, save_name: str = 'fig1'):
     plt.clf()
     sns.set_theme()
-    sns.set_style("white")
+    sns.set_style("ticks")
+
     # fig, axs = plt.subplots(2)
     # fig.suptitle('Vertically stacked subplots')
     plt.plot(v_x, f_l, 'r-')
@@ -134,7 +135,8 @@ def plot_densities(v_x: np.ndarray, f_maxwell: np.ndarray, f_entropy: np.ndarray
                    f_random: np.ndarray, f_unlikely: np.ndarray, show_fig=True, save_name: str = 'fig1'):
     plt.clf()
     sns.set_theme()
-    sns.set_style("white")
+    sns.set_style("ticks")
+
     # fig, axs = plt.subplots(2)
     # fig.suptitle('Vertically stacked subplots')
     plt.plot(v_x, f_maxwell, 'r-')
@@ -166,7 +168,8 @@ def plot_1d(xs, ys, labels=None, name='defaultName', log=True, folder_name="figu
             linetypes = linetypes[0:len(labels)]
 
     sns.set_theme()
-    sns.set_style("white")
+    sns.set_style("ticks")
+
     colors = ['k', 'r', 'g', 'b']
     symbol_size = 0.7
     if len(xs) == 1:
@@ -208,9 +211,98 @@ def plot_1d(xs, ys, labels=None, name='defaultName', log=True, folder_name="figu
     return 0
 
 
-def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, folder_name="figures", linetypes=None,
-              show_fig=False, xlim=None, ylim=None, xlabel=None, ylabel=None, legend_pos="upper right",
-              black_first=False, symbolsize=2, marker_size=6, font_size=14, yticks=None, xticks=None):
+def beautify_img(load_name: str, xlabel: str = None, ylabel: str = None, xticks: list = None, yticks: list = None,
+                 font_size: int = 14, folder_name: str = "figures", name: str = 'defaultName', cbar: str = None):
+    plt.clf()
+    fig = plt.figure(figsize=(5.8, 4.7), dpi=500)
+    ax = plt.axes()
+
+    sns.set_theme()
+    sns.set_style("ticks")
+
+    if xlabel is not None:
+        plt.xlabel(xlabel, fontsize=font_size)
+        plt.xticks(fontsize=int(0.7 * font_size))
+        if xticks is not None:
+            plt.xticks(xticks, fontsize=int(0.7 * font_size))
+    if ylabel is not None:
+        plt.ylabel(ylabel, fontsize=font_size)
+        plt.yticks(fontsize=int(0.7 * font_size))
+        if yticks is not None:
+            plt.yticks(yticks, fontsize=int(0.7 * font_size))
+
+    if cbar == "pred":
+        im = plt.imshow(np.array([[0, 1]]), cmap="inferno")
+    elif cbar == "tmp":
+        im = plt.imshow(np.array([[0.8, 9.2]]), cmap="inferno")
+    elif cbar == "vel":
+        im = plt.imshow(np.array([[0, 4.5]]), cmap="inferno")
+
+    img = plt.imread(load_name)
+    plt.imshow(img, extent=[-6, 6, 0, 6])
+
+    if cbar is not None:
+        cax = fig.add_axes([ax.get_position().x1 + 0.01, ax.get_position().y0, 0.02, ax.get_position().height])
+        plt.colorbar(im, cax=cax)  # Similar to fig.colorbar(im, cax = cax)
+
+    # plt.tight_layout()
+    plt.savefig(folder_name + "/" + name + ".png", dpi=500, bbox_inches='tight', pad_inches=0)
+    print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".png"))
+    plt.close()
+    plt.clf()
+
+    return 0
+
+
+def plot_cylinder_colorbars():
+    # create dummy invisible image
+    # 1) prediction
+    sns.set_theme()
+    sns.set_style("ticks")
+
+    img = plt.imshow(np.array([[0, 1]]), cmap="inferno")
+    img.set_visible(False)
+    cbar = plt.colorbar(orientation="vertical")
+    cbar.ax.tick_params(labelsize=14)
+    plt.savefig("illustration/cylinder_2d/colorbar_pred.png", dpi=500, transparent=True,
+                bbox_inches='tight', pad_inches=0)
+    plt.clf()
+
+    # 1) temp
+    sns.set_theme()
+    sns.set_style("ticks")
+
+    # sns.set_theme(style='white')
+
+    img = plt.imshow(np.array([[0.8, 9.2]]), cmap="inferno")
+    img.set_visible(False)
+    cbar = plt.colorbar(orientation="vertical")
+    cbar.ax.tick_params(labelsize=14)
+    plt.savefig("illustration/cylinder_2d/colorbar_temp.png", dpi=500, transparent=True,
+                bbox_inches='tight', pad_inches=0)
+    plt.clf()
+
+    # 2) velocity
+    sns.set_theme()
+    sns.set_style("ticks")
+
+    # sns.set_theme(style='white')
+
+    img = plt.imshow(np.array([[0, 4.5]]), cmap="inferno")
+    img.set_visible(False)
+    cbar = plt.colorbar(orientation="vertical")
+    cbar.ax.tick_params(labelsize=14)
+    plt.savefig("illustration/cylinder_2d/colorbar_velocity.png", dpi=500, transparent=True,
+                bbox_inches='tight', pad_inches=0)
+    plt.clf()
+
+    return 0
+
+
+def plot_1dv2_old(xs, ys, labels=None, name='defaultName', log=True, loglog=False, folder_name="figures",
+                  linetypes=None,
+                  show_fig=False, xlim=None, ylim=None, xlabel=None, ylabel=None, legend_pos="upper right",
+                  black_first=False, symbolsize=2, marker_size=6, font_size=18, yticks=None, xticks=None):
     """
     Expected shape for x in xs : (nx,)
                        y in ys : (1,nx)
@@ -219,8 +311,9 @@ def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, f
 
     plt.figure(figsize=(5.8, 4.7), dpi=400)
     sns.set_theme()
-    sns.set_style("white")
-    sns.set_theme(style='white')
+    sns.set_style("ticks")
+
+    # sns.set_theme(style='white')
 
     if not linetypes:
         linetypes = ['-', '--', '-.', ':', ':', '.', ',', 'o', 'v', '^', '<', '>', '1', '2', '3', '4', 's', 'p', '*',
@@ -282,6 +375,93 @@ def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, f
             plt.yticks(yticks, fontsize=int(font_size * 0.7))
 
     # plt.title(title, fontsize=14)
+    plt.tight_layout()
+    plt.savefig(folder_name + "/" + name + ".png", dpi=500)
+    print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".png"))
+    plt.close()
+    return 0
+
+
+def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, folder_name="figures", linetypes=None,
+              show_fig=False, xlim=None, ylim=None, xlabel=None, ylabel=None, ticks=None, symbol_size=2.0,
+              marker_size=2.5, legend_pos=None, font_size=26, xticks=None, yticks=None,
+              colors=['r', 'g', 'b', 'c', 'm', 'y'],
+              black_first=False):
+    """
+    Expected shape for x in xs : (nx,)
+                       y in ys : (1,nx)
+    """
+    plt.clf()
+    plt.figure(figsize=(5.8, 4.7), dpi=500)
+    if not linetypes:
+        linetypes = ['-', '--', '-.', ':', ':', '.', ',', 'o', 'v', '^', '<', '>', '1', '2', '3', '4', 's', 'p', '*',
+                     'h', 'H', '+', 'x', 'D', 'd', '|']
+        if labels is not None:
+            linetypes = linetypes[0:len(labels)]
+
+    sns.set_theme()
+    sns.set_style("ticks")
+    colors = colors
+    if black_first:
+        colors = ['k', 'r', 'g', 'b']
+    symbol_size = symbol_size
+    if len(xs) == 1:
+        x = xs[0]
+        i = 0
+        for y, lineType in zip(ys, linetypes):
+            if lineType in ['.', ',', 'o', 'v', '^', '<', '>']:
+                if colors[i] == 'k':
+                    plt.plot(x, y, 'w' + lineType, linewidth=symbol_size, markersize=marker_size,
+                             markeredgewidth=0.5, markeredgecolor='k')
+                else:
+                    plt.plot(x, y, colors[i] + lineType, linewidth=symbol_size, markersize=marker_size,
+                             markeredgewidth=0.5, markeredgecolor='k')
+            else:
+                plt.plot(x, y, colors[i] + lineType, linewidth=symbol_size, markeredgecolor='k')
+            i += 1
+        if labels:
+            if legend_pos:
+                plt.legend(labels, loc=legend_pos, fontsize=int(0.6 * font_size))
+            else:
+                plt.legend(labels, fontsize=int(0.6 * font_size))
+    elif len(xs) is not len(ys):
+        print("Error: List of x entries must be of same length as y entries")
+        exit(1)
+    else:
+        for x, y, lineType, color in zip(xs, ys, linetypes, colors):
+            plt.plot(x, y, color + lineType, linewidth=symbol_size, markersize=marker_size, markeredgewidth=0.5,
+                     markeredgecolor='k')
+        if legend_pos:
+            plt.legend(labels, loc=legend_pos, fontsize=int(0.6 * font_size))
+        else:
+            plt.legend(labels, fontsize=int(0.6 * font_size))
+    if log:
+        plt.yscale('log')
+    if loglog:
+        plt.yscale('log')
+        plt.xscale('log')
+    if show_fig:
+        plt.show()
+    if ylim is not None:
+        plt.ylim(ylim[0], ylim[1])
+    if xlim is not None:
+        plt.xlim(xlim[0], xlim[1])
+    if xlabel is not None:
+        plt.xlabel(xlabel, fontsize=font_size)
+    if ylabel is not None:
+        plt.ylabel(ylabel, fontsize=font_size)
+    if ticks:
+        plt.xticks(ticks[0])
+        plt.yticks(ticks[1])
+    else:
+        plt.xticks(fontsize=int(0.7 * font_size))
+        plt.yticks(fontsize=int(0.7 * font_size))
+    if xticks:
+        plt.xticks(xticks, fontsize=int(0.7 * font_size))
+        plt.yticks(fontsize=int(0.7 * font_size))
+    if yticks:
+        # plt.xticks(fontsize=int(0.7 * font_size))
+        plt.yticks(yticks, fontsize=int(0.7 * font_size))
     plt.tight_layout()
     plt.savefig(folder_name + "/" + name + ".png", dpi=500)
     print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".png"))
