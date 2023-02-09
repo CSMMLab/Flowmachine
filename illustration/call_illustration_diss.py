@@ -103,14 +103,14 @@ def print_densities():
     plot_1dv2(xs=[v_x],
               ys=[f_kinetic[0, :].reshape(len(f_kinetic[0]), 1), f_kinetic[1, :].reshape(len(f_kinetic[0]), 1),
                   f_kinetic[2, :].reshape(len(f_kinetic[0]), 1), f_ns[:, 0].reshape(len(f_kinetic[0]), 1)],
-              labels=['left cell', 'right cell', 'interface', 'BGK reconstruction'], name='maxwell_fusion', log=False,
+              labels=['left cell', 'right cell', 'interface', 'Chapman-Enskog'], name='maxwell_fusion', log=False,
               marker_size=markersize, folder_name=save_folder_name, linetypes=['-', '--', 'o', '-.'], show_fig=False,
               xlim=(-5, 5),
               font_size=fontsize, ylim=(0, 0.5), xlabel=r"$v$", ylabel=r"$f(v)$", black_first=True)
     plot_1dv2(xs=[v_x],
               ys=[f_kinetic[3, :].reshape(len(f_kinetic[0]), 1), f_kinetic[4, :].reshape(len(f_kinetic[0]), 1),
                   f_kinetic[5, :].reshape(len(f_kinetic[0]), 1), f_ns[:, 1].reshape(len(f_kinetic[0]), 1)],
-              labels=['left cell', 'right cell', 'interface', 'BGK reconstruction'], name='bimodal_fusion', log=False,
+              labels=['left cell', 'right cell', 'interface', 'Chapman-Enskog'], name='bimodal_fusion', log=False,
               folder_name=save_folder_name, linetypes=['-', '--', 'o', '-.'], show_fig=False, xlim=(-5, 5),
               marker_size=markersize, font_size=fontsize, ylim=(0, 0.6), xlabel=r"$v$", ylabel=r"$f(v)$",
               black_first=True)
