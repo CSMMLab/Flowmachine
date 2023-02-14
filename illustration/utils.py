@@ -127,7 +127,7 @@ def plot_density_fusion_1d(v_x: np.ndarray, f_l: np.ndarray, f_r: np.ndarray, f_
     plt.xlim(-5.0, 5.0)
     if show_fig:
         plt.show()
-    plt.savefig('illustration/' + save_name + ".png", dpi=400)
+    plt.savefig('illustration/' + save_name + ".pdf", dpi=400)
     return 0
 
 
@@ -152,7 +152,7 @@ def plot_densities(v_x: np.ndarray, f_maxwell: np.ndarray, f_entropy: np.ndarray
     plt.xlim(-5.0, 5.0)
     if show_fig:
         plt.show()
-    plt.savefig('illustration/' + save_name + ".png", dpi=400)
+    plt.savefig('illustration/' + save_name + ".pdf", dpi=400)
     return 0
 
 
@@ -206,8 +206,8 @@ def plot_1d(xs, ys, labels=None, name='defaultName', log=True, folder_name="figu
         plt.ylabel(ylabel, fontsize=14)
     # plt.title(title, fontsize=14)
     plt.tight_layout()
-    plt.savefig(folder_name + "/" + name + ".png", dpi=500)
-    print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".png"))
+    plt.savefig(folder_name + "/" + name + ".pdf", dpi=500)
+    print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".pdf"))
     return 0
 
 
@@ -246,8 +246,8 @@ def beautify_img(load_name: str, xlabel: str = None, ylabel: str = None, xticks:
         plt.colorbar(im, cax=cax)  # Similar to fig.colorbar(im, cax = cax)
 
     # plt.tight_layout()
-    plt.savefig(folder_name + "/" + name + ".png", dpi=500, bbox_inches='tight', pad_inches=0)
-    print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".png"))
+    plt.savefig(folder_name + "/" + name + ".pdf", dpi=500, bbox_inches='tight', pad_inches=0)
+    print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".pdf"))
     plt.close()
     plt.clf()
 
@@ -264,7 +264,7 @@ def plot_cylinder_colorbars():
     img.set_visible(False)
     cbar = plt.colorbar(orientation="vertical")
     cbar.ax.tick_params(labelsize=14)
-    plt.savefig("illustration/cylinder_2d/colorbar_pred.png", dpi=500, transparent=True,
+    plt.savefig("illustration/cylinder_2d/colorbar_pred.pdf", dpi=500, transparent=True,
                 bbox_inches='tight', pad_inches=0)
     plt.clf()
 
@@ -278,7 +278,7 @@ def plot_cylinder_colorbars():
     img.set_visible(False)
     cbar = plt.colorbar(orientation="vertical")
     cbar.ax.tick_params(labelsize=14)
-    plt.savefig("illustration/cylinder_2d/colorbar_temp.png", dpi=500, transparent=True,
+    plt.savefig("illustration/cylinder_2d/colorbar_temp.pdf", dpi=500, transparent=True,
                 bbox_inches='tight', pad_inches=0)
     plt.clf()
 
@@ -292,7 +292,7 @@ def plot_cylinder_colorbars():
     img.set_visible(False)
     cbar = plt.colorbar(orientation="vertical")
     cbar.ax.tick_params(labelsize=14)
-    plt.savefig("illustration/cylinder_2d/colorbar_velocity.png", dpi=500, transparent=True,
+    plt.savefig("illustration/cylinder_2d/colorbar_velocity.pdf", dpi=500, transparent=True,
                 bbox_inches='tight', pad_inches=0)
     plt.clf()
 
@@ -376,8 +376,8 @@ def plot_1dv2_old(xs, ys, labels=None, name='defaultName', log=True, loglog=Fals
 
     # plt.title(title, fontsize=14)
     plt.tight_layout()
-    plt.savefig(folder_name + "/" + name + ".png", dpi=500)
-    print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".png"))
+    plt.savefig(folder_name + "/" + name + ".pdf", dpi=500)
+    print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".pdf"))
     plt.close()
     return 0
 
@@ -463,8 +463,8 @@ def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, f
         # plt.xticks(fontsize=int(0.7 * font_size))
         plt.yticks(yticks, fontsize=int(0.7 * font_size))
     plt.tight_layout()
-    plt.savefig(folder_name + "/" + name + ".png", dpi=500)
-    print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".png"))
+    plt.savefig(folder_name + "/" + name + ".pdf", dpi=500)
+    print("Figure successfully saved to file: " + str(folder_name + "/" + name + ".pdf"))
     plt.close()
     return 0
 
@@ -503,7 +503,7 @@ def scatter_plot_2d(x_in: np.ndarray, z_in: np.ndarray, lim_x: tuple = (-1, 1), 
     cbar = fig.colorbar(out, ax=ax, extend='both')
     if show_fig:
         plt.show()
-    plt.savefig(folder_name + "/" + name + ".png", dpi=400)
+    plt.savefig(folder_name + "/" + name + ".pdf", dpi=400)
     return 0
 
 
@@ -550,7 +550,7 @@ def scatter_plot_2d_N2(x_in: np.ndarray, z_in: np.ndarray, lim_x: tuple = (-1, 1
     cbar = fig.colorbar(out, ax=ax, extend='both')
     if show_fig:
         plt.show()
-    plt.savefig(folder_name + "/" + name + ".png", dpi=400)
+    plt.savefig(folder_name + "/" + name + ".pdf", dpi=400)
     return 0
 
 
@@ -594,7 +594,7 @@ def scatter_plot_3d(xyz_in: np.ndarray, color_in: np.ndarray, lim_x: tuple = (-1
     cbar = fig.colorbar(out, ax=ax, extend='both')
     if show_fig:
         plt.show()
-    plt.savefig(folder_name + "/" + name + ".png", dpi=600)
+    plt.savefig(folder_name + "/" + name + ".pdf", dpi=600)
     return 0
 
 
