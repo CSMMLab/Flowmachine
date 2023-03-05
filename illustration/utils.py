@@ -411,13 +411,11 @@ def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, f
         for y, lineType in zip(ys, linetypes):
             if lineType in ['.', ',', 'o', 'v', '^', '<', '>']:
                 if colors[i] == 'k':
-                    plt.plot(x, y, 'w' + lineType, linewidth=symbol_size, markersize=marker_size,
-                             markeredgewidth=0.5, markeredgecolor='k')
+                    plt.plot(x, y, 'w' + lineType, linewidth=symbol_size, markersize=marker_size)
                 else:
-                    plt.plot(x, y, colors[i] + lineType, linewidth=symbol_size, markersize=marker_size,
-                             markeredgewidth=0.5, markeredgecolor='k')
+                    plt.plot(x, y, colors[i] + lineType, linewidth=symbol_size, markersize=marker_size)
             else:
-                plt.plot(x, y, colors[i] + lineType, linewidth=symbol_size, markeredgecolor='k')
+                plt.plot(x, y, colors[i] + lineType, linewidth=symbol_size)
             i += 1
         if labels:
             if legend_pos:
@@ -429,8 +427,7 @@ def plot_1dv2(xs, ys, labels=None, name='defaultName', log=True, loglog=False, f
         exit(1)
     else:
         for x, y, lineType, color in zip(xs, ys, linetypes, colors):
-            plt.plot(x, y, color + lineType, linewidth=symbol_size, markersize=marker_size, markeredgewidth=0.5,
-                     markeredgecolor='k')
+            plt.plot(x, y, color + lineType, linewidth=symbol_size, markersize=marker_size)
         if legend_pos:
             plt.legend(labels, loc=legend_pos, fontsize=int(0.6 * font_size))
         else:
